@@ -79,6 +79,9 @@ class _PersistentStorageServiceImpl implements PersistentStorageService {
 
   @override
   initializeBaseApiUrl() {
-    baseApiUrl ??= dotenv.baseApiUrl;
+    if (baseApiUrl.isEmpty) {
+      return dotenv.baseApiUrl;
+    }
+    return baseApiUrl;
   }
 }

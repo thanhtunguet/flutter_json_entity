@@ -8,18 +8,18 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   @override
   set value(dynamic value) {
     if (value is T) {
-      _value = value;
+      rawValue = value;
       return;
     }
     if (value is Map<String, dynamic>) {
       final model = _type();
       model.fromJSON(value);
-      _value = model;
+      rawValue = model;
     }
   }
 
   @override
   toJSON() {
-    return _value?.toJSON();
+    return rawValue?.toJSON();
   }
 }

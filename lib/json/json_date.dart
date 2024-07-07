@@ -6,14 +6,14 @@ class JsonDate extends JsonField<DateTime> {
   @override
   set value(dynamic value) {
     if (value is String) {
-      _value = DateTime.tryParse(value);
+      rawValue = DateTime.tryParse(value);
       return;
     }
-    _value = value;
+    rawValue = value;
   }
 
   @override
   toJSON() {
-    return _value?.toIso8601String();
+    return rawValue?.toIso8601String();
   }
 }

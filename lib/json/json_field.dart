@@ -3,19 +3,17 @@ part of 'json.dart';
 abstract class JsonField<T> {
   final String fieldName;
 
-  T? _value;
+  T? rawValue;
 
-  T get value => _value!;
-
-  T? get rawValue => _value;
+  T get value => rawValue!;
 
   set value(dynamic value) {
-    _value = value;
+    rawValue = value;
   }
 
   JsonField(this.fieldName);
 
   dynamic toJSON() {
-    return _value;
+    return rawValue;
   }
 }
