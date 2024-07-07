@@ -1,8 +1,14 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/extensions/dotenv.dart';
+import 'package:supa_architecture/supa_architecture.dart';
 
 abstract interface class PersistentStorageService {
+  // Constants for keys
+  static const String _tenantBoxName = 'tenant';
+  static const String _userBoxName = 'user';
+
   static Future<PersistentStorageService> initialize({
     String boxName = 'supa_architecture',
   }) async {
@@ -13,14 +19,6 @@ abstract interface class PersistentStorageService {
     );
   }
 
-  set tenantId(int tenantId);
-
-  int get tenantId;
-
-  set userId(int userId);
-
-  int get userId;
-
   set isBiometricEnabled(bool isBiometricEnabled);
 
   bool get isBiometricEnabled;
@@ -30,12 +28,19 @@ abstract interface class PersistentStorageService {
   String get baseApiUrl;
 
   initializeBaseApiUrl();
+
+  Tenant? get tenant;
+
+  AppUser? get appUser;
+
+  set tenant(Tenant? tenant);
+
+  set appUser(AppUser? appUser);
+
+  logout();
 }
 
 class _PersistentStorageServiceImpl implements PersistentStorageService {
-  // Constants for keys
-  static const String _tenantIdKey = 'tenantId';
-  static const String _userIdKey = 'userId';
   static const String _isBiometricEnabledKey = 'isBiometricEnabled';
   static const String _baseApiUrlKey = 'baseApiUrl';
 
@@ -44,22 +49,6 @@ class _PersistentStorageServiceImpl implements PersistentStorageService {
   _PersistentStorageServiceImpl._({
     required String boxName,
   }) : box = Hive.box(boxName);
-
-  @override
-  set tenantId(int tenantId) {
-    box.put(_tenantIdKey, tenantId);
-  }
-
-  @override
-  int get tenantId => box.get(_tenantIdKey);
-
-  @override
-  set userId(int userId) {
-    box.put(_userIdKey, userId);
-  }
-
-  @override
-  int get userId => box.get(_userIdKey);
 
   @override
   set isBiometricEnabled(bool isBiometricEnabled) {
@@ -83,5 +72,57 @@ class _PersistentStorageServiceImpl implements PersistentStorageService {
       return dotenv.baseApiUrl;
     }
     return baseApiUrl;
+  }
+
+  @override
+  AppUser? get appUser {
+    final json = box.get(PersistentStorageService._userBoxName);
+    if (json == null) {
+      return null;
+    }
+    final appUser = AppUser();
+    appUser.fromJSON(json);
+    return appUser;
+  }
+
+  @override
+  set appUser(AppUser? appUser) {
+    if (appUser == null) {
+      box.clear();
+      return;
+    }
+    box.put(
+      PersistentStorageService._userBoxName,
+      appUser.toJSON(),
+    );
+  }
+
+  @override
+  Tenant? get tenant {
+    final json = box.get(PersistentStorageService._tenantBoxName);
+    if (json == null) {
+      return null;
+    }
+    final tenant = Tenant();
+    tenant.fromJSON(json);
+    return tenant;
+  }
+
+  @override
+  set tenant(Tenant? tenant) {
+    if (tenant == null) {
+      box.clear();
+      return;
+    }
+    box.put(
+      PersistentStorageService._tenantBoxName,
+      tenant.toJSON(),
+    );
+  }
+
+  @override
+  logout() {
+    box.delete(PersistentStorageService._tenantBoxName);
+    box.delete(PersistentStorageService._userBoxName);
   }
 }

@@ -71,9 +71,11 @@ class SupaApplication {
   }
 }
 
-get cookieStorageService => SupaApplication.instance.cookieStorageService;
+CookieStorageService get cookieStorageService =>
+    SupaApplication.instance.cookieStorageService;
 
-get secureStorageService => SupaApplication.instance.secureStorageService;
+SecureStorageService get secureStorageService =>
+    SupaApplication.instance.secureStorageService;
 
-get persistentStorageService =>
+PersistentStorageService get persistentStorageService =>
     SupaApplication.instance.persistentStorageService;

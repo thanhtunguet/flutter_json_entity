@@ -5,7 +5,7 @@ class AppUser extends JsonModel {
 
   @override
   List<JsonField> get fields => [
-        id,
+        userId,
         globalUserId,
         email,
         username,
@@ -19,7 +19,7 @@ class AppUser extends JsonModel {
         updatedAt,
       ];
 
-  JsonNumber id = JsonNumber("id");
+  JsonNumber userId = JsonNumber("userId");
 
   JsonNumber globalUserId = JsonNumber("globalUserId");
 

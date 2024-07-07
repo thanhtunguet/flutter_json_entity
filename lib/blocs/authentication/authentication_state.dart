@@ -9,6 +9,10 @@ enum AuthenticationStatus {
 }
 
 sealed class AuthenticationState extends Equatable {
+  bool get isLoading => status == AuthenticationStatus.loading;
+
+  bool get isAuthenticated => status == AuthenticationStatus.authenticated;
+
   AuthenticationStatus get status;
 
   const AuthenticationState();

@@ -9,17 +9,18 @@ abstract class JsonModel with JsonSerializable {
     _types[type] = constructor;
   }
 
-  static InstanceConstructor construct(Type type) {
+  static T construct<T extends JsonModel>(Type type) {
     assert(_types.containsKey(type));
-    return _types[type]!;
+    final constructor = _types[type]!;
+    return constructor() as T;
   }
 
   List<JsonField> get fields;
 
   @override
   void fromJSON(dynamic json) {
-    assert(json is Map<String, dynamic>);
-    if (json is Map<String, dynamic>) {
+    assert(json is Map<dynamic, dynamic>);
+    if (json is Map<dynamic, dynamic>) {
       for (final field in fields) {
         if (json.containsKey(field.fieldName)) {
           field.value = json[field.fieldName];

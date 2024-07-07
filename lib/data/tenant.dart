@@ -4,6 +4,7 @@ class Tenant extends JsonModel {
   @override
   List<JsonField> get fields => [
         id,
+        code,
         name,
         defaultPath,
         ownerId,
@@ -15,6 +16,8 @@ class Tenant extends JsonModel {
       ];
 
   JsonNumber id = JsonNumber('id');
+
+  JsonString code = JsonString('code');
 
   JsonString name = JsonString('name');
 
