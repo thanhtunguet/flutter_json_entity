@@ -1,5 +1,9 @@
 library supa_architecture;
 
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supa_architecture/data/app_user.dart';
 import 'package:supa_architecture/data/enum_model.dart';
@@ -68,6 +72,25 @@ class SupaApplication {
     JsonModel.registerType(EnumModel, EnumModel.new);
     JsonModel.registerType(File, File.new);
     JsonModel.registerType(Tenant, Tenant.new);
+  }
+
+  static late AadOAuth azureAuth;
+
+  static void initializeAzureAd({
+    required String tenantId,
+    required String clientId,
+    required String redirectUri,
+    required GlobalKey<NavigatorState> navigationKey,
+  }) {
+    final config = Config(
+      tenant: tenantId,
+      clientId: clientId,
+      scope: "openid profile",
+      navigatorKey: navigationKey,
+      redirectUri: redirectUri,
+      webUseRedirect: true,
+    );
+    azureAuth = AadOAuth(config);
   }
 }
 

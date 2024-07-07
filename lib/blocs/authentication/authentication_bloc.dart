@@ -165,6 +165,19 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationLoading());
+
+    try {
+      final result = await SupaApplication.azureAuth.login();
+
+      final String? accessToken =
+          await SupaApplication.azureAuth.getAccessToken();
+      if (accessToken != null) {
+        final tenants = await authRepo.loginWithMicrosoft(accessToken);
+        _handleLoginWithTenants(tenants);
+      }
+    } catch (error) {
+      add(AuthenticationErrorEvent(error as Error));
+    }
   }
 
   loginWithBiometric() {
@@ -187,5 +200,6 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationInitial());
+    authRepo.removeAuthentication();
   }
 }

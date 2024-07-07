@@ -80,6 +80,10 @@ class PortalAuthenticationRepository extends ApiClient {
 
     return null;
   }
+
+  void removeAuthentication() {
+    persistentStorageService.logout();
+  }
 }
 
 class TenantAuthentication {

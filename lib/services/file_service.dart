@@ -1,5 +1,5 @@
-import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:supa_carbon_icons/supa_carbon_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class FileService {
@@ -25,7 +25,9 @@ class FileService {
   }
 
   static bool isImageFile(String filename) {
-    return filename.endsWith('.jpg') || filename.endsWith('.jpeg') || filename.endsWith('.png');
+    return filename.endsWith('.jpg') ||
+        filename.endsWith('.jpeg') ||
+        filename.endsWith('.png');
   }
 
   static bool isPDFFile(String filename) {
