@@ -167,7 +167,7 @@ class AuthenticationBloc
     emit(AuthenticationLoading());
 
     try {
-      final result = await SupaApplication.azureAuth.login();
+      await SupaApplication.azureAuth.login();
 
       final String? accessToken =
           await SupaApplication.azureAuth.getAccessToken();

@@ -85,7 +85,7 @@ class SupaApplication {
     final config = Config(
       tenant: tenantId,
       clientId: clientId,
-      scope: "openid profile",
+      scope: "openid profile email",
       navigatorKey: navigationKey,
       redirectUri: redirectUri,
       webUseRedirect: true,
