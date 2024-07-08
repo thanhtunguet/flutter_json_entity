@@ -29,6 +29,10 @@ extension HttpResponse on Response {
     return (data as num).toDouble();
   }
 
+  num bodyAsNumber() {
+    return num.parse(data);
+  }
+
   String bodyAsString() {
     return data.toString();
   }
