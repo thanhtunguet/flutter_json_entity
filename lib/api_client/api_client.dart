@@ -1,27 +1,65 @@
+import 'dart:async';
 import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:path/path.dart';
+import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'http_response.dart';
 
 abstract class ApiClient {
-  static final defaultDio = Dio();
+  static Completer<void>? _refreshCompleter;
+
+  static final refreshInterceptor = InterceptorsWrapper(
+    onError: (DioException error, ErrorInterceptorHandler handler) async {
+      if (error.response?.statusCode == 401) {
+        if (_refreshCompleter == null) {
+          _refreshCompleter = Completer<void>();
+          try {
+            await refreshToken();
+            _refreshCompleter?.complete();
+          } catch (refreshError) {
+            _refreshCompleter?.completeError(refreshError);
+          } finally {
+            _refreshCompleter = null;
+          }
+        }
+
+        try {
+          await _refreshCompleter?.future;
+          final dio = Dio();
+          dio.interceptors.add(cookieStorageService.getCookieManager());
+          final response = await dio.fetch(error.requestOptions);
+          return handler.resolve(response);
+        } catch (refreshError) {
+          return handler.next(error);
+        }
+      } else {
+        return handler.next(error);
+      }
+    },
+  );
+
+  static Future<void> refreshToken() async {
+    return await PortalAuthenticationRepository()
+        .refreshToken()
+        .catchError((error) {
+      throw error;
+    });
+  }
 
   final Dio dio;
 
   String get baseUrl;
 
-  ApiClient({
-    bool useDefaultDio = false,
-  }) : dio = useDefaultDio ? defaultDio : Dio() {
-    if (!useDefaultDio) {
-      dio.options.baseUrl = baseUrl;
-      final cookieManager = SupaApplication.instance.cookieStorageService.getCookieManager();
-      dio.interceptors.add(cookieManager);
-    }
+  ApiClient() : dio = Dio() {
+    dio.options.baseUrl = baseUrl;
+    final cookieManager =
+        SupaApplication.instance.cookieStorageService.getCookieManager();
+    dio.interceptors.add(cookieManager);
+    dio.interceptors.add(refreshInterceptor);
   }
 
   Future<Uint8List> downloadBytes(String url) {

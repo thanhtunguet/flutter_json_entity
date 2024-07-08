@@ -9,6 +9,7 @@ import 'package:supa_architecture/data/app_user.dart';
 import 'package:supa_architecture/data/enum_model.dart';
 import 'package:supa_architecture/data/file.dart';
 import 'package:supa_architecture/data/tenant.dart';
+import 'package:supa_architecture/data/user_notification.dart';
 import 'package:supa_architecture/json/json.dart';
 import 'package:supa_architecture/services/cookie_storage_service.dart';
 import 'package:supa_architecture/services/persistent_storage_service.dart';
@@ -72,6 +73,7 @@ class SupaApplication {
     JsonModel.registerType(EnumModel, EnumModel.new);
     JsonModel.registerType(File, File.new);
     JsonModel.registerType(Tenant, Tenant.new);
+    JsonModel.registerType(UserNotification, UserNotification.new);
   }
 
   static late AadOAuth azureAuth;

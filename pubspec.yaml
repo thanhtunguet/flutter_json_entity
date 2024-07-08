@@ -31,6 +31,7 @@ dependencies:
   flutter_bloc: ^8.0.0
   riverpod: ^2.0.0
   supa_carbon_icons: ^0.0.1+4
+  fresh_dio: ^0.4.1
 
 dev_dependencies:
   flutter_test:
