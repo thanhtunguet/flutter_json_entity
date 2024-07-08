@@ -17,6 +17,7 @@ import 'package:supa_architecture/services/secure_storage_service.dart';
 
 export 'api_client/api_client.dart';
 export 'blocs/blocs.dart';
+export 'constants/date_time_formats_vn.dart';
 export 'data/app_token.dart';
 export 'data/app_user.dart';
 export 'data/device_notification_token.dart';
