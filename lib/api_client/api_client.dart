@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io' as io;
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
@@ -60,6 +61,19 @@ abstract class ApiClient {
         SupaApplication.instance.cookieStorageService.getCookieManager();
     dio.interceptors.add(cookieManager);
     dio.interceptors.add(refreshInterceptor);
+    if (kDebugMode) {
+      dio.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseBody: true,
+          responseHeader: false,
+          error: true,
+          compact: true,
+          maxWidth: 100,
+        ),
+      );
+    }
   }
 
   Future<Uint8List> downloadBytes(String url) {
