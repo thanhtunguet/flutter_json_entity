@@ -19,7 +19,33 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   }
 
   @override
-  toJSON() {
+  Map<String, dynamic>? toJSON() {
     return rawValue?.toJSON();
+  }
+
+  operator [](String name) {
+    if (rawValue == null) {
+      return null;
+    }
+    for (final field in rawValue!.fields) {
+      if (field.fieldName == name) {
+        return field.value;
+      }
+    }
+    throw Exception('Field $name is not exist');
+  }
+
+  operator []=(String name, value) {
+    assert(rawValue != null);
+    if (rawValue == null) {
+      throw Exception('Field $name is not exist');
+    }
+    for (final field in rawValue!.fields) {
+      if (field.fieldName == name) {
+        field.value = value;
+        return;
+      }
+    }
+    throw Exception('Field $name is not exist');
   }
 }

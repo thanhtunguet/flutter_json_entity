@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 part 'json_boolean.dart';
 part 'json_date.dart';
 part 'json_field.dart';

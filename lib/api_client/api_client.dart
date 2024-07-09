@@ -3,6 +3,7 @@ import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
@@ -33,6 +34,7 @@ abstract class ApiClient {
           final dio = Dio();
           dio.interceptors.add(cookieStorageService.getCookieManager());
           final response = await dio.fetch(error.requestOptions);
+          GetIt.instance.get<AuthenticationBloc>().initialize();
           return handler.resolve(response);
         } catch (refreshError) {
           return handler.next(error);

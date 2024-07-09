@@ -20,17 +20,27 @@ abstract interface class CookieStorageService {
 
   Future<List<Cookie>> getCookies();
 
-  Future<void> setCookies(List<Cookie> cookies);
+  Future<void> setCookies(
+    List<Cookie> cookies, {
+    bool deleteAll = false,
+  });
+
+  Future<void> deleteToken();
+
+  Future<void> logout();
 }
 
 class _CookieStorageServiceImpl implements CookieStorageService {
   final PersistCookieJar persistCookieJar;
 
   static const _authenticationPath = '/rpc/portal/authentication';
+  static const _rpcPath = '/rpc/';
 
   static Uri get _authenticationUri =>
       Uri.parse(persistentStorageService.baseApiUrl)
           .replace(path: _authenticationPath);
+  static Uri get _rpcUri =>
+      Uri.parse(persistentStorageService.baseApiUrl).replace(path: _rpcPath);
 
   _CookieStorageServiceImpl._({
     required this.persistCookieJar,
@@ -55,5 +65,19 @@ class _CookieStorageServiceImpl implements CookieStorageService {
       await persistCookieJar.deleteAll();
     }
     return persistCookieJar.saveFromResponse(_authenticationUri, cookies);
+  }
+
+  @override
+  Future<void> deleteToken() async {
+    final cookies = await persistCookieJar.loadForRequest(_authenticationUri);
+    final newCookies =
+        cookies.where((cookie) => cookie.name == 'RefreshToken').toList();
+    await persistCookieJar.deleteAll();
+    await persistCookieJar.saveFromResponse(_authenticationUri, newCookies);
+  }
+
+  @override
+  Future<void> logout() async {
+    return persistCookieJar.deleteAll();
   }
 }

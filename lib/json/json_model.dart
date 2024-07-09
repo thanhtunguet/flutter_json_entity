@@ -40,4 +40,28 @@ abstract class JsonModel with JsonSerializable {
     }
     return json;
   }
+
+  @override
+  String toString() {
+    return jsonEncode(toJSON());
+  }
+
+  operator [](String name) {
+    for (final field in fields) {
+      if (field.fieldName == name) {
+        return field.value;
+      }
+    }
+    throw Exception('Field $name is not exist');
+  }
+
+  operator []=(String name, value) {
+    for (final field in fields) {
+      if (field.fieldName == name) {
+        field.value = value;
+        return;
+      }
+    }
+    throw Exception('Field $name is not exist');
+  }
 }

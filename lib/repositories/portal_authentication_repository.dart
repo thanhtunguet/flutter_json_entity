@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:supa_architecture/data/tenant.dart';
+import 'package:supa_architecture/data/tenant_authentication.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 class PortalAuthenticationRepository extends ApiClient {
@@ -99,15 +100,8 @@ class PortalAuthenticationRepository extends ApiClient {
     return null;
   }
 
-  void removeAuthentication() {
-    persistentStorageService.logout();
+  void removeAuthentication() async {
+    await persistentStorageService.logout();
+    await cookieStorageService.logout();
   }
-}
-
-class TenantAuthentication {
-  final Tenant tenant;
-
-  final AppUser appUser;
-
-  TenantAuthentication(this.tenant, this.appUser);
 }

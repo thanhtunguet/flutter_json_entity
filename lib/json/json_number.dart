@@ -17,4 +17,9 @@ class JsonNumber extends JsonField<num> {
       return;
     }
   }
+
+  @override
+  num? toJSON() {
+    return rawValue;
+  }
 }

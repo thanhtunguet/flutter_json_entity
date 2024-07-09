@@ -23,7 +23,28 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
   }
 
   @override
-  toJSON() {
+  List<Map<String, dynamic>>? toJSON() {
     return rawValue?.map((element) => element.toJSON()).toList();
+  }
+
+  operator [](int index) {
+    if (rawValue == null) {
+      return null;
+    }
+    if (index < 0 || index >= rawValue!.length) {
+      throw Exception('Index $index is out of range');
+    }
+    return rawValue![index];
+  }
+
+  operator []=(int index, value) {
+    assert(rawValue != null);
+    if (rawValue == null) {
+      throw Exception('Index $index is out of range');
+    }
+    if (index < 0 || index >= rawValue!.length) {
+      throw Exception('Index $index is out of range');
+    }
+    rawValue![index] = value;
   }
 }

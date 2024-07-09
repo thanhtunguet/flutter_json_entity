@@ -13,7 +13,7 @@ class JsonDate extends JsonField<DateTime> {
   }
 
   @override
-  toJSON() {
+  String? toJSON() {
     return rawValue?.toIso8601String();
   }
 }
