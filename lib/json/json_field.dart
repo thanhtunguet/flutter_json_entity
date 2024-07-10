@@ -3,6 +3,18 @@ part of 'json.dart';
 abstract class JsonField<T> {
   final String fieldName;
 
+  String? error;
+
+  String? warning;
+
+  String? information;
+
+  bool get hasError => error != null;
+
+  bool get hasWarning => warning != null;
+
+  bool get hasInformation => information != null;
+
   T? rawValue;
 
   T get value => rawValue!;
