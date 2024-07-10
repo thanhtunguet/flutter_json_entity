@@ -18,16 +18,14 @@ abstract interface class CookieStorageService {
 
   CookieManager getCookieManager();
 
-  Future<List<Cookie>> getCookies();
-
   Future<void> setCookies(
     List<Cookie> cookies, {
     bool deleteAll = false,
   });
 
-  Future<void> deleteToken();
-
   Future<void> logout();
+
+  Future<void> deleteAccessTokenOnly();
 }
 
 class _CookieStorageServiceImpl implements CookieStorageService {
@@ -52,11 +50,6 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   }
 
   @override
-  Future<List<Cookie>> getCookies() async {
-    return persistCookieJar.loadForRequest(_authenticationUri);
-  }
-
-  @override
   Future<void> setCookies(
     List<Cookie> cookies, {
     bool deleteAll = false,
@@ -68,16 +61,12 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   }
 
   @override
-  Future<void> deleteToken() async {
-    final cookies = await persistCookieJar.loadForRequest(_authenticationUri);
-    final newCookies =
-        cookies.where((cookie) => cookie.name == 'RefreshToken').toList();
-    await persistCookieJar.deleteAll();
-    await persistCookieJar.saveFromResponse(_authenticationUri, newCookies);
+  Future<void> logout() async {
+    return persistCookieJar.deleteAll();
   }
 
   @override
-  Future<void> logout() async {
-    return persistCookieJar.deleteAll();
+  Future<void> deleteAccessTokenOnly() async {
+    return persistCookieJar.delete(_rpcUri);
   }
 }

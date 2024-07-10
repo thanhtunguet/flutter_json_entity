@@ -63,7 +63,7 @@ abstract class ApiClient {
         SupaApplication.instance.cookieStorageService.getCookieManager();
     dio.interceptors.add(cookieManager);
     dio.interceptors.add(refreshInterceptor);
-    if (kDebugMode) {
+    if (kDebugMode && io.Platform.isAndroid) {
       dio.interceptors.add(
         PrettyDioLogger(
           requestHeader: true,

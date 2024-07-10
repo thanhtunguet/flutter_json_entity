@@ -200,6 +200,10 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationInitial());
-    authRepo.removeAuthentication();
+    try {
+      await authRepo.logout();
+    } catch (error) {
+      /// Do nothing here. Just logout!
+    }
   }
 }

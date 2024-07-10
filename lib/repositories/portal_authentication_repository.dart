@@ -84,6 +84,15 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  Future<List<Tenant>> listTenant() async {
+    return dio.post(
+      '/list-tenant',
+      data: {},
+    ).then(
+      (response) => response.bodyAsList<Tenant>(),
+    );
+  }
+
   saveAuthentication(AppUser appUser, Tenant tenant) {
     persistentStorageService.tenant = tenant;
     persistentStorageService.appUser = appUser;
@@ -100,7 +109,15 @@ class PortalAuthenticationRepository extends ApiClient {
     return null;
   }
 
-  void removeAuthentication() async {
+  Future<bool> logout() async {
+    await _removeAuthentication();
+    return dio.post(
+      '/logout',
+      data: {},
+    ).then((response) => response.bodyAsBoolean());
+  }
+
+  Future<void> _removeAuthentication() async {
     await persistentStorageService.logout();
     await cookieStorageService.logout();
   }
