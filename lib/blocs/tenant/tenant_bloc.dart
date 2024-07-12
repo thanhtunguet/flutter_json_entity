@@ -15,9 +15,11 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     on<TenantLoadedEvent>(_onTenantLoaded);
   }
 
-  Future<void> _onTenantInitial(
-      TenantInitialEvent event, Emitter<TenantState> emit) async {
-    add(TenantLoadingEvent());
+  handleInitialize() {
+    add(TenantInitialEvent());
+  }
+
+  Future<void> handleUpdateTenant() async {
     await portalRepo.listTenant().then((tenants) {
       add(TenantLoadedEvent(tenants));
     }).catchError((error) {
@@ -25,9 +27,10 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     });
   }
 
-  Future<void> _onTenantLoading(
-      TenantLoadingEvent event, Emitter<TenantState> emit) async {
-    emit(TenantLoading());
+  Future<void> _onTenantInitial(
+      TenantInitialEvent event, Emitter<TenantState> emit) async {
+    add(TenantLoadingEvent());
+    await handleUpdateTenant();
   }
 
   Future<void> _onTenantLoaded(
@@ -35,7 +38,8 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     emit(TenantLoaded(event.tenants));
   }
 
-  initialize() {
-    add(TenantInitialEvent());
+  Future<void> _onTenantLoading(
+      TenantLoadingEvent event, Emitter<TenantState> emit) async {
+    emit(TenantLoading());
   }
 }

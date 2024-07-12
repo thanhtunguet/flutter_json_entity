@@ -1,26 +1,18 @@
 part of 'authentication_bloc.dart';
 
-enum AuthenticationStatus {
-  authenticated,
-  unauthenticated,
-  unknown,
-  loading,
-  error,
-}
+final class AuthenticationError extends AuthenticationState {
+  final Error error;
 
-sealed class AuthenticationState extends Equatable {
-  bool get isLoading => status == AuthenticationStatus.loading;
-
-  bool get isAuthenticated => status == AuthenticationStatus.authenticated;
-
-  AuthenticationStatus get status;
-
-  const AuthenticationState();
+  const AuthenticationError(this.error);
 
   @override
   List<Object> get props => [
         status,
+        error,
       ];
+
+  @override
+  AuthenticationStatus get status => AuthenticationStatus.error;
 }
 
 final class AuthenticationInitial extends AuthenticationState {
@@ -33,22 +25,30 @@ final class AuthenticationLoading extends AuthenticationState {
   AuthenticationStatus get status => AuthenticationStatus.loading;
 }
 
-final class AuthenticationTenants extends AuthenticationState {
+sealed class AuthenticationState extends Equatable {
+  const AuthenticationState();
+
+  bool get isAuthenticated => status == AuthenticationStatus.authenticated;
+
+  bool get isLoading => status == AuthenticationStatus.loading;
+
   @override
-  AuthenticationStatus get status => AuthenticationStatus.unknown;
+  List<Object> get props => [
+        status,
+      ];
 
-  final List<Tenant> tenants;
+  AuthenticationStatus get status;
+}
 
-  const AuthenticationTenants(this.tenants);
-
-  @override
-  List<Object> get props => [status, tenants, ...tenants];
+enum AuthenticationStatus {
+  authenticated,
+  unauthenticated,
+  unknown,
+  loading,
+  error,
 }
 
 final class AuthenticationSuccess extends AuthenticationState {
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.authenticated;
-
   final Tenant tenant;
 
   final AppUser appUser;
@@ -59,21 +59,26 @@ final class AuthenticationSuccess extends AuthenticationState {
   List<Object> get props => [
         status,
         tenant,
+        tenant.id.value,
         appUser,
       ];
+
+  @override
+  AuthenticationStatus get status => AuthenticationStatus.authenticated;
+
+  AuthenticationSuccess changeTenant(Tenant tenant) {
+    return AuthenticationSuccess(tenant, appUser);
+  }
 }
 
-final class AuthenticationError extends AuthenticationState {
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.error;
+final class AuthenticationTenants extends AuthenticationState {
+  final List<Tenant> tenants;
 
-  final Error error;
-
-  const AuthenticationError(this.error);
+  const AuthenticationTenants(this.tenants);
 
   @override
-  List<Object> get props => [
-        status,
-        error,
-      ];
+  List<Object> get props => [status, tenants, ...tenants];
+
+  @override
+  AuthenticationStatus get status => AuthenticationStatus.unknown;
 }

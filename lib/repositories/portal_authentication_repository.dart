@@ -98,6 +98,10 @@ class PortalAuthenticationRepository extends ApiClient {
     persistentStorageService.appUser = appUser;
   }
 
+  changeSavedTenant(Tenant tenant) {
+    persistentStorageService.tenant = tenant;
+  }
+
   TenantAuthentication? loadAuthentication() {
     final tenant = persistentStorageService.tenant;
     final appUser = persistentStorageService.appUser;

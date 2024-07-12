@@ -34,7 +34,7 @@ abstract class ApiClient {
           final dio = Dio();
           dio.interceptors.add(cookieStorageService.getCookieManager());
           final response = await dio.fetch(error.requestOptions);
-          GetIt.instance.get<AuthenticationBloc>().initialize();
+          GetIt.instance.get<AuthenticationBloc>().handleLogout();
           return handler.resolve(response);
         } catch (refreshError) {
           return handler.next(error);
@@ -45,17 +45,7 @@ abstract class ApiClient {
     },
   );
 
-  static Future<void> refreshToken() async {
-    return await PortalAuthenticationRepository()
-        .refreshToken()
-        .catchError((error) {
-      throw error;
-    });
-  }
-
   final Dio dio;
-
-  String get baseUrl;
 
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
@@ -77,6 +67,8 @@ abstract class ApiClient {
       );
     }
   }
+
+  String get baseUrl;
 
   Future<Uint8List> downloadBytes(String url) {
     final options = Options(
@@ -101,5 +93,13 @@ abstract class ApiClient {
     } catch (error) {
       return null;
     }
+  }
+
+  static Future<void> refreshToken() async {
+    return await PortalAuthenticationRepository()
+        .refreshToken()
+        .catchError((error) {
+      throw error;
+    });
   }
 }

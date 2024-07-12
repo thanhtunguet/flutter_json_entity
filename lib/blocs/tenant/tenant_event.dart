@@ -9,10 +9,10 @@ sealed class TenantEvent extends Equatable {
 
 final class TenantInitialEvent extends TenantEvent {}
 
-final class TenantLoadingEvent extends TenantEvent {}
-
 final class TenantLoadedEvent extends TenantEvent {
   final List<Tenant> tenants;
 
   const TenantLoadedEvent(this.tenants);
 }
+
+final class TenantLoadingEvent extends TenantEvent {}
