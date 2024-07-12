@@ -34,7 +34,8 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
 
   Future<void> _checkBiometricSupport() async {
     try {
-      _canCheckBiometrics = await auth.canCheckBiometrics;
+      _canCheckBiometrics =
+          await auth.canCheckBiometrics || await auth.isDeviceSupported();
       List<BiometricType> availableBiometrics =
           await auth.getAvailableBiometrics();
 
@@ -73,7 +74,7 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
     if (!_canCheckBiometrics) {
       return Container();
     }
-    return InkWell(
+    return GestureDetector(
       onTap: () async {
         final bool authenticated = await _authenticated(widget.reason);
         return widget.onAuthenticated(authenticated);

@@ -26,6 +26,8 @@ abstract interface class CookieStorageService {
   Future<void> logout();
 
   Future<void> deleteAccessTokenOnly();
+
+  Future<List<Cookie>> getAuthenticationCookies();
 }
 
 class _CookieStorageServiceImpl implements CookieStorageService {
@@ -68,5 +70,10 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   @override
   Future<void> deleteAccessTokenOnly() async {
     return persistCookieJar.delete(_rpcUri);
+  }
+
+  @override
+  Future<List<Cookie>> getAuthenticationCookies() {
+    return persistCookieJar.loadForRequest(_authenticationUri);
   }
 }

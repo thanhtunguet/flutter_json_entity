@@ -95,6 +95,8 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationLoading());
+    final tenants = await authRepo.loginWithBiometric();
+    _handleLoginWithTenants(tenants);
   }
 
   _onError(
