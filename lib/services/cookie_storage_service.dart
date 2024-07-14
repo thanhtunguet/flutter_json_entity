@@ -28,6 +28,8 @@ abstract interface class CookieStorageService {
   Future<void> deleteAccessTokenOnly();
 
   Future<List<Cookie>> getAuthenticationCookies();
+
+  Future<String> buildUrlWithToken(String fileUrl);
 }
 
 class _CookieStorageServiceImpl implements CookieStorageService {
@@ -76,4 +78,20 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   Future<List<Cookie>> getAuthenticationCookies() {
     return persistCookieJar.loadForRequest(_authenticationUri);
   }
+
+  @override
+  Future<String> buildUrlWithToken(String fileUrl) async {
+    final cookies = await persistCookieJar.loadForRequest(_rpcUri);
+    final uri = Uri.parse(fileUrl);
+    final queryParameters = uri.queryParameters;
+    return uri.replace(queryParameters: {
+      ...queryParameters,
+      'token': cookies.accessToken,
+    }).toString();
+  }
+}
+
+extension _CookiesExtensions on List<Cookie> {
+  String get accessToken =>
+      firstWhere((cookie) => cookie.name == 'Token').value;
 }

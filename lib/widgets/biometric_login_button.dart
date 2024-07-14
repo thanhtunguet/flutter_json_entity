@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
 final class BiometricLoginButton extends StatefulWidget {
-  final Widget Function(BiometricType) childRender;
+  final Widget Function(BiometricType?) childRender;
 
   final Future<void> Function(bool) onAuthenticated;
 
@@ -79,7 +79,7 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
         final bool authenticated = await _authenticated(widget.reason);
         return widget.onAuthenticated(authenticated);
       },
-      child: widget.childRender(_biometricType!),
+      child: widget.childRender(_biometricType),
     );
   }
 }

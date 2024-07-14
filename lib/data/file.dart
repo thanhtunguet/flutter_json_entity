@@ -6,6 +6,7 @@ class File extends JsonModel {
         id,
         name,
         path,
+        url,
         mimeType,
         size,
         createdAt,
