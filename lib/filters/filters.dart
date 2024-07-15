@@ -25,10 +25,10 @@ abstract class DataFilter implements JsonSerializable {
   static const viewCodeApproved = "APPROVED";
 
   /// Number of entities to skip
-  int? skip = 0;
+  int skip = 0;
 
   /// Number of entities to take in a request
-  int? take = 10;
+  int take = 20;
 
   /// Field name to order by
   String? orderBy;
@@ -100,5 +100,9 @@ abstract class DataFilter implements JsonSerializable {
   @override
   String toString() {
     return jsonEncode(toJSON());
+  }
+
+  int nextPage() {
+    return skip + take;
   }
 }

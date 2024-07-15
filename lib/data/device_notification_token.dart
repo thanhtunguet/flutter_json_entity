@@ -1,15 +1,27 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+
+class DeviceInfo {
+  final String osVersion;
+
+  final String deviceModel;
+
+  const DeviceInfo({
+    required this.osVersion,
+    required this.deviceModel,
+  });
+}
 
 class DeviceNotificationToken extends Equatable {
   @override
   List<Object?> get props => [
-        globalUserId,
         osVersion,
         deviceModel,
         token,
       ];
-
-  final int globalUserId;
 
   final String osVersion;
 
@@ -18,24 +30,50 @@ class DeviceNotificationToken extends Equatable {
   final String? token;
 
   const DeviceNotificationToken({
-    required this.globalUserId,
     required this.osVersion,
     required this.deviceModel,
     this.token,
   });
 
   DeviceNotificationToken.fromJSON(Map<String, dynamic> json)
-      : globalUserId = json['globalUserId'],
-        osVersion = json['osVersion'],
+      : osVersion = json['osVersion'],
         deviceModel = json['deviceModel'],
         token = json['token'];
 
   Map<String, dynamic> toJSON() {
     return {
-      'globalUserId': globalUserId,
       'osVersion': osVersion,
       'deviceModel': deviceModel,
       'token': token,
     };
+  }
+
+  static Future<DeviceInfo> getDeviceInfo() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    String osVersion = 'Unknown';
+    String deviceModel = 'Unknown';
+
+    try {
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+        osVersion = androidInfo.version.release;
+        deviceModel = androidInfo.model;
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+        osVersion = iosInfo.systemVersion;
+        deviceModel = iosInfo.model;
+      } else if (kIsWeb) {
+        WebBrowserInfo webInfo = await deviceInfoPlugin.webBrowserInfo;
+        osVersion = webInfo.userAgent ?? 'Unknown';
+        deviceModel = webInfo.browserName.name;
+      }
+    } catch (e) {
+      // Handle exception if needed
+    }
+
+    return DeviceInfo(
+      deviceModel: deviceModel,
+      osVersion: osVersion,
+    );
   }
 }

@@ -7,4 +7,7 @@ class JsonString extends JsonField {
   String? toJSON() {
     return rawValue;
   }
+
+  @override
+  get value => rawValue ?? nullString;
 }

@@ -17,7 +17,11 @@ abstract class JsonField<T> {
 
   T? rawValue;
 
-  T get value => rawValue!;
+  String get nullString => kDebugMode
+      ? '<Null check operator used on a null value, from JsonField.name = $fieldName>'
+      : '';
+
+  T get value;
 
   set value(dynamic value) {
     rawValue = value;

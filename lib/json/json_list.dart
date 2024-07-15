@@ -8,6 +8,9 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
   }
 
   @override
+  List<T> get value => rawValue ?? [];
+
+  @override
   set value(dynamic value) {
     if (value is List<T>) {
       rawValue = value;

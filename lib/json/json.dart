@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+import 'package:supa_architecture/constants/date_time_formats_vn.dart';
+
 part 'json_boolean.dart';
 part 'json_date.dart';
 part 'json_field.dart';

@@ -6,6 +6,9 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   JsonObject(super.fieldName, InstanceConstructor<T> type) : _type = type;
 
   @override
+  T get value => rawValue ?? _type();
+
+  @override
   set value(dynamic value) {
     if (value is T) {
       rawValue = value;

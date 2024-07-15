@@ -49,10 +49,9 @@ abstract class ApiClient {
 
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
-    final cookieManager =
-        SupaApplication.instance.cookieStorageService.getCookieManager();
-    dio.interceptors.add(cookieManager);
+    dio.interceptors.add(cookieStorageService.getCookieManager());
     dio.interceptors.add(refreshInterceptor);
+
     if (kDebugMode && io.Platform.isAndroid) {
       dio.interceptors.add(
         PrettyDioLogger(
@@ -96,10 +95,6 @@ abstract class ApiClient {
   }
 
   static Future<void> refreshToken() async {
-    return await PortalAuthenticationRepository()
-        .refreshToken()
-        .catchError((error) {
-      throw error;
-    });
+    return PortalAuthenticationRepository().refreshToken();
   }
 }

@@ -11,8 +11,9 @@ class UtilsNotificationRepository
       )
       .toString();
 
-  Future<DeviceNotificationToken> createToken(
-      DeviceNotificationToken deviceNotificationToken) async {
+  Future<bool> createToken(
+    DeviceNotificationToken deviceNotificationToken,
+  ) async {
     return dio
         .post(
           '/create-token',
@@ -23,8 +24,9 @@ class UtilsNotificationRepository
         );
   }
 
-  Future<DeviceNotificationToken> deleteToken(
-      DeviceNotificationToken deviceNotificationToken) async {
+  Future<bool> deleteToken(
+    DeviceNotificationToken deviceNotificationToken,
+  ) async {
     return dio
         .post(
           '/delete-token',
