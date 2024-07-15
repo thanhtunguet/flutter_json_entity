@@ -28,8 +28,13 @@ class AuthenticationBloc
     on<AuthenticationTenantChangedEvent>(_onTenantChanged);
   }
 
-  handleChangeTenant(Tenant tenant) {
-    add(AuthenticationTenantChangedEvent(tenant: tenant));
+  Future<void> handleChangeTenant(Tenant tenant) async {
+    await authRepo.createToken(tenant);
+    await authRepo.changeSavedTenant(tenant);
+    add(AuthenticationFinalEvent(
+      appUser: (state as AuthenticationSuccess).appUser,
+      tenant: tenant,
+    ));
   }
 
   handleInitialize() {
@@ -193,13 +198,14 @@ class AuthenticationBloc
     AuthenticationTenantChangedEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    await authRepo.createToken(event.tenant);
+    final tenant = event.tenant;
 
-    final newState =
-        (state as AuthenticationSuccess).changeTenant(event.tenant);
-    await authRepo.changeSavedTenant(event.tenant);
+    await authRepo.changeSavedTenant(tenant);
 
-    emit(newState);
+    add(AuthenticationFinalEvent(
+      appUser: (state as AuthenticationSuccess).appUser,
+      tenant: tenant,
+    ));
   }
 
   _onTenantSelected(

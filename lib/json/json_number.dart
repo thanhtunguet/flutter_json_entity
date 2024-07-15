@@ -4,7 +4,7 @@ class JsonNumber extends JsonField<num> {
   JsonNumber(super.fieldName);
 
   @override
-  num get value => rawValue!;
+  num get value => rawValue ?? 0;
 
   @override
   set value(dynamic value) {
