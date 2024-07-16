@@ -1,7 +1,15 @@
 part of 'authentication_bloc.dart';
 
+enum AuthenticationStatus {
+  authenticated,
+  unauthenticated,
+  unknown,
+  loading,
+  error,
+}
+
 final class AuthenticationError extends AuthenticationState {
-  final Error error;
+  final Exception error;
 
   const AuthenticationError(this.error);
 
@@ -38,14 +46,6 @@ sealed class AuthenticationState extends Equatable {
       ];
 
   AuthenticationStatus get status;
-}
-
-enum AuthenticationStatus {
-  authenticated,
-  unauthenticated,
-  unknown,
-  loading,
-  error,
 }
 
 final class AuthenticationSuccess extends AuthenticationState {

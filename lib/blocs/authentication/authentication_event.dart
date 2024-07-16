@@ -1,7 +1,7 @@
 part of 'authentication_bloc.dart';
 
 final class AuthenticationErrorEvent extends AuthenticationEvent {
-  final Error error;
+  final Exception error;
 
   const AuthenticationErrorEvent(this.error);
 

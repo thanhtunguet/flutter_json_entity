@@ -23,7 +23,9 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     await portalRepo.listTenant().then((tenants) {
       add(TenantLoadedEvent(tenants));
     }).catchError((error) {
-      /// TODO: handle tenants error
+      if (error is Exception) {
+        ///
+      }
     });
   }
 

@@ -158,7 +158,9 @@ class AuthenticationBloc
     try {
       await authRepo.logout();
     } catch (error) {
-      /// Do nothing here. Just logout!
+      if (error is Exception) {
+        add(AuthenticationErrorEvent(error));
+      }
     }
   }
 
@@ -178,7 +180,7 @@ class AuthenticationBloc
         _handleLoginWithTenants(tenants);
       }
     } catch (error) {
-      add(AuthenticationErrorEvent(error as Error));
+      add(AuthenticationErrorEvent(error as Exception));
     }
   }
 
@@ -191,6 +193,8 @@ class AuthenticationBloc
     final password = event.password;
     await authRepo.login(username, password).then((tenants) {
       return _handleLoginWithTenants(tenants);
+    }).catchError((error) {
+      add(AuthenticationErrorEvent(error));
     });
   }
 
