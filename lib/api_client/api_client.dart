@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
@@ -51,20 +50,6 @@ abstract class ApiClient {
     dio.options.baseUrl = baseUrl;
     dio.interceptors.add(cookieStorageService.getCookieManager());
     dio.interceptors.add(refreshInterceptor);
-
-    if (kDebugMode && io.Platform.isAndroid) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: false,
-          error: true,
-          compact: true,
-          maxWidth: 100,
-        ),
-      );
-    }
   }
 
   String get baseUrl;
