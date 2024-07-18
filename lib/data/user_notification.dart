@@ -16,6 +16,11 @@ class UserNotification extends JsonModel {
   JsonString linkWeb = JsonString("linkWeb");
   JsonString linkMobile = JsonString("linkMobile");
 
+  JsonObject<AppUser> sender = JsonObject<AppUser>("sender", AppUser.new);
+  JsonNumber senderId = JsonNumber("senderId");
+  JsonObject<AppUser> recipient = JsonObject<AppUser>("recipient", AppUser.new);
+  JsonNumber recipientId = JsonNumber("recipientId");
+
   @override
   List<JsonField> get fields => [
         id,
@@ -28,5 +33,9 @@ class UserNotification extends JsonModel {
         link,
         linkWeb,
         linkMobile,
+        sender,
+        senderId,
+        recipient,
+        recipientId,
       ];
 }
