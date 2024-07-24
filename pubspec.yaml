@@ -1,6 +1,6 @@
 name: supa_architecture
 description: "Supa application architecture"
-version: 0.0.1
+version: 0.0.1+preview.1
 homepage: https://github.com/thanhtunguet/supa_architecture
 
 environment:
