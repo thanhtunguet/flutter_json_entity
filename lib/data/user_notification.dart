@@ -1,4 +1,3 @@
-import 'package:supa_architecture/json/json.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 class UserNotification extends JsonModel {

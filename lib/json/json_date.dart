@@ -5,7 +5,6 @@ class JsonDate extends JsonField<DateTime> {
 
   @override
   DateTime get value {
-    assert(rawValue != null);
     return rawValue ?? DateTime.now();
   }
 
@@ -24,7 +23,7 @@ class JsonDate extends JsonField<DateTime> {
     if (rawValue == null) {
       return '';
     }
-    return DateFormat(dateFormat).format(rawValue!);
+    return value.format(dateFormat: dateFormat);
   }
 
   @override

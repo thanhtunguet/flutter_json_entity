@@ -1,4 +1,4 @@
-import 'package:supa_architecture/json/json.dart';
+import 'package:supa_architecture/supa_architecture.dart';
 
 class AppUser extends JsonModel {
   static final AppUser empty = AppUser();
@@ -15,8 +15,20 @@ class AppUser extends JsonModel {
         address,
         dateOfBirth,
         avatar,
+        adminType,
+        adminTypeId,
+        gender,
+        genderId,
+        isAlreadyGettingStarted,
+        otpCode,
+        language,
+        languageId,
         createdAt,
         updatedAt,
+        receivingSystemEmail,
+        receivingSystemNotification,
+        timezone,
+        timezoneId,
       ];
 
   JsonNumber userId = JsonNumber("userId");
@@ -38,6 +50,34 @@ class AppUser extends JsonModel {
   JsonDate dateOfBirth = JsonDate("dateOfBirth");
 
   JsonString avatar = JsonString("avatar");
+
+  JsonObject<EnumModel> adminType =
+      JsonObject<EnumModel>("adminType", EnumModel.new);
+
+  JsonNumber adminTypeId = JsonNumber("adminTypeId");
+
+  JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender", EnumModel.new);
+
+  JsonNumber genderId = JsonNumber("genderId");
+
+  JsonBoolean isAlreadyGettingStarted = JsonBoolean("isAlreadyGettingStarted");
+
+  JsonString otpCode = JsonString("otpCode");
+
+  JsonObject<EnumModel> language =
+      JsonObject<EnumModel>("language", EnumModel.new);
+
+  JsonNumber languageId = JsonNumber("languageId");
+
+  JsonBoolean receivingSystemEmail = JsonBoolean("receivingSystemEmail");
+
+  JsonBoolean receivingSystemNotification =
+      JsonBoolean("receivingSystemNotification");
+
+  JsonObject<EnumModel> timezone =
+      JsonObject<EnumModel>("timezone", EnumModel.new);
+
+  JsonNumber timezoneId = JsonNumber("timezoneId");
 
   JsonDate createdAt = JsonDate("createdAt");
 

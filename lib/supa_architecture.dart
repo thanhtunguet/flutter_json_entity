@@ -23,6 +23,8 @@ export 'data/app_user.dart';
 export 'data/device_notification_token.dart';
 export 'data/enum_model.dart';
 export 'data/file.dart';
+export 'exceptions/exceptions.dart';
+export 'extensions/extensions.dart';
 export 'filters/filters.dart';
 export 'json/json.dart';
 export 'repositories/base_repository.dart';

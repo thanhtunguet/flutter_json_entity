@@ -5,7 +5,7 @@ class CarbonButton extends StatelessWidget {
 
   final bool isExpanded;
 
-  final void Function() onPressed;
+  final VoidCallback? onPressed;
 
   final String label;
 

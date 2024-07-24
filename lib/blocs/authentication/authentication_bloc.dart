@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
+import 'package:supa_architecture/repositories/portal_profile_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'authentication_event.dart';
@@ -12,6 +14,8 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   static final authRepo = PortalAuthenticationRepository();
+
+  static final profileRepo = PortalProfileRepository();
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
     on<AuthenticationInitialEvent>(_onInitial);
@@ -26,6 +30,40 @@ class AuthenticationBloc
     on<AuthenticationTenantSelectedEvent>(_onTenantSelected);
     on<AuthenticationFinalEvent>(_onFinal);
     on<AuthenticationTenantChangedEvent>(_onTenantChanged);
+  }
+
+  Future<void> handleSwitchEmail(bool value) async {
+    final user = (state as AuthenticationSuccess).appUser;
+    final tenant = (state as AuthenticationSuccess).tenant;
+    user.receivingSystemEmail.value = value;
+    add(AuthenticationFinalEvent(
+      appUser: user,
+      tenant: tenant,
+    ));
+    try {
+      final appUser = await profileRepo.switchEmail(user);
+      add(AuthenticationFinalEvent(
+        appUser: appUser,
+        tenant: tenant,
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> handleSwitchNotification(bool value) async {
+    final user = (state as AuthenticationSuccess).appUser;
+    final tenant = (state as AuthenticationSuccess).tenant;
+
+    user.receivingSystemNotification.value = value;
+    add(AuthenticationFinalEvent(appUser: user, tenant: tenant));
+
+    try {
+      final appUser = await profileRepo.switchNotification(user);
+      add(AuthenticationFinalEvent(appUser: appUser, tenant: tenant));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> handleChangeTenant(Tenant tenant) async {

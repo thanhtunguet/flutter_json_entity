@@ -43,6 +43,15 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  Future<int> countTenant() async {
+    return dio.post(
+      '/count-tenant',
+      data: {},
+    ).then(
+      (response) => (response.data as num).toInt(),
+    );
+  }
+
   TenantAuthentication? loadAuthentication() {
     final tenant = persistentStorageService.tenant;
     final appUser = persistentStorageService.appUser;

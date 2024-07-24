@@ -5,7 +5,6 @@ class JsonBoolean extends JsonField<bool> {
 
   @override
   bool get value {
-    assert(rawValue != null);
     return rawValue ?? false;
   }
 
