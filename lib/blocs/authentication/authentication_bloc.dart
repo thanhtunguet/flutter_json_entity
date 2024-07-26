@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:recaptcha_enterprise_flutter/recaptcha_action.dart';
+import 'package:recaptcha_enterprise_flutter/recaptcha_enterprise.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
@@ -163,16 +165,24 @@ class AuthenticationBloc
     AuthenticationWithGoogleEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationLoading());
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: <String>[
-        'email',
-      ],
-    );
-    final credentials = await googleSignIn.signIn();
-    final googleKey = await credentials?.authentication;
-    final tenants = await authRepo.loginWithGoogle(googleKey!.idToken!);
-    _handleLoginWithTenants(tenants);
+    try {
+      emit(AuthenticationLoading());
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: <String>[
+          'email',
+        ],
+      );
+      final credentials = await googleSignIn.signIn();
+      final googleKey = await credentials?.authentication;
+      if (googleKey != null) {
+        final tenants = await authRepo.loginWithGoogle(googleKey.idToken!);
+        _handleLoginWithTenants(tenants);
+      } else {
+        emit(AuthenticationInitial());
+      }
+    } catch (error) {
+      emit(AuthenticationInitial());
+    }
   }
 
   Future<void> _onInitial(
@@ -229,7 +239,11 @@ class AuthenticationBloc
     emit(AuthenticationLoading());
     final username = event.username;
     final password = event.password;
-    await authRepo.login(username, password).then((tenants) {
+    final useCaptcha = SupaApplication.instance.useCaptcha;
+    final captcha = useCaptcha
+        ? await RecaptchaEnterprise.execute(RecaptchaAction.LOGIN())
+        : '';
+    await authRepo.login(username, password, captcha).then((tenants) {
       return _handleLoginWithTenants(tenants);
     }).catchError((error) {
       add(AuthenticationErrorEvent(error));

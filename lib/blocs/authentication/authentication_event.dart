@@ -118,7 +118,6 @@ final class AuthenticationWithMicrosoftEvent extends AuthenticationEvent {
 
 final class AuthenticationWithPasswordEvent extends AuthenticationEvent {
   final String username;
-
   final String password;
 
   const AuthenticationWithPasswordEvent({

@@ -10,17 +10,21 @@ sealed class SupaException extends HttpException {
       switch (exception.response!.statusCode) {
         case 401:
           return SupaUnauthorizedException('Thông tin đăng nhập hết hạn');
+
         case 404:
           return SupaNotFoundException(
             'Nội dung không tồn tại trên hệ thống',
           );
+
         case 400:
           return SupaNotFoundException(
               exception.response!.data['generalErrors'][0]);
+
         case 403:
           return SupaForbiddenException(
             'Bạn không có quyền truy cập vào nội dung này',
           );
+
         default:
           return SupaUnknownException(
             'Có lỗi xảy ra trong quá trình tải dữ liệu',

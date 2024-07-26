@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supa_architecture/data/secure_authentication_info.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/data/tenant_authentication.dart';
@@ -64,10 +67,17 @@ class PortalAuthenticationRepository extends ApiClient {
   }
 
   /// Password Login
-  Future<List<Tenant>> login(String username, String password) async {
+  Future<List<Tenant>> login(
+      String username, String password, String captcha) async {
     return dio.post('/login', data: {
       'username': username,
       'password': password,
+      'captcha': captcha,
+      'osName': kIsWeb
+          ? 'WEB'
+          : Platform.isAndroid
+              ? 'ANDROID'
+              : 'IOS',
     }).then((response) => response.bodyAsList<Tenant>());
   }
 

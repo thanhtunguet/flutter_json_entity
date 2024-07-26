@@ -67,6 +67,18 @@ abstract class ApiClient {
     },
   );
 
+  static InterceptorsWrapper deviceInfoInterceptor =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    final deviceInfo = SupaApplication.instance.deviceInfo;
+
+    options.headers['X-Device-Model'] = deviceInfo.deviceModel;
+    options.headers['X-Device-Name'] = deviceInfo.deviceName;
+    options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
+    options.headers['X-System-Version'] = deviceInfo.systemVersion;
+
+    handler.next(options);
+  });
+
   /// The [Dio] instance used for making HTTP requests.
   final Dio dio;
 
@@ -76,6 +88,7 @@ abstract class ApiClient {
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
     dio.interceptors.add(cookieStorageService.getCookieManager());
+    dio.interceptors.add(deviceInfoInterceptor);
     dio.interceptors.add(refreshInterceptor);
   }
 

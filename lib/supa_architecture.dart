@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supa_architecture/data/app_user.dart';
+import 'package:supa_architecture/data/device_info.dart';
 import 'package:supa_architecture/data/enum_model.dart';
 import 'package:supa_architecture/data/file.dart';
+import 'package:supa_architecture/data/recaptcha_config.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/data/user_notification.dart';
 import 'package:supa_architecture/json/json.dart';
@@ -41,25 +43,39 @@ class SupaApplication {
 
   final PersistentStorageService persistentStorageService;
 
+  final DeviceInfo deviceInfo;
+
+  RecaptchaConfig? _captchaConfig;
+
   SupaApplication._({
     required this.cookieStorageService,
     required this.secureStorageService,
     required this.persistentStorageService,
+    required this.deviceInfo,
   });
+
+  RecaptchaConfig get captchaConfig => _captchaConfig!;
+
+  bool get useCaptcha => _captchaConfig != null;
 
   static Future<SupaApplication> initialize() async {
     if (!_isInitialized) {
       await dotenv.load();
 
       final cookieStorageService = await CookieStorageService.initialize();
+
       final persistentStorageService =
           await PersistentStorageService.initialize();
+
       final secureStorageService = SecureStorageService.initialize();
+
+      final deviceInfo = await DeviceInfo.getDeviceInfo();
 
       instance = SupaApplication._(
         cookieStorageService: cookieStorageService,
         secureStorageService: secureStorageService,
         persistentStorageService: persistentStorageService,
+        deviceInfo: deviceInfo,
       );
 
       persistentStorageService.initializeBaseApiUrl();
@@ -70,6 +86,20 @@ class SupaApplication {
 
     return instance;
   }
+
+  static initCaptcha({
+    required RecaptchaConfig captchaConfig,
+  }) {
+    instance._initCaptcha(captchaConfig: captchaConfig);
+  }
+
+  _initCaptcha({
+    required RecaptchaConfig captchaConfig,
+  }) {
+    _captchaConfig = captchaConfig;
+  }
+
+  bool get useRecaptcha => _captchaConfig != null;
 
   static registerModels() {
     JsonModel.registerType(AppUser, AppUser.new);
