@@ -4,6 +4,7 @@ import 'dart:io' as io;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
@@ -56,9 +57,9 @@ abstract class ApiClient {
           final dio = Dio();
           dio.interceptors.add(cookieStorageService.getCookieManager());
           final response = await dio.fetch(error.requestOptions);
-          GetIt.instance.get<AuthenticationBloc>().handleLogout();
           return handler.resolve(response);
         } catch (refreshError) {
+          GetIt.instance.get<AuthenticationBloc>().handleLogout();
           return handler.next(error);
         }
       } else {
@@ -146,5 +147,26 @@ abstract class ApiClient {
   /// - A [Future] that completes when the token refresh operation is finished.
   static Future<void> refreshToken() async {
     return PortalAuthenticationRepository().refreshToken();
+  }
+
+  Future<File> uploadFile({
+    required String filePath,
+    String uploadUrl = '/upload-file',
+  }) async {
+    String filename = path.basename(filePath);
+    FormData formData = FormData.fromMap(
+      {
+        'file': await MultipartFile.fromFile(filePath, filename: filename),
+      },
+    );
+
+    return dio
+        .post(
+          uploadUrl,
+          data: formData,
+        )
+        .then(
+          (response) => response.body<File>(),
+        );
   }
 }

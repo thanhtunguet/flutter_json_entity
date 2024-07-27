@@ -21,6 +21,8 @@ abstract class DateTimeFormatsVN {
 
   static const String timeOnly = 'HH:mm:ss';
 
+  static const String timeOnlyWithoutSeconds = 'HH:mm';
+
   static const String dateWithDayAndMonthOnly = 'dd/MM';
 
   static const String yearOnly = 'yyyy';
