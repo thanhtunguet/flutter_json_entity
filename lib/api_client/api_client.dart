@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
@@ -80,6 +81,18 @@ abstract class ApiClient {
     handler.next(options);
   });
 
+  static final errorLogInterceptor = InterceptorsWrapper(
+    onError: (error, handle) {
+      if (error.response?.statusCode == 400) {
+        if (error.response?.data is Map) {
+          final errors = error.response?.data['errors'];
+          debugPrint(jsonEncode(errors));
+        }
+      }
+      throw error;
+    },
+  );
+
   /// The [Dio] instance used for making HTTP requests.
   final Dio dio;
 
@@ -91,6 +104,7 @@ abstract class ApiClient {
     dio.interceptors.add(cookieStorageService.getCookieManager());
     dio.interceptors.add(deviceInfoInterceptor);
     dio.interceptors.add(refreshInterceptor);
+    dio.interceptors.add(errorLogInterceptor);
   }
 
   /// The base URL for the API requests.
