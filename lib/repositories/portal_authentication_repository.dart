@@ -33,7 +33,10 @@ class PortalAuthenticationRepository extends ApiClient {
         )
         .toString();
     return dio.post(url, data: {}).then(
-      (response) => response.body<AppUser>(),
+      (response) {
+        response.data['id'] = response.data['userId'];
+        return response.body<AppUser>();
+      },
     );
   }
 
