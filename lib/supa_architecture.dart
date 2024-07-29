@@ -2,13 +2,13 @@ library supa_architecture;
 
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Image;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supa_architecture/data/app_user.dart';
 import 'package:supa_architecture/data/device_info.dart';
 import 'package:supa_architecture/data/enum_model.dart';
 import 'package:supa_architecture/data/file.dart';
+import 'package:supa_architecture/data/image.dart';
 import 'package:supa_architecture/data/recaptcha_config.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/data/user_notification.dart';
@@ -25,6 +25,7 @@ export 'data/app_user.dart';
 export 'data/device_notification_token.dart';
 export 'data/enum_model.dart';
 export 'data/file.dart';
+export 'data/image.dart';
 export 'exceptions/exceptions.dart';
 export 'extensions/extensions.dart';
 export 'filters/filters.dart';
@@ -105,6 +106,7 @@ class SupaApplication {
     JsonModel.registerType(AppUser, AppUser.new);
     JsonModel.registerType(EnumModel, EnumModel.new);
     JsonModel.registerType(File, File.new);
+    JsonModel.registerType(ImageModel, ImageModel.new);
     JsonModel.registerType(Tenant, Tenant.new);
     JsonModel.registerType(UserNotification, UserNotification.new);
   }
