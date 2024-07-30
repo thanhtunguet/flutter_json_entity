@@ -115,7 +115,7 @@ class AuthenticationBloc
     add(AuthenticationTenantSelectedEvent(tenant: tenant));
   }
 
-  _handleLoginWithTenants(List<Tenant> tenants) {
+  handleLoginWithTenants(List<Tenant> tenants) {
     add(AuthenticationTenantsLoadedEvent(tenants: tenants));
   }
 
@@ -123,25 +123,33 @@ class AuthenticationBloc
     AuthenticationWithAppleEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationLoading());
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    final tenants = await PortalAuthenticationRepository()
-        .loginWithApple(credential.identityToken!);
-    _handleLoginWithTenants(tenants);
+    try {
+      emit(AuthenticationLoading());
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final tenants = await PortalAuthenticationRepository()
+          .loginWithApple(credential.identityToken!);
+      handleLoginWithTenants(tenants);
+    } catch (error) {
+      add(AuthenticationErrorEvent(error));
+    }
   }
 
   _onBiometricLogin(
     AuthenticationWithBiometricEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationLoading());
-    final tenants = await authRepo.loginWithBiometric();
-    _handleLoginWithTenants(tenants);
+    try {
+      emit(AuthenticationLoading());
+      final tenants = await authRepo.loginWithBiometric();
+      handleLoginWithTenants(tenants);
+    } catch (error) {
+      add(AuthenticationErrorEvent(error));
+    }
   }
 
   _onError(
@@ -176,12 +184,12 @@ class AuthenticationBloc
       final googleKey = await credentials?.authentication;
       if (googleKey != null) {
         final tenants = await authRepo.loginWithGoogle(googleKey.idToken!);
-        _handleLoginWithTenants(tenants);
+        handleLoginWithTenants(tenants);
       } else {
         emit(AuthenticationInitial());
       }
     } catch (error) {
-      emit(AuthenticationInitial());
+      add(AuthenticationErrorEvent(error));
     }
   }
 
@@ -202,8 +210,8 @@ class AuthenticationBloc
     AuthenticationLogoutEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationInitial());
     try {
+      emit(AuthenticationInitial());
       await authRepo.logout();
     } catch (error) {
       if (error is Exception) {
@@ -216,16 +224,15 @@ class AuthenticationBloc
     AuthenticationWithMicrosoftEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationLoading());
-
     try {
+      emit(AuthenticationLoading());
       await SupaApplication.azureAuth.login();
 
       final String? accessToken =
           await SupaApplication.azureAuth.getAccessToken();
       if (accessToken != null) {
         final tenants = await authRepo.loginWithMicrosoft(accessToken);
-        _handleLoginWithTenants(tenants);
+        handleLoginWithTenants(tenants);
       }
     } catch (error) {
       add(AuthenticationErrorEvent(error as Exception));
@@ -236,18 +243,22 @@ class AuthenticationBloc
     AuthenticationWithPasswordEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(AuthenticationLoading());
-    final username = event.username;
-    final password = event.password;
-    final useCaptcha = SupaApplication.instance.useCaptcha;
-    final captcha = useCaptcha
-        ? await RecaptchaEnterprise.execute(RecaptchaAction.LOGIN())
-        : '';
-    await authRepo.login(username, password, captcha).then((tenants) {
-      return _handleLoginWithTenants(tenants);
-    }).catchError((error) {
+    try {
+      emit(AuthenticationLoading());
+      final username = event.username;
+      final password = event.password;
+      final useCaptcha = SupaApplication.instance.useCaptcha;
+      final captcha = useCaptcha
+          ? await RecaptchaEnterprise.execute(RecaptchaAction.LOGIN())
+          : '';
+      await authRepo.login(username, password, captcha).then((tenants) {
+        return handleLoginWithTenants(tenants);
+      }).catchError((error) {
+        add(AuthenticationErrorEvent(error));
+      });
+    } catch (error) {
       add(AuthenticationErrorEvent(error));
-    });
+    }
   }
 
   _onTenantChanged(

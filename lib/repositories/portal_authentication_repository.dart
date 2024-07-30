@@ -175,4 +175,25 @@ class PortalAuthenticationRepository extends ApiClient {
     await persistentStorageService.logout();
     await cookieStorageService.logout();
   }
+
+  Future<String> forgotPassword(String email, String captcha) async {
+    return dio.post('/forgot-password', data: {
+      'email': email,
+      'captcha': captcha,
+    }).then((response) => response.data);
+  }
+
+  Future<List<Tenant>> forgotPasswordOtp(
+    String content,
+    String password,
+    String otpCode,
+    String catpcha,
+  ) async {
+    return dio.post('/forgot-with-otp', data: {
+      'content': content,
+      'password': password,
+      'otpCode': otpCode,
+      'captcha': catpcha,
+    }).then((response) => response.bodyAsList<Tenant>());
+  }
 }

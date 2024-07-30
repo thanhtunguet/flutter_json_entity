@@ -9,7 +9,7 @@ enum AuthenticationStatus {
 }
 
 final class AuthenticationError extends AuthenticationState {
-  final Exception error;
+  final dynamic error;
 
   const AuthenticationError(this.error);
 
