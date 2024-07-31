@@ -20,6 +20,8 @@ class UserNotification extends JsonModel {
   JsonObject<AppUser> recipient = JsonObject<AppUser>("recipient", AppUser.new);
   JsonNumber recipientId = JsonNumber("recipientId");
 
+  JsonBoolean read = JsonBoolean("read");
+
   @override
   List<JsonField> get fields => [
         id,

@@ -2,8 +2,7 @@ import 'package:supa_architecture/data/user_notification.dart';
 import 'package:supa_architecture/data/user_notification_filter.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
-class UtilsNotificationRepository
-    extends BaseRepository<UserNotification, UserNotificationFilter> {
+class UtilsNotificationRepository extends BaseRepository<UserNotification, UserNotificationFilter> {
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
       .replace(
@@ -48,8 +47,7 @@ class UtilsNotificationRepository
         );
   }
 
-  Future<List<UserNotification>> listUnread(
-      UserNotificationFilter filter) async {
+  Future<List<UserNotification>> listUnread(UserNotificationFilter filter) async {
     return dio
         .post(
           '/list-unread',
@@ -82,7 +80,7 @@ class UtilsNotificationRepository
         );
   }
 
-  Future<UserNotification> read(UserNotification userNotification) async {
+  Future<String> read(UserNotification userNotification) async {
     return dio
         .post(
           '/read',

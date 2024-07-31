@@ -38,11 +38,8 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   static const _authenticationPath = '/rpc/portal/authentication';
   static const _rpcPath = '/rpc/';
 
-  static Uri get _authenticationUri =>
-      Uri.parse(persistentStorageService.baseApiUrl)
-          .replace(path: _authenticationPath);
-  static Uri get _rpcUri =>
-      Uri.parse(persistentStorageService.baseApiUrl).replace(path: _rpcPath);
+  static Uri get _authenticationUri => Uri.parse(persistentStorageService.baseApiUrl).replace(path: _authenticationPath);
+  static Uri get _rpcUri => Uri.parse(persistentStorageService.baseApiUrl).replace(path: _rpcPath);
 
   _CookieStorageServiceImpl._({
     required this.persistCookieJar,
@@ -71,7 +68,10 @@ class _CookieStorageServiceImpl implements CookieStorageService {
 
   @override
   Future<void> deleteAccessTokenOnly() async {
-    return persistCookieJar.delete(_rpcUri);
+    final cookies = await persistCookieJar.loadForRequest(_authenticationUri);
+    final newCookies = cookies.where((cookie) => cookie.name.toLowerCase() != 'token').toList();
+    await persistCookieJar.delete(_rpcUri);
+    await persistCookieJar.saveFromResponse(_authenticationUri, newCookies);
   }
 
   @override
@@ -92,6 +92,5 @@ class _CookieStorageServiceImpl implements CookieStorageService {
 }
 
 extension _CookiesExtensions on List<Cookie> {
-  String get accessToken =>
-      firstWhere((cookie) => cookie.name == 'Token').value;
+  String get accessToken => firstWhere((cookie) => cookie.name == 'Token').value;
 }
