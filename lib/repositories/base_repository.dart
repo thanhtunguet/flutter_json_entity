@@ -101,4 +101,26 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter> e
           (response) => response.body<T>(),
         );
   }
+
+  Future<T> approveById(num id) async {
+    return dio.post(
+      '/approve',
+      data: {
+        'id': id,
+      },
+    ).then(
+      (response) => response.body<T>(),
+    );
+  }
+
+  Future<T> rejectById(num id) async {
+    return dio.post(
+      '/reject',
+      data: {
+        'id': id,
+      },
+    ).then(
+      (response) => response.body<T>(),
+    );
+  }
 }
