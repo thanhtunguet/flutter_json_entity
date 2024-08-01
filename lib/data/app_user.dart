@@ -82,4 +82,6 @@ class AppUser extends JsonModel {
   JsonDate createdAt = JsonDate("createdAt");
 
   JsonDate updatedAt = JsonDate("updatedAt");
+
+  JsonString identityCode = JsonString("identityCode");
 }

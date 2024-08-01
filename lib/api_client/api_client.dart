@@ -160,6 +160,7 @@ abstract class ApiClient {
   /// **Returns:**
   /// - A [Future] that completes when the token refresh operation is finished.
   static Future<void> refreshToken() async {
+    cookieStorageService.deleteAccessTokenOnly();
     return PortalAuthenticationRepository().refreshToken();
   }
 
