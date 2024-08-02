@@ -165,6 +165,14 @@ abstract class ApiClient {
     return PortalAuthenticationRepository().refreshToken();
   }
 
+  /// Uploads a file to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `filePath`: The path to the file to be uploaded.
+  /// - `uploadUrl`: The URL to which the file will be uploaded. Defaults to `/upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a [File] object representing the uploaded file.
   Future<File> uploadFile({
     required String filePath,
     String uploadUrl = '/upload-file',
@@ -182,7 +190,7 @@ abstract class ApiClient {
           data: formData,
         )
         .then(
-          (response) => response.body<File>(),
+          (response) => response.data<File>(),
         );
   }
 }

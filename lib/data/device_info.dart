@@ -1,13 +1,31 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
+/// A class representing device information.
+///
+/// This class provides common properties for device information such as
+/// device name, device model, operating system, and system version. It also
+/// includes a static method to asynchronously fetch device information
+/// based on the platform (Android or iOS).
 class DeviceInfo {
-  // Common properties
+  /// The name of the device.
   final String deviceName;
+
+  /// The model of the device.
   final String deviceModel;
+
+  /// The operating system of the device.
   final String operatingSystem;
+
+  /// The system version of the device.
   final String systemVersion;
 
-  // Constructor
+  /// Constructs an instance of [DeviceInfo].
+  ///
+  /// **Parameters:**
+  /// - `deviceName`: The name of the device.
+  /// - `deviceModel`: The model of the device.
+  /// - `operatingSystem`: The operating system of the device.
+  /// - `systemVersion`: The system version of the device.
   DeviceInfo({
     required this.deviceName,
     required this.deviceModel,
@@ -15,7 +33,14 @@ class DeviceInfo {
     required this.systemVersion,
   });
 
-  // Method to get device info
+  /// Asynchronously fetches the device information.
+  ///
+  /// This method retrieves device information using the [DeviceInfoPlugin]
+  /// and returns an instance of [DeviceInfo] with the appropriate details
+  /// based on the platform (Android or iOS).
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to an instance of [DeviceInfo].
   static Future<DeviceInfo> getDeviceInfo() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 

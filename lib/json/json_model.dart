@@ -1,46 +1,82 @@
 part of 'json.dart';
 
+/// A type definition for a function that constructs an instance of [JsonModel].
 typedef InstanceConstructor<T extends JsonModel> = T Function();
 
+/// An abstract class representing a JSON model.
+///
+/// This class provides methods for handling JSON serialization and deserialization,
+/// managing fields, and handling errors, warnings, and informational messages.
 abstract class JsonModel with JsonSerializable {
+  /// A map to store registered types and their constructors.
   static final Map<Type, InstanceConstructor> _types = {};
 
+  /// Registers a type and its constructor.
+  ///
+  /// **Parameters:**
+  /// - `type`: The type to register.
+  /// - `constructor`: The constructor function for the type.
   static void registerType(Type type, InstanceConstructor constructor) {
     _types[type] = constructor;
   }
 
+  /// Constructs an instance of a registered type.
+  ///
+  /// **Parameters:**
+  /// - `type`: The type to construct.
+  ///
+  /// **Returns:**
+  /// - An instance of the specified type.
   static T construct<T extends JsonModel>(Type type) {
     assert(_types.containsKey(type));
     final constructor = _types[type]!;
     return constructor() as T;
   }
 
+  /// List of JSON fields representing the model attributes.
   List<JsonField> get fields;
 
+  /// List of general errors.
   List<String> generalErrors = [];
 
+  /// List of general warnings.
   List<String> generalWarnings = [];
 
+  /// List of general informational messages.
   List<String> generalInformations = [];
 
+  /// Map of field-specific errors.
   Map<String, String?> errors = {};
 
+  /// Map of field-specific warnings.
   Map<String, String?> warnings = {};
 
+  /// Map of field-specific informational messages.
   Map<String, String?> informations = {};
 
+  /// Checks if the model has any errors.
   bool get hasError => errors.isNotEmpty;
 
+  /// Checks if the model has any warnings.
   bool get hasWarning => warnings.isNotEmpty;
 
+  /// Checks if the model has any informational messages.
   bool get hasInformation => informations.isNotEmpty;
 
-  String? get error => generalErrors[0];
+  /// Gets the first general error message.
+  String? get error => generalErrors.isNotEmpty ? generalErrors[0] : null;
 
-  String? get warning => generalWarnings[0];
+  /// Gets the first general warning message.
+  String? get warning => generalWarnings.isNotEmpty ? generalWarnings[0] : null;
 
-  String? get information => generalInformations[0];
+  /// Gets the first general informational message.
+  String? get information =>
+      generalInformations.isNotEmpty ? generalInformations[0] : null;
 
+  /// Deserializes the JSON data to the model.
+  ///
+  /// **Parameters:**
+  /// - `json`: The JSON data to deserialize.
   @override
   void fromJSON(dynamic json) {
     assert(json is Map<dynamic, dynamic>);
@@ -121,6 +157,10 @@ abstract class JsonModel with JsonSerializable {
     }
   }
 
+  /// Serializes the model to JSON.
+  ///
+  /// **Returns:**
+  /// - A map representing the model in JSON format.
   @override
   Map<String, dynamic> toJSON() {
     final json = <String, dynamic>{};
@@ -133,20 +173,42 @@ abstract class JsonModel with JsonSerializable {
     return json;
   }
 
+  /// Converts the model to a JSON string.
+  ///
+  /// **Returns:**
+  /// - A JSON string representation of the model.
   @override
   String toString() {
     return jsonEncode(toJSON());
   }
 
+  /// Gets the value of a field by name.
+  ///
+  /// **Parameters:**
+  /// - `name`: The name of the field.
+  ///
+  /// **Returns:**
+  /// - The value of the field.
+  ///
+  /// **Throws:**
+  /// - `Exception` if the field does not exist.
   operator [](String name) {
     for (final field in fields) {
       if (field.fieldName == name) {
         return field.value;
       }
     }
-    throw Exception('Field $name is not exist');
+    throw Exception('Field $name does not exist');
   }
 
+  /// Sets the value of a field by name.
+  ///
+  /// **Parameters:**
+  /// - `name`: The name of the field.
+  /// - `value`: The new value to set.
+  ///
+  /// **Throws:**
+  /// - `Exception` if the field does not exist.
   operator []=(String name, value) {
     for (final field in fields) {
       if (field.fieldName == name) {
@@ -154,6 +216,6 @@ abstract class JsonModel with JsonSerializable {
         return;
       }
     }
-    throw Exception('Field $name is not exist');
+    throw Exception('Field $name does not exist');
   }
 }

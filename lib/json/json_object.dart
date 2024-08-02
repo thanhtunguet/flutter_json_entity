@@ -1,13 +1,32 @@
 part of 'json.dart';
 
+/// A class representing a JSON object field.
+///
+/// This class extends [JsonField] to handle objects of type [T] which extends [JsonModel].
+/// It provides methods for setting and getting values, converting to JSON,
+/// and accessing nested fields within the object.
 class JsonObject<T extends JsonModel> extends JsonField<T> {
+  /// The constructor for creating instances of type [T].
   final InstanceConstructor<T> _type;
 
+  /// Constructs an instance of [JsonObject].
+  ///
+  /// **Parameters:**
+  /// - `fieldName`: The name of the field.
+  /// - `type`: The constructor for creating instances of type [T].
   JsonObject(super.fieldName, InstanceConstructor<T> type) : _type = type;
 
+  /// Gets the value of the JSON object field.
+  ///
+  /// **Returns:**
+  /// - An instance of [T], or a new instance if the value is null.
   @override
   T get value => rawValue ?? _type();
 
+  /// Sets the value of the JSON object field.
+  ///
+  /// **Parameters:**
+  /// - `value`: The new value of the field.
   @override
   set value(dynamic value) {
     if (value is T) {
@@ -21,11 +40,25 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
     }
   }
 
+  /// Converts the object to JSON.
+  ///
+  /// **Returns:**
+  /// - A map representing the object in JSON format.
   @override
   Map<String, dynamic>? toJSON() {
     return rawValue?.toJSON();
   }
 
+  /// Gets the value of a nested field by name.
+  ///
+  /// **Parameters:**
+  /// - `name`: The name of the nested field.
+  ///
+  /// **Returns:**
+  /// - The value of the nested field.
+  ///
+  /// **Throws:**
+  /// - `Exception` if the field does not exist.
   operator [](String name) {
     if (rawValue == null) {
       return null;
@@ -35,13 +68,21 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
         return field.value;
       }
     }
-    throw Exception('Field $name is not exist');
+    throw Exception('Field $name does not exist');
   }
 
+  /// Sets the value of a nested field by name.
+  ///
+  /// **Parameters:**
+  /// - `name`: The name of the nested field.
+  /// - `value`: The new value to set.
+  ///
+  /// **Throws:**
+  /// - `Exception` if the field does not exist.
   operator []=(String name, value) {
     assert(rawValue != null);
     if (rawValue == null) {
-      throw Exception('Field $name is not exist');
+      throw Exception('Field $name does not exist');
     }
     for (final field in rawValue!.fields) {
       if (field.fieldName == name) {
@@ -49,6 +90,6 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
         return;
       }
     }
-    throw Exception('Field $name is not exist');
+    throw Exception('Field $name does not exist');
   }
 }

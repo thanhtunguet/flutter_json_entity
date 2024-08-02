@@ -1,8 +1,15 @@
 import 'package:supa_architecture/supa_architecture.dart';
 
+/// A class representing an application user.
+///
+/// This class extends [JsonModel] and provides various fields representing
+/// user attributes such as ID, email, username, and more. It also provides
+/// a static instance of an empty [AppUser].
 class AppUser extends JsonModel {
+  /// A static instance of an empty [AppUser].
   static final AppUser empty = AppUser();
 
+  /// List of JSON fields representing the user attributes.
   @override
   List<JsonField> get fields => [
         id,
@@ -31,57 +38,82 @@ class AppUser extends JsonModel {
         timezoneId,
       ];
 
+  /// The user ID.
   JsonNumber id = JsonNumber("id");
 
+  /// The global user ID.
   JsonNumber globalUserId = JsonNumber("globalUserId");
 
+  /// The user's email address.
   JsonString email = JsonString("email");
 
+  /// The user's username.
   JsonString username = JsonString("username");
 
+  /// The user's password.
   JsonString password = JsonString("password");
 
+  /// The user's display name.
   JsonString displayName = JsonString("displayName");
 
+  /// The user's phone number.
   JsonString phone = JsonString("phone");
 
+  /// The user's address.
   JsonString address = JsonString("address");
 
+  /// The user's date of birth.
   JsonDate dateOfBirth = JsonDate("dateOfBirth");
 
+  /// The user's avatar URL.
   JsonString avatar = JsonString("avatar");
 
+  /// The user's admin type as an [EnumModel].
   JsonObject<EnumModel> adminType =
       JsonObject<EnumModel>("adminType", EnumModel.new);
 
+  /// The ID of the user's admin type.
   JsonNumber adminTypeId = JsonNumber("adminTypeId");
 
+  /// The user's gender as an [EnumModel].
   JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender", EnumModel.new);
 
+  /// The ID of the user's gender.
   JsonNumber genderId = JsonNumber("genderId");
 
+  /// Indicates if the user has already gotten started.
   JsonBoolean isAlreadyGettingStarted = JsonBoolean("isAlreadyGettingStarted");
 
+  /// The OTP code for the user.
   JsonString otpCode = JsonString("otpCode");
 
+  /// The user's language as an [EnumModel].
   JsonObject<EnumModel> language =
       JsonObject<EnumModel>("language", EnumModel.new);
 
+  /// The ID of the user's language.
   JsonNumber languageId = JsonNumber("languageId");
 
+  /// Indicates if the user is receiving system emails.
   JsonBoolean receivingSystemEmail = JsonBoolean("receivingSystemEmail");
 
+  /// Indicates if the user is receiving system notifications.
   JsonBoolean receivingSystemNotification =
       JsonBoolean("receivingSystemNotification");
 
+  /// The user's timezone as an [EnumModel].
   JsonObject<EnumModel> timezone =
       JsonObject<EnumModel>("timezone", EnumModel.new);
 
+  /// The ID of the user's timezone.
   JsonNumber timezoneId = JsonNumber("timezoneId");
 
+  /// The date the user was created.
   JsonDate createdAt = JsonDate("createdAt");
 
+  /// The date the user was last updated.
   JsonDate updatedAt = JsonDate("updatedAt");
 
+  /// The user's identity code.
   JsonString identityCode = JsonString("identityCode");
 }
