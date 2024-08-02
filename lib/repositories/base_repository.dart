@@ -2,7 +2,8 @@ import 'package:supa_architecture/api_client/api_client.dart';
 import 'package:supa_architecture/filters/filters.dart';
 import 'package:supa_architecture/json/json.dart';
 
-abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter> extends ApiClient {
+abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
+    extends ApiClient {
   Future<List<T>> list(TFilter filter) async {
     return dio
         .post(

@@ -61,6 +61,7 @@ abstract class ApiClient {
           return handler.resolve(response);
         } catch (refreshError) {
           GetIt.instance.get<AuthenticationBloc>().handleLogout();
+          await cookieStorageService.deleteCookies();
           return handler.next(error);
         }
       } else {

@@ -27,6 +27,8 @@ abstract interface class CookieStorageService {
 
   Future<void> deleteAccessTokenOnly();
 
+  Future<void> deleteCookies();
+
   Future<List<Cookie>> getAuthenticationCookies();
 
   Future<String> buildUrlWithToken(String fileUrl);
@@ -38,8 +40,11 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   static const _authenticationPath = '/rpc/portal/authentication';
   static const _rpcPath = '/rpc/';
 
-  static Uri get _authenticationUri => Uri.parse(persistentStorageService.baseApiUrl).replace(path: _authenticationPath);
-  static Uri get _rpcUri => Uri.parse(persistentStorageService.baseApiUrl).replace(path: _rpcPath);
+  static Uri get _authenticationUri =>
+      Uri.parse(persistentStorageService.baseApiUrl)
+          .replace(path: _authenticationPath);
+  static Uri get _rpcUri =>
+      Uri.parse(persistentStorageService.baseApiUrl).replace(path: _rpcPath);
 
   _CookieStorageServiceImpl._({
     required this.persistCookieJar,
@@ -69,7 +74,9 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   @override
   Future<void> deleteAccessTokenOnly() async {
     final cookies = await persistCookieJar.loadForRequest(_authenticationUri);
-    final newCookies = cookies.where((cookie) => cookie.name.toLowerCase() != 'token').toList();
+    final newCookies = cookies
+        .where((cookie) => cookie.name.toLowerCase() != 'token')
+        .toList();
     await persistCookieJar.delete(_rpcUri);
     await persistCookieJar.saveFromResponse(_authenticationUri, newCookies);
   }
@@ -89,8 +96,17 @@ class _CookieStorageServiceImpl implements CookieStorageService {
       'token': cookies.accessToken,
     }).toString();
   }
+
+  @override
+  Future<void> deleteCookies() async {
+    await persistCookieJar.deleteAll();
+  }
 }
 
 extension _CookiesExtensions on List<Cookie> {
-  String get accessToken => firstWhere((cookie) => cookie.name == 'Token').value;
+  String get accessToken =>
+      firstWhere((cookie) => cookie.name.toLowerCase() == 'token').value;
+
+  String get refreshToken =>
+      firstWhere((cookie) => cookie.name.toLowerCase() == 'refreshtoken').value;
 }

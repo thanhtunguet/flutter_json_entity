@@ -22,6 +22,12 @@ class AppToken extends Equatable {
   });
 
   AppToken.fromCookies(List<Cookie> cookies)
-      : accessToken = cookies.where((cookie) => cookie.name == _accessTokenKey).first.value,
-        refreshToken = cookies.where((cookie) => cookie.name == _refreshTokenKey).first.value;
+      : accessToken = cookies
+            .where((cookie) => cookie.name == _accessTokenKey)
+            .first
+            .value,
+        refreshToken = cookies
+            .where((cookie) => cookie.name == _refreshTokenKey)
+            .first
+            .value;
 }
