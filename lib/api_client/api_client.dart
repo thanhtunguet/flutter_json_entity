@@ -206,7 +206,7 @@ abstract class ApiClient {
           data: formData,
         )
         .then(
-          (response) => response.data<File>(),
+          (response) => response.body<File>(),
         );
   }
 }

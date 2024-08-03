@@ -36,6 +36,7 @@ class AppUser extends JsonModel {
         receivingSystemNotification,
         timezone,
         timezoneId,
+        identityCode,
       ];
 
   /// The user ID.
