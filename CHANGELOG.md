@@ -1,3 +1,10 @@
+## 0.0.1+preview.3
+
+### Added
+
+- Finish documentation
+- Fix: response body file
+
 ## 0.0.1+preview.2
 
 ### Added
