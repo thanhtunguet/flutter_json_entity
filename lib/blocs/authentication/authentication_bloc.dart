@@ -177,7 +177,7 @@ class AuthenticationBloc
     try {
       emit(AuthenticationLoading());
       GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>['email']);
-      await googleSignIn.disconnect();
+      if (await googleSignIn.isSignedIn()) await googleSignIn.disconnect();
       final credentials = await googleSignIn.signIn();
       final googleKey = await credentials?.authentication;
       if (googleKey != null) {

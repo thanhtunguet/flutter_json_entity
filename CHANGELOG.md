@@ -1,3 +1,9 @@
+## 0.0.1+preview.4
+
+### Fixed
+
+- Google disconnect
+
 ## 0.0.1+preview.3
 
 ### Added
