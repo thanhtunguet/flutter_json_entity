@@ -70,18 +70,34 @@ abstract class ApiClient {
     },
   );
 
-  static InterceptorsWrapper deviceInfoInterceptor =
+  /// An interceptor for adding device information headers to outgoing requests.
+  ///
+  /// This interceptor adds the following headers to outgoing requests:
+  ///
+  /// - `X-Device-Model`: The device model.
+  /// - `X-Device-Name`: The device name.
+  /// - `X-Operating-System`: The operating system.
+  /// - `X-System-Version`: The system version.
+  ///
+  /// This interceptor is used to identify the device making the request in the
+  /// backend.
+  static InterceptorsWrapper get deviceInfoInterceptor =>
       InterceptorsWrapper(onRequest: (options, handler) {
-    final deviceInfo = SupaApplication.instance.deviceInfo;
+        final deviceInfo = SupaApplication.instance.deviceInfo;
 
-    options.headers['X-Device-Model'] = deviceInfo.deviceModel;
-    options.headers['X-Device-Name'] = deviceInfo.deviceName;
-    options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
-    options.headers['X-System-Version'] = deviceInfo.systemVersion;
+        options.headers['X-Device-Model'] = deviceInfo.deviceModel;
+        options.headers['X-Device-Name'] = deviceInfo.deviceName;
+        options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
+        options.headers['X-System-Version'] = deviceInfo.systemVersion;
 
-    handler.next(options);
-  });
+        handler.next(options);
+      });
 
+  /// Interceptor for logging HTTP errors.
+  ///
+  /// This interceptor logs errors that occur during HTTP requests.
+  /// If a 400 Bad Request error occurs and the response data is a map,
+  /// it logs the errors to the console.
   static final errorLogInterceptor = InterceptorsWrapper(
     onError: (error, handle) {
       if (error.response?.statusCode == 400) {

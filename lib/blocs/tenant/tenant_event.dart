@@ -16,6 +16,7 @@ final class TenantLoadingEvent extends TenantEvent {}
 
 /// Event to indicate that tenants have been loaded.
 final class TenantLoadedEvent extends TenantEvent {
+  /// The list of loaded tenants.
   final List<Tenant> tenants;
 
   /// Constructs an instance of [TenantLoadedEvent].

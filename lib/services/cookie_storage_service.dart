@@ -158,11 +158,4 @@ extension _CookiesExtensions on List<Cookie> {
   /// - The access token as a [String].
   String get accessToken =>
       firstWhere((cookie) => cookie.name.toLowerCase() == 'token').value;
-
-  /// Retrieves the refresh token from the list of cookies.
-  ///
-  /// **Returns:**
-  /// - The refresh token as a [String].
-  String get refreshToken =>
-      firstWhere((cookie) => cookie.name.toLowerCase() == 'refreshtoken').value;
 }

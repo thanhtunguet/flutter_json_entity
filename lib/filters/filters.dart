@@ -13,39 +13,87 @@ part 'int_filter.dart';
 part 'number_filter.dart';
 part 'string_filter.dart';
 
+/// Base class for creating data filters.
+///
+/// This abstract class defines common properties and methods for filtering
+/// data sets, such as pagination, sorting, and search functionality.
 abstract class DataFilter implements JsonSerializable {
+  /// Constant for ascending order.
   static const orderAsc = "ASC";
 
+  /// Constant for descending order.
   static const orderDesc = "DESC";
 
+  /// Constant for the "ALL" view code.
   static const viewCodeAll = "ALL";
 
+  /// Constant for the "PENDING" view code.
   static const viewCodePending = "PENDING";
 
+  /// Constant for the "APPROVED" view code.
   static const viewCodeApproved = "APPROVED";
 
-  /// Number of entities to skip
+  /// Number of entities to skip.
   int skip = 0;
 
-  /// Number of entities to take in a request
+  /// Number of entities to take in a request.
   int take = 20;
 
-  /// Field name to order by
+  /// Field name to order by.
   String? orderBy;
 
-  /// Order orientation
+  /// Order orientation.
   String? orderType;
 
-  /// Search field
+  /// Search field.
   String? search;
 
-  /// Document view code
+  /// Document view code.
   String? viewCode;
 
+  /// A list of filter fields to be applied to the data set.
+  ///
+  /// The list may be empty, but it will never be `null`.
+  ///
+  /// Each filter field in the list provides a set of operations to be applied
+  /// to a specific field in the data set.
+  ///
+  /// The operations are:
+  /// - `equal`: Matches the specified value.
+  /// - `notEqual`: Excludes the specified value.
+  /// - `greater`: Matches values greater than the specified value.
+  /// - `greaterEqual`: Matches values greater than or equal to the specified
+  /// value.
+  /// - `less`: Matches values less than the specified value.
+  /// - `lessEqual`: Matches values less than or equal to the specified value.
+  /// - `startWith`: Matches values that start with the specified value.
+  /// - `notStartWith`: Excludes values that start with the specified value.
+  /// - `endWith`: Matches values that end with the specified value.
+  /// - `notEndWith`: Excludes values that end with the specified value.
+  /// - `contain`: Matches values that contain the specified value.
+  /// - `notContain`: Excludes values that contain the specified value.
+  /// - `inList`: Matches values in the specified list.
+  /// - `notInList`: Excludes values in the specified list.
+  /// - `search`: Matches values that contain the specified value in any part of
+  /// the field.
+  ///
+  /// The field name is defined by the `name` property of each filter field.
+  ///
+  /// The specific operations available depend on the type of the field. For
+  /// example, the `string` type supports `equal`, `notEqual`, `contain`,
+  /// `notContain`, `startWith`, `notStartWith`, `endWith`, `notEndWith`, and
+  /// `search`.
+  ///
+  /// The `inList` and `notInList` operations are available for fields of type
+  /// `int`, `double`, `guid`, and `string`.
+  ///
+  /// The `greater`, `greaterEqual`, `less`, and `lessEqual` operations are
+  /// available for fields of type `int`, `double`, and `date`.
   List<FilterField> get fields;
 
+  /// Converts this filter to a JSON-compatible map.
   @override
-  toJSON() {
+  Map<String, dynamic> toJSON() {
     final Map<String, dynamic> json = {};
     json["skip"] = skip;
     json["take"] = take;
@@ -67,6 +115,10 @@ abstract class DataFilter implements JsonSerializable {
     return json;
   }
 
+  /// Populates this filter from a JSON-compatible map.
+  ///
+  /// **Parameters:**
+  /// - `json`: The JSON-compatible map to populate from.
   @override
   void fromJSON(dynamic json) {
     if (json is Map<String, dynamic>) {
@@ -77,10 +129,10 @@ abstract class DataFilter implements JsonSerializable {
         take = json["take"];
       }
       if (json.containsKey("orderBy") && json["orderBy"] is String?) {
-        take = json["orderBy"];
+        orderBy = json["orderBy"];
       }
       if (json.containsKey("orderType") && json["orderType"] is String?) {
-        take = json["orderType"];
+        orderType = json["orderType"];
       }
       if (json.containsKey("search") && json["search"] is String?) {
         search = json["search"];
@@ -97,11 +149,16 @@ abstract class DataFilter implements JsonSerializable {
     }
   }
 
+  /// Converts this filter to a JSON string.
   @override
   String toString() {
     return jsonEncode(toJSON());
   }
 
+  /// Calculates the next page to be fetched based on the current `skip` and `take` values.
+  ///
+  /// **Returns:**
+  /// - The number of entities to skip for the next page.
   int nextPage() {
     return skip + take;
   }

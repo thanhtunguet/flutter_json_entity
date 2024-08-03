@@ -5,6 +5,7 @@ final class TenantInitial extends TenantState {}
 
 /// Represents the state when tenants have been loaded.
 final class TenantLoaded extends TenantState {
+  /// The list of loaded tenants.
   final List<Tenant> tenants;
 
   /// Constructs an instance of [TenantLoaded].

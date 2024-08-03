@@ -12,6 +12,14 @@ part 'tenant_state.dart';
 /// using events and states. It communicates with the [PortalAuthenticationRepository]
 /// to fetch tenant data.
 class TenantBloc extends Bloc<TenantEvent, TenantState> {
+  /// A repository that handles authentication operations.
+  ///
+  /// The [portalRepo] is an instance of [PortalAuthenticationRepository] that
+  /// is responsible for handling authentication operations.
+  ///
+  /// This field is initialized with an instance of [PortalAuthenticationRepository]
+  /// and is used by the [TenantBloc] to communicate with the server for tenant
+  /// data.
   static final portalRepo = PortalAuthenticationRepository();
 
   /// Constructs an instance of [TenantBloc].

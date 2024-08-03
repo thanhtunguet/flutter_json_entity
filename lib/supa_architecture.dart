@@ -33,21 +33,31 @@ export 'json/json.dart';
 export 'repositories/base_repository.dart';
 export 'widgets/widgets.dart';
 
+/// The main class for the Supa Architecture package.
+///
+/// This class provides initialization and configuration methods for various
+/// services and settings within the Supa Architecture package.
 class SupaApplication {
+  /// Singleton instance of [SupaApplication].
   static late final SupaApplication instance;
 
   static bool _isInitialized = false;
 
+  /// Service for managing cookies.
   final CookieStorageService cookieStorageService;
 
+  /// Service for managing secure storage.
   final SecureStorageService secureStorageService;
 
+  /// Service for managing persistent storage.
   final PersistentStorageService persistentStorageService;
 
+  /// Information about the device.
   final DeviceInfo deviceInfo;
 
   RecaptchaConfig? _captchaConfig;
 
+  /// Private constructor for creating an instance of [SupaApplication].
   SupaApplication._({
     required this.cookieStorageService,
     required this.secureStorageService,
@@ -55,21 +65,26 @@ class SupaApplication {
     required this.deviceInfo,
   });
 
+  /// Getter for the reCAPTCHA configuration.
   RecaptchaConfig get captchaConfig => _captchaConfig!;
 
+  /// Checks if reCAPTCHA is enabled.
   bool get useCaptcha => _captchaConfig != null;
 
+  /// Initializes the [SupaApplication].
+  ///
+  /// This method loads environment variables, initializes services, and registers models.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to the singleton instance of [SupaApplication].
   static Future<SupaApplication> initialize() async {
     if (!_isInitialized) {
       await dotenv.load();
 
       final cookieStorageService = await CookieStorageService.initialize();
-
       final persistentStorageService =
           await PersistentStorageService.initialize();
-
       final secureStorageService = SecureStorageService.initialize();
-
       final deviceInfo = await DeviceInfo.getDeviceInfo();
 
       instance = SupaApplication._(
@@ -88,21 +103,31 @@ class SupaApplication {
     return instance;
   }
 
+  /// Initializes the reCAPTCHA configuration.
+  ///
+  /// **Parameters:**
+  /// - `captchaConfig`: The configuration for reCAPTCHA.
   static initCaptcha({
     required RecaptchaConfig captchaConfig,
   }) {
     instance._initCaptcha(captchaConfig: captchaConfig);
   }
 
-  _initCaptcha({
+  /// Private method to set the reCAPTCHA configuration.
+  ///
+  /// **Parameters:**
+  /// - `captchaConfig`: The configuration for reCAPTCHA.
+  void _initCaptcha({
     required RecaptchaConfig captchaConfig,
   }) {
     _captchaConfig = captchaConfig;
   }
 
+  /// Checks if reCAPTCHA is enabled.
   bool get useRecaptcha => _captchaConfig != null;
 
-  static registerModels() {
+  /// Registers JSON models used in the application.
+  static void registerModels() {
     JsonModel.registerType(AppUser, AppUser.new);
     JsonModel.registerType(EnumModel, EnumModel.new);
     JsonModel.registerType(File, File.new);
@@ -111,8 +136,16 @@ class SupaApplication {
     JsonModel.registerType(UserNotification, UserNotification.new);
   }
 
+  /// Singleton instance of [AadOAuth] for Azure AD authentication.
   static late AadOAuth azureAuth;
 
+  /// Initializes the Azure AD authentication configuration.
+  ///
+  /// **Parameters:**
+  /// - `tenantId`: The Azure AD tenant ID.
+  /// - `clientId`: The Azure AD client ID.
+  /// - `redirectUri`: The redirect URI for authentication.
+  /// - `navigationKey`: The navigator key for the application.
   static void initializeAzureAd({
     required String tenantId,
     required String clientId,
@@ -131,11 +164,14 @@ class SupaApplication {
   }
 }
 
+/// Getter for the [CookieStorageService] instance.
 CookieStorageService get cookieStorageService =>
     SupaApplication.instance.cookieStorageService;
 
+/// Getter for the [SecureStorageService] instance.
 SecureStorageService get secureStorageService =>
     SupaApplication.instance.secureStorageService;
 
+/// Getter for the [PersistentStorageService] instance.
 PersistentStorageService get persistentStorageService =>
     SupaApplication.instance.persistentStorageService;

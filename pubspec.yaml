@@ -1,6 +1,6 @@
 name: supa_architecture
 description: >
-  The Supa Architecture package provides a comprehensive set of tools and utilities designed to streamline the development of Flutter applications. It includes robust solutions for managing API interactions, handling JSON data, performing authentication, and more, following clean architecture principles to enhance code maintainability and scalability.
+  A comprehensive set of tools and utilities designed to streamline the development of Flutter applications.
 version: 0.0.1+preview.2
 homepage: https://github.com/thanhtunguet/supa_architecture
 

@@ -7,16 +7,32 @@ import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/data/tenant_authentication.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
+/// Repository for managing portal authentication operations.
+///
+/// This class extends [ApiClient] and provides methods for user login,
+/// logout, token management, profile retrieval, and more.
 class PortalAuthenticationRepository extends ApiClient {
+  /// The base URL for the API.
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
       .replace(path: '/rpc/portal/mobile/authentication')
       .toString();
 
-  changeSavedTenant(Tenant tenant) {
+  /// Changes the saved tenant in persistent storage.
+  ///
+  /// **Parameters:**
+  /// - `tenant`: The tenant to be saved.
+  void changeSavedTenant(Tenant tenant) {
     persistentStorageService.tenant = tenant;
   }
 
+  /// Creates a token for the specified tenant.
+  ///
+  /// **Parameters:**
+  /// - `tenant`: The tenant for which the token is to be created.
+  ///
+  /// **Returns:**
+  /// - A [Future] that completes when the token is created.
   Future<void> createToken(Tenant tenant) async {
     return dio
         .post(
@@ -26,6 +42,10 @@ class PortalAuthenticationRepository extends ApiClient {
         .then((response) => response.data);
   }
 
+  /// Retrieves the profile of the authenticated user.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to the authenticated [AppUser].
   Future<AppUser> getProfile() async {
     final url = Uri.parse(baseUrl)
         .replace(
@@ -40,6 +60,10 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  /// Lists the tenants associated with the authenticated user.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> listTenant() async {
     return dio.post(
       '/list-tenant',
@@ -49,6 +73,10 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  /// Counts the number of tenants associated with the authenticated user.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to the number of tenants.
   Future<int> countTenant() async {
     return dio.post(
       '/count-tenant',
@@ -58,6 +86,10 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  /// Loads the authentication details from persistent storage.
+  ///
+  /// **Returns:**
+  /// - A [TenantAuthentication] object if authentication details are found, otherwise `null`.
   TenantAuthentication? loadAuthentication() {
     final tenant = persistentStorageService.tenant;
     final appUser = persistentStorageService.appUser;
@@ -69,7 +101,15 @@ class PortalAuthenticationRepository extends ApiClient {
     return null;
   }
 
-  /// Password Login
+  /// Logs in the user using username and password.
+  ///
+  /// **Parameters:**
+  /// - `username`: The username of the user.
+  /// - `password`: The password of the user.
+  /// - `captcha`: The captcha token.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> login(
       String username, String password, String captcha) async {
     return dio.post('/login', data: {
@@ -84,7 +124,13 @@ class PortalAuthenticationRepository extends ApiClient {
     }).then((response) => response.bodyAsList<Tenant>());
   }
 
-  /// Apple Login
+  /// Logs in the user using Apple ID.
+  ///
+  /// **Parameters:**
+  /// - `idToken`: The ID token from Apple.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> loginWithApple(String idToken) async {
     return dio.post(
       '/apple-login',
@@ -94,15 +140,23 @@ class PortalAuthenticationRepository extends ApiClient {
     ).then((response) => response.bodyAsList<Tenant>());
   }
 
+  /// Logs in the user using biometric authentication.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> loginWithBiometric() async {
     final authInfo = await secureStorageService.getSavedAuthenticationInfo();
-    await refreshToken(
-      refreshToken: authInfo?.refreshToken,
-    );
+    await refreshToken(refreshToken: authInfo?.refreshToken);
     return listTenant();
   }
 
-  /// Google Login
+  /// Logs in the user using Google account.
+  ///
+  /// **Parameters:**
+  /// - `idToken`: The ID token from Google.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> loginWithGoogle(String idToken) async {
     return dio.post(
       '/google-login',
@@ -112,7 +166,13 @@ class PortalAuthenticationRepository extends ApiClient {
     ).then((response) => response.bodyAsList<Tenant>());
   }
 
-  /// Microsoft Login
+  /// Logs in the user using Microsoft account.
+  ///
+  /// **Parameters:**
+  /// - `idToken`: The ID token from Microsoft.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> loginWithMicrosoft(String idToken) async {
     return dio.post(
       '/microsoft-login',
@@ -122,6 +182,10 @@ class PortalAuthenticationRepository extends ApiClient {
     ).then((response) => response.bodyAsList<Tenant>());
   }
 
+  /// Logs out the user.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a boolean indicating whether the logout was successful.
   Future<bool> logout() async {
     await _removeAuthentication();
     return dio.post(
@@ -130,9 +194,14 @@ class PortalAuthenticationRepository extends ApiClient {
     ).then((response) => response.bodyAsBoolean());
   }
 
-  Future<void> refreshToken({
-    String? refreshToken,
-  }) async {
+  /// Refreshes the authentication token.
+  ///
+  /// **Parameters:**
+  /// - `refreshToken`: The refresh token.
+  ///
+  /// **Returns:**
+  /// - A [Future] that completes when the token is refreshed.
+  Future<void> refreshToken({String? refreshToken}) async {
     final dio = Dio();
     dio.interceptors.add(cookieStorageService.getCookieManager());
     dio.options.baseUrl = persistentStorageService.baseApiUrl;
@@ -147,18 +216,19 @@ class PortalAuthenticationRepository extends ApiClient {
           data: {},
           options: Options(
             headers: refreshToken != null
-                ? {
-                    'cookie': 'RefreshToken=$refreshToken',
-                  }
+                ? {'cookie': 'RefreshToken=$refreshToken'}
                 : null,
           ),
         )
-        .then(
-          (response) => response.data,
-        );
+        .then((response) => response.data);
   }
 
-  saveAuthentication(AppUser appUser, Tenant tenant) async {
+  /// Saves the authentication information.
+  ///
+  /// **Parameters:**
+  /// - `appUser`: The authenticated user.
+  /// - `tenant`: The authenticated tenant.
+  Future<void> saveAuthentication(AppUser appUser, Tenant tenant) async {
     persistentStorageService.tenant = tenant;
     persistentStorageService.appUser = appUser;
     final cookies = await cookieStorageService.getAuthenticationCookies();
@@ -171,11 +241,20 @@ class PortalAuthenticationRepository extends ApiClient {
     secureStorageService.saveAuthenticationInfo(authInfo);
   }
 
+  /// Removes the authentication information.
   Future<void> _removeAuthentication() async {
     await persistentStorageService.logout();
     await cookieStorageService.logout();
   }
 
+  /// Initiates the forgot password process.
+  ///
+  /// **Parameters:**
+  /// - `email`: The email of the user.
+  /// - `captcha`: The captcha token.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a string message.
   Future<String> forgotPassword(String email, String captcha) async {
     return dio.post('/forgot-password', data: {
       'email': email,
@@ -183,17 +262,23 @@ class PortalAuthenticationRepository extends ApiClient {
     }).then((response) => response.data);
   }
 
+  /// Completes the forgot password process using OTP.
+  ///
+  /// **Parameters:**
+  /// - `content`: The content of the request.
+  /// - `password`: The new password.
+  /// - `otpCode`: The OTP code.
+  /// - `captcha`: The captcha token.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [Tenant].
   Future<List<Tenant>> forgotPasswordOtp(
-    String content,
-    String password,
-    String otpCode,
-    String catpcha,
-  ) async {
+      String content, String password, String otpCode, String captcha) async {
     return dio.post('/forgot-with-otp', data: {
       'content': content,
       'password': password,
       'otpCode': otpCode,
-      'captcha': catpcha,
+      'captcha': captcha,
     }).then((response) => response.bodyAsList<Tenant>());
   }
 }
