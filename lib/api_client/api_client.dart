@@ -40,6 +40,9 @@ abstract class ApiClient {
   /// multiple refresh operations.
   static final refreshInterceptor = InterceptorsWrapper(
     onError: (DioException error, ErrorInterceptorHandler handler) async {
+      if (error.response?.statusCode == 403) {
+        debugPrint('403 - Request URL = ${error.requestOptions.uri}');
+      }
       if (error.response?.statusCode == 401) {
         if (_refreshCompleter == null) {
           _refreshCompleter = Completer<void>();
