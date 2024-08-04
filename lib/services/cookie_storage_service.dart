@@ -146,7 +146,8 @@ class _CookieStorageServiceImpl implements CookieStorageService {
 
   @override
   Future<void> deleteCookies() async {
-    await persistCookieJar.deleteAll();
+    await persistCookieJar.delete(_authenticationUri);
+    await persistCookieJar.delete(_rpcUri);
   }
 }
 
