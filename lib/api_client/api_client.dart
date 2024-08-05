@@ -30,6 +30,13 @@ part 'http_response.dart';
 /// }
 /// ```
 abstract class ApiClient {
+  /// A singleton instance of [ApiClient].
+  ///
+  /// This instance is created with the default constructor and is configured
+  /// with the base URL and interceptors specified in the constructor.
+  ///
+  /// **Usage Example:**
+  ///
   static Completer<void>? _refreshCompleter;
 
   /// An interceptor for handling HTTP errors and refreshing tokens.
