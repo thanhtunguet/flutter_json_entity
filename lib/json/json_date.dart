@@ -1,5 +1,41 @@
 part of 'json.dart';
 
+/// An extension on the DateTime class to provide additional functionality for
+/// formatting DateTime objects with timezone offsets.
+extension DateTimeOffsetExtensions on DateTime {
+  /// Returns the timezone offset as a string in the format `±hh:mm`.
+  /// If the DateTime is in UTC, it returns 'Z'.
+  ///
+  /// Example:
+  /// ```dart
+  /// DateTime.now().getTimezoneOffsetString(); // '+07:00' or 'Z' if UTC
+  /// ```
+  String getTimezoneOffsetString() {
+    if (isUtc) {
+      return '';
+    } else {
+      Duration offset = timeZoneOffset;
+      String sign = offset.isNegative ? '-' : '+';
+      int hours = offset.inHours.abs();
+      int minutes = offset.inMinutes.remainder(60).abs();
+      return '$sign${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+    }
+  }
+
+  /// Returns the DateTime object as an ISO 8601 string with timezone offset.
+  /// If the DateTime is in UTC, it appends 'Z' to the string.
+  ///
+  /// Example:
+  /// ```dart
+  /// DateTime.now().toIso8601StringWithOffset(); // '2024-08-07T12:34:56.789+07:00' or '2024-08-07T12:34:56.789Z' if UTC
+  /// ```
+  String toIso8601StringWithOffset() {
+    String iso8601String = toIso8601String();
+    String offsetString = getTimezoneOffsetString();
+    return iso8601String + offsetString;
+  }
+}
+
 /// A class representing a JSON date field.
 ///
 /// This class extends [JsonField] to handle `DateTime` values, providing methods
@@ -55,6 +91,6 @@ class JsonDate extends JsonField<DateTime> {
   /// - The date value in ISO 8601 string format.
   @override
   String? toJSON() {
-    return rawValue?.toIso8601String();
+    return rawValue?.toIso8601StringWithOffset();
   }
 }

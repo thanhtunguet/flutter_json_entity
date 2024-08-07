@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
-import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
+import 'package:supa_architecture/api_client/interceptors/device_info_interceptor.dart';
+import 'package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart';
+import 'package:supa_architecture/api_client/interceptors/refresh_interceptor.dart';
+import 'package:supa_architecture/api_client/interceptors/timezone_interceptor.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'http_response.dart';
@@ -30,89 +31,6 @@ part 'http_response.dart';
 /// }
 /// ```
 abstract class ApiClient {
-  static Completer<void>? _refreshCompleter;
-
-  /// An interceptor for handling HTTP errors and refreshing tokens.
-  ///
-  /// If a 401 Unauthorized error occurs, this interceptor will attempt to
-  /// refresh the token and retry the original request. It manages the token
-  /// refresh operation to ensure that concurrent requests do not trigger
-  /// multiple refresh operations.
-  static final refreshInterceptor = InterceptorsWrapper(
-    onError: (DioException error, ErrorInterceptorHandler handler) async {
-      if (error.response?.statusCode == 403) {
-        debugPrint('403 - Request URL = ${error.requestOptions.uri}');
-      }
-      if (error.response?.statusCode == 401) {
-        if (_refreshCompleter == null) {
-          _refreshCompleter = Completer<void>();
-          try {
-            await refreshToken();
-            _refreshCompleter?.complete();
-          } catch (refreshError) {
-            _refreshCompleter?.completeError(refreshError);
-          } finally {
-            _refreshCompleter = null;
-          }
-        }
-
-        try {
-          await _refreshCompleter?.future;
-          final dio = Dio();
-          dio.interceptors.add(cookieStorageService.getCookieManager());
-          final response = await dio.fetch(error.requestOptions);
-          return handler.resolve(response);
-        } catch (refreshError) {
-          GetIt.instance.get<AuthenticationBloc>().handleLogout();
-          await cookieStorageService.deleteCookies();
-          return handler.next(error);
-        }
-      } else {
-        return handler.next(error);
-      }
-    },
-  );
-
-  /// An interceptor for adding device information headers to outgoing requests.
-  ///
-  /// This interceptor adds the following headers to outgoing requests:
-  ///
-  /// - `X-Device-Model`: The device model.
-  /// - `X-Device-Name`: The device name.
-  /// - `X-Operating-System`: The operating system.
-  /// - `X-System-Version`: The system version.
-  ///
-  /// This interceptor is used to identify the device making the request in the
-  /// backend.
-  static InterceptorsWrapper get deviceInfoInterceptor =>
-      InterceptorsWrapper(onRequest: (options, handler) {
-        final deviceInfo = SupaApplication.instance.deviceInfo;
-
-        options.headers['X-Device-Model'] = deviceInfo.deviceModel;
-        options.headers['X-Device-Name'] = deviceInfo.deviceName;
-        options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
-        options.headers['X-System-Version'] = deviceInfo.systemVersion;
-
-        handler.next(options);
-      });
-
-  /// Interceptor for logging HTTP errors.
-  ///
-  /// This interceptor logs errors that occur during HTTP requests.
-  /// If a 400 Bad Request error occurs and the response data is a map,
-  /// it logs the errors to the console.
-  static final errorLogInterceptor = InterceptorsWrapper(
-    onError: (error, handle) {
-      if (error.response?.statusCode == 400) {
-        if (error.response?.data is Map) {
-          final errors = error.response?.data['errors'];
-          debugPrint(jsonEncode(errors));
-        }
-      }
-      throw error;
-    },
-  );
-
   /// The [Dio] instance used for making HTTP requests.
   final Dio dio;
 
@@ -122,9 +40,10 @@ abstract class ApiClient {
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
     dio.interceptors.add(cookieStorageService.getCookieManager());
-    dio.interceptors.add(deviceInfoInterceptor);
-    dio.interceptors.add(refreshInterceptor);
-    dio.interceptors.add(errorLogInterceptor);
+    dio.interceptors.add(DeviceInfoInterceptor());
+    dio.interceptors.add(TimezoneInterceptor());
+    dio.interceptors.add(RefreshInterceptor());
+    dio.interceptors.add(GeneralErrorLogInterceptor());
   }
 
   /// The base URL for the API requests.
@@ -170,18 +89,6 @@ abstract class ApiClient {
     } catch (error) {
       return null;
     }
-  }
-
-  /// Refreshes the authentication token.
-  ///
-  /// This method is used by the refresh interceptor to obtain a new token
-  /// when the current token has expired.
-  ///
-  /// **Returns:**
-  /// - A [Future] that completes when the token refresh operation is finished.
-  static Future<void> refreshToken() async {
-    cookieStorageService.deleteAccessTokenOnly();
-    return PortalAuthenticationRepository().refreshToken();
   }
 
   /// Uploads a file to the specified upload URL.
