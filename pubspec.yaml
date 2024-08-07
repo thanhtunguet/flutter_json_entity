@@ -1,7 +1,7 @@
 name: supa_architecture
 description: >
   A comprehensive set of tools and utilities designed to streamline the development of Flutter applications.
-version: 0.0.1+preview.4
+version: 0.0.1+preview.5
 homepage: https://github.com/thanhtunguet/supa_architecture
 
 environment:
@@ -46,6 +46,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
   build_runner: ^2.4.0
+  sentry_flutter: ^8.6.0
+  toastification: ^2.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

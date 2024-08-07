@@ -40,6 +40,7 @@ Empowering Your Flutter Projects with Clean Architecture and Pre-Built Functiona
     - [Services](#services)
     - [Widgets](#widgets)
     - [SupaApplication](#supaapplication)
+  - [Example](#example)
   - [Contributing](#contributing)
   - [License](#license)
 
@@ -369,6 +370,12 @@ Explain the reusable widgets provided, including:
 Detail the main class, `SupaApplication`, including:
 - Its purpose
 - How it integrates with other parts of the library
+
+## Example
+
+See package example here:
+
+[example/example.md](example/example.md)
 
 ## Contributing
 Instructions for contributing to the library, including guidelines for submitting issues and pull requests.
