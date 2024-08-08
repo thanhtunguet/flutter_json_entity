@@ -42,7 +42,7 @@ class GeneralErrorLogInterceptor extends InterceptorsWrapper {
     switch (err.response?.statusCode) {
       case 403:
         _printColored(
-          'REQUEST_FORBIDDEN 403 = ${err.requestOptions.uri.toString()}',
+          'DIO REQUEST_FORBIDDEN 403 = ${err.requestOptions.uri.toString()}',
           'red',
         );
         break;
@@ -50,7 +50,7 @@ class GeneralErrorLogInterceptor extends InterceptorsWrapper {
       case 400:
         if (err.response?.data is Map) {
           final errors = err.response?.data['errors'];
-          _printColored(jsonEncode(errors), 'red');
+          _printColored("DIO BAD_REQUEST 401 = ${jsonEncode(errors)}", 'red');
         }
 
         break;

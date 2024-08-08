@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:supa_architecture/json/json.dart';
 
 /// A custom interceptor to add the `X-Timezone` header to every request.
 /// The header value is the current timezone offset in decimal format.
@@ -17,7 +18,7 @@ class TimezoneInterceptor extends InterceptorsWrapper {
 
     // Add the `X-Timezone` header to the request
     options.headers['X-Timezone'] = offsetString;
-    options.headers['X-RequestedAt'] = now.toIso8601String();
+    options.headers['X-Requested-At'] = now.toIso8601StringWithOffset();
 
     // Continue with the request
     super.onRequest(options, handler);
