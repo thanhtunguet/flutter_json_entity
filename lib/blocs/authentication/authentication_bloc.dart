@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:recaptcha_enterprise_flutter/recaptcha.dart';
 import 'package:recaptcha_enterprise_flutter/recaptcha_action.dart';
-import 'package:recaptcha_enterprise_flutter/recaptcha_enterprise.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
@@ -250,9 +250,15 @@ class AuthenticationBloc
       final username = event.username;
       final password = event.password;
       final useCaptcha = SupaApplication.instance.useCaptcha;
-      final captcha = useCaptcha
-          ? await RecaptchaEnterprise.execute(RecaptchaAction.LOGIN())
-          : '';
+      String captcha;
+      if (useCaptcha) {
+        final client = await Recaptcha.fetchClient(
+            SupaApplication.instance.captchaConfig.siteKey);
+        captcha = await client.execute(RecaptchaAction.LOGIN());
+      } else {
+        captcha = '';
+      }
+
       await authRepo.login(username, password, captcha).then((tenants) {
         return handleLoginWithTenants(tenants);
       }).catchError((error) {
