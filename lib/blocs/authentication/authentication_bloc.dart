@@ -8,6 +8,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/repositories/portal_profile_repository.dart';
+import 'package:supa_architecture/repositories/utils_notification_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'authentication_event.dart';
@@ -25,13 +26,19 @@ class AuthenticationBloc
   /// This repository is used for handling authentication-related operations.
   /// It provides methods for authenticating with password, Google, Apple,
   /// Microsoft, and biometric login.
-  static final authRepo = PortalAuthenticationRepository();
+  final authRepo = PortalAuthenticationRepository();
+
+  /// The [notiRepo] is an instance of [UtilsNotificationRepository].
+  ///
+  /// This repository is used for handling notification-related operations.
+  /// It provides methods for retrieving notifications and marking them as read.
+  final UtilsNotificationRepository notiRepo = UtilsNotificationRepository();
 
   /// The [profileRepo] is an instance of [PortalProfileRepository].
   ///
   /// This repository is used for handling profile-related operations.
   /// It provides methods for updating user profile information.
-  static final profileRepo = PortalProfileRepository();
+  final profileRepo = PortalProfileRepository();
 
   /// Constructs an instance of [AuthenticationBloc].
   AuthenticationBloc() : super(AuthenticationInitial()) {
@@ -81,8 +88,12 @@ class AuthenticationBloc
   Future<void> handleChangeTenant(Tenant tenant) async {
     await authRepo.createToken(tenant);
     authRepo.changeSavedTenant(tenant);
-    add(AuthenticationFinalEvent(
-        appUser: (state as AuthenticationSuccess).appUser, tenant: tenant));
+    add(
+      AuthenticationFinalEvent(
+        appUser: (state as AuthenticationSuccess).appUser,
+        tenant: tenant,
+      ),
+    );
   }
 
   /// Initializes the authentication state.
@@ -258,7 +269,9 @@ class AuthenticationBloc
     final tenant = event.tenant;
     authRepo.changeSavedTenant(tenant);
     add(AuthenticationFinalEvent(
-        appUser: (state as AuthenticationSuccess).appUser, tenant: tenant));
+      appUser: (state as AuthenticationSuccess).appUser,
+      tenant: tenant,
+    ));
   }
 
   /// Handles tenant selected event.

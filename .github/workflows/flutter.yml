@@ -1,0 +1,36 @@
+name: Flutter Library Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "stable" # You can specify a specific version if needed
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Step 4: Run Flutter tests
+      - name: Run tests
+        run: flutter test
+
+      # Step 5: Analyze code
+      - name: Run flutter analyze
+        run: flutter analyze
