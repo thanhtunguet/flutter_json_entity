@@ -56,9 +56,10 @@ void main() {
     });
 
     test('json serialization', () {
+      final String stringized = appUser.toString();
       expect(
-        appUser.toString(),
-        '{"id":1,"code":"ThangLD","name":"Le Duc Thang","birthday":"1991-05-10T00:00:00.000","supervisor":{"id":2,"code":"VuDT","name":"Dang Tuan Vu","birthday":"1990-03-14T00:00:00.000","students":[]},"students":[{"id":3,"code":"TungPT","name":"Pham Thanh Tung","birthday":"1997-11-01T00:00:00.000","students":[]},{"id":4,"code":"TienTV","name":"Tran Van Tien","birthday":"1997-09-09T00:00:00.000","students":[]}]}',
+        stringized,
+        '{"id":1,"code":"ThangLD","name":"Le Duc Thang","birthday":"1991-05-10T00:00:00.000+07:00","supervisor":{"id":2,"code":"VuDT","name":"Dang Tuan Vu","birthday":"1990-03-14T00:00:00.000+07:00","students":[]},"students":[{"id":3,"code":"TungPT","name":"Pham Thanh Tung","birthday":"1997-11-01T00:00:00.000+07:00","students":[]},{"id":4,"code":"TienTV","name":"Tran Van Tien","birthday":"1997-09-09T00:00:00.000+07:00","students":[]}]}',
       );
     });
 
