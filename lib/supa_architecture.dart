@@ -2,6 +2,7 @@ library supa_architecture;
 
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supa_architecture/data/app_user.dart';
@@ -83,7 +84,8 @@ class SupaApplication {
         await dotenv.load();
 
         final cookieStorageService = await CookieStorageService.initialize();
-        final persistentStorageService = await PersistentStorageService.initialize();
+        final persistentStorageService =
+            await PersistentStorageService.initialize();
         final secureStorageService = SecureStorageService.initialize();
         final deviceInfo = await DeviceInfo.getDeviceInfo();
 
@@ -99,7 +101,9 @@ class SupaApplication {
 
         _isInitialized = true;
       } catch (error) {
-        print(error);
+        if (kDebugMode) {
+          print(error);
+        }
       }
     }
 
@@ -168,10 +172,13 @@ class SupaApplication {
 }
 
 /// Getter for the [CookieStorageService] instance.
-CookieStorageService get cookieStorageService => SupaApplication.instance.cookieStorageService;
+CookieStorageService get cookieStorageService =>
+    SupaApplication.instance.cookieStorageService;
 
 /// Getter for the [SecureStorageService] instance.
-SecureStorageService get secureStorageService => SupaApplication.instance.secureStorageService;
+SecureStorageService get secureStorageService =>
+    SupaApplication.instance.secureStorageService;
 
 /// Getter for the [PersistentStorageService] instance.
-PersistentStorageService get persistentStorageService => SupaApplication.instance.persistentStorageService;
+PersistentStorageService get persistentStorageService =>
+    SupaApplication.instance.persistentStorageService;
