@@ -79,25 +79,28 @@ class SupaApplication {
   /// - A [Future] that resolves to the singleton instance of [SupaApplication].
   static Future<SupaApplication> initialize() async {
     if (!_isInitialized) {
-      await dotenv.load();
+      try {
+        await dotenv.load();
 
-      final cookieStorageService = await CookieStorageService.initialize();
-      final persistentStorageService =
-          await PersistentStorageService.initialize();
-      final secureStorageService = SecureStorageService.initialize();
-      final deviceInfo = await DeviceInfo.getDeviceInfo();
+        final cookieStorageService = await CookieStorageService.initialize();
+        final persistentStorageService = await PersistentStorageService.initialize();
+        final secureStorageService = SecureStorageService.initialize();
+        final deviceInfo = await DeviceInfo.getDeviceInfo();
 
-      instance = SupaApplication._(
-        cookieStorageService: cookieStorageService,
-        secureStorageService: secureStorageService,
-        persistentStorageService: persistentStorageService,
-        deviceInfo: deviceInfo,
-      );
+        instance = SupaApplication._(
+          cookieStorageService: cookieStorageService,
+          secureStorageService: secureStorageService,
+          persistentStorageService: persistentStorageService,
+          deviceInfo: deviceInfo,
+        );
 
-      persistentStorageService.initializeBaseApiUrl();
-      registerModels();
+        persistentStorageService.initializeBaseApiUrl();
+        registerModels();
 
-      _isInitialized = true;
+        _isInitialized = true;
+      } catch (error) {
+        print(error);
+      }
     }
 
     return instance;
@@ -165,13 +168,10 @@ class SupaApplication {
 }
 
 /// Getter for the [CookieStorageService] instance.
-CookieStorageService get cookieStorageService =>
-    SupaApplication.instance.cookieStorageService;
+CookieStorageService get cookieStorageService => SupaApplication.instance.cookieStorageService;
 
 /// Getter for the [SecureStorageService] instance.
-SecureStorageService get secureStorageService =>
-    SupaApplication.instance.secureStorageService;
+SecureStorageService get secureStorageService => SupaApplication.instance.secureStorageService;
 
 /// Getter for the [PersistentStorageService] instance.
-PersistentStorageService get persistentStorageService =>
-    SupaApplication.instance.persistentStorageService;
+PersistentStorageService get persistentStorageService => SupaApplication.instance.persistentStorageService;
