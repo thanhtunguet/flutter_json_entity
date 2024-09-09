@@ -182,3 +182,6 @@ SecureStorageService get secureStorageService =>
 /// Getter for the [PersistentStorageService] instance.
 PersistentStorageService get persistentStorageService =>
     SupaApplication.instance.persistentStorageService;
+
+/// Provides access to the [SupaApplication] singleton instance.
+SupaApplication get supaApplication => SupaApplication.instance;
