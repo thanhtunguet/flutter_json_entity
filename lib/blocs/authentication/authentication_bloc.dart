@@ -26,19 +26,20 @@ class AuthenticationBloc
   /// This repository is used for handling authentication-related operations.
   /// It provides methods for authenticating with password, Google, Apple,
   /// Microsoft, and biometric login.
-  final authRepo = PortalAuthenticationRepository();
+  PortalAuthenticationRepository get authRepo =>
+      PortalAuthenticationRepository();
 
   /// The [notiRepo] is an instance of [UtilsNotificationRepository].
   ///
   /// This repository is used for handling notification-related operations.
   /// It provides methods for retrieving notifications and marking them as read.
-  final UtilsNotificationRepository notiRepo = UtilsNotificationRepository();
+  UtilsNotificationRepository get notiRepo => UtilsNotificationRepository();
 
   /// The [profileRepo] is an instance of [PortalProfileRepository].
   ///
   /// This repository is used for handling profile-related operations.
   /// It provides methods for updating user profile information.
-  final profileRepo = PortalProfileRepository();
+  PortalProfileRepository get profileRepo => PortalProfileRepository();
 
   /// Constructs an instance of [AuthenticationBloc].
   AuthenticationBloc() : super(AuthenticationInitial()) {

@@ -20,7 +20,8 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
   /// This field is initialized with an instance of [PortalAuthenticationRepository]
   /// and is used by the [TenantBloc] to communicate with the server for tenant
   /// data.
-  static final portalRepo = PortalAuthenticationRepository();
+  static PortalAuthenticationRepository get portalRepo =>
+      PortalAuthenticationRepository();
 
   /// Constructs an instance of [TenantBloc].
   TenantBloc() : super(TenantInitial()) {
