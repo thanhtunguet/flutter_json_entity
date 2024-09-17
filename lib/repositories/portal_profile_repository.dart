@@ -7,7 +7,11 @@ import 'package:supa_architecture/supa_architecture.dart';
 /// settings, obtaining OTP, and changing passwords.
 class PortalProfileRepository extends ApiClient {
   @override
-  String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl).replace(path: '/rpc/portal/app-user-profile').toString();
+  String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
+      .replace(
+        path: '/rpc/portal/app-user-profile',
+      )
+      .toString();
 
   /// Switches the email of the specified user.
   ///

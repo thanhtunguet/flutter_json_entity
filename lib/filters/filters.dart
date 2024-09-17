@@ -33,6 +33,9 @@ abstract class DataFilter implements JsonSerializable {
   /// Constant for the "APPROVED" view code.
   static const viewCodeApproved = "APPROVED";
 
+  /// Constant for the "OWNER" view code.
+  static const viewCodeOwner = "OWNER";
+
   /// Number of entities to skip.
   int skip = 0;
 

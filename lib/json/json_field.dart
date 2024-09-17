@@ -29,11 +29,6 @@ abstract class JsonField<T> {
   /// The raw value of the field.
   T? rawValue;
 
-  /// A string representation for null values, used for debugging.
-  String get nullString => kDebugMode
-      ? '<Null check operator used on a null value, from JsonField.name = $fieldName>'
-      : '';
-
   /// The value of the field.
   T get value;
 

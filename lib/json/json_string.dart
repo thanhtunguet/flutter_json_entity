@@ -25,5 +25,5 @@ class JsonString extends JsonField<String> {
   /// **Returns:**
   /// - The string value, or a null string if the value is null.
   @override
-  String get value => rawValue ?? nullString;
+  String get value => rawValue ?? '';
 }
