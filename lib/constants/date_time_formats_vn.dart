@@ -1,3 +1,5 @@
+part of 'constants.dart';
+
 /// Constants for formatting dates and times in the Vietnamese locale.
 ///
 /// These formats are designed to be used with the [DateFormat] constructor,
