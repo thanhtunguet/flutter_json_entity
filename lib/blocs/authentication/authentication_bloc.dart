@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:recaptcha_enterprise_flutter/recaptcha.dart';
 import 'package:recaptcha_enterprise_flutter/recaptcha_action.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/repositories/portal_profile_repository.dart';
 import 'package:supa_architecture/repositories/utils_notification_repository.dart';

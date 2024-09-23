@@ -1,3 +1,9 @@
+## 0.0.1+preview.12
+
+### Added
+
+- Model: Attachment
+
 ## 0.0.1+preview.5
 
 ### Added

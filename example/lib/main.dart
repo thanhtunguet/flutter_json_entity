@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:supa_architecture/data/recaptcha_config.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 import 'package:toastification/toastification.dart';
 

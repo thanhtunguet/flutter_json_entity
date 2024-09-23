@@ -1,5 +1,3 @@
-import 'package:supa_architecture/data/user_notification.dart';
-import 'package:supa_architecture/data/user_notification_filter.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 /// A repository class for managing user notifications.

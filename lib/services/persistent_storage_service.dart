@@ -1,6 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 /// An abstract interface class for managing persistent storage.

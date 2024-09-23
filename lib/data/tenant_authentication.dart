@@ -1,4 +1,3 @@
-import 'package:supa_architecture/data/tenant.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 /// A class representing the authentication information for a tenant.
