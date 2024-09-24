@@ -1,10 +1,12 @@
 export './app_token.dart';
 export './app_user.dart';
+export './app_user_filter.dart';
 export './attachment.dart';
 export './device_info.dart';
 export './device_notification_token.dart';
 export './enum_model.dart';
 export './file.dart';
+export './file_filter.dart';
 export './forgot_password_dto.dart';
 export './image.dart';
 export './recaptcha_config.dart';
