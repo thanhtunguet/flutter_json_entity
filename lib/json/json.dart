@@ -5,7 +5,9 @@ import 'package:supa_architecture/extensions/datetime.dart';
 
 part 'json_boolean.dart';
 part 'json_date.dart';
+part 'json_double.dart';
 part 'json_field.dart';
+part 'json_integer.dart';
 part 'json_list.dart';
 part 'json_model.dart';
 part 'json_number.dart';
