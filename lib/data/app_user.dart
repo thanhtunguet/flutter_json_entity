@@ -70,14 +70,13 @@ class AppUser extends JsonModel {
   JsonString avatar = JsonString("avatar");
 
   /// The user's admin type as an [EnumModel].
-  JsonObject<EnumModel> adminType =
-      JsonObject<EnumModel>("adminType", EnumModel.new);
+  JsonObject<EnumModel> adminType = JsonObject<EnumModel>("adminType");
 
   /// The ID of the user's admin type.
   JsonNumber adminTypeId = JsonNumber("adminTypeId");
 
   /// The user's gender as an [EnumModel].
-  JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender", EnumModel.new);
+  JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender");
 
   /// The ID of the user's gender.
   JsonNumber genderId = JsonNumber("genderId");
@@ -89,8 +88,7 @@ class AppUser extends JsonModel {
   JsonString otpCode = JsonString("otpCode");
 
   /// The user's language as an [EnumModel].
-  JsonObject<EnumModel> language =
-      JsonObject<EnumModel>("language", EnumModel.new);
+  JsonObject<EnumModel> language = JsonObject<EnumModel>("language");
 
   /// The ID of the user's language.
   JsonNumber languageId = JsonNumber("languageId");
@@ -103,8 +101,7 @@ class AppUser extends JsonModel {
       JsonBoolean("receivingSystemNotification");
 
   /// The user's timezone as an [EnumModel].
-  JsonObject<EnumModel> timezone =
-      JsonObject<EnumModel>("timezone", EnumModel.new);
+  JsonObject<EnumModel> timezone = JsonObject<EnumModel>("timezone");
 
   /// The ID of the user's timezone.
   JsonNumber timezoneId = JsonNumber("timezoneId");

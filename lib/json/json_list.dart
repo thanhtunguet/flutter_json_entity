@@ -6,15 +6,12 @@ part of 'json.dart';
 /// providing methods for setting and getting values, converting to JSON,
 /// and accessing list elements.
 class JsonList<T extends JsonModel> extends JsonField<List<T>> {
-  /// The constructor for creating instances of type [T].
-  final InstanceConstructor<T> _type;
-
   /// Constructs an instance of [JsonList].
   ///
   /// **Parameters:**
   /// - `fieldName`: The name of the field.
   /// - `type`: The constructor for creating instances of type [T].
-  JsonList(super.fieldName, InstanceConstructor<T> type) : _type = type {
+  JsonList(super.fieldName) {
     rawValue = [];
   }
 
@@ -37,7 +34,7 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
     }
     if (value is List) {
       rawValue = value.map((element) {
-        final model = _type();
+        final model = getIt.get<T>();
         model.fromJSON(element);
         return model;
       }).toList();

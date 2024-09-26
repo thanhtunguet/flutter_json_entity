@@ -6,22 +6,24 @@ part of 'json.dart';
 /// It provides methods for setting and getting values, converting to JSON,
 /// and accessing nested fields within the object.
 class JsonObject<T extends JsonModel> extends JsonField<T> {
-  /// The constructor for creating instances of type [T].
-  final InstanceConstructor<T> _type;
-
   /// Constructs an instance of [JsonObject].
   ///
   /// **Parameters:**
   /// - `fieldName`: The name of the field.
   /// - `type`: The constructor for creating instances of type [T].
-  JsonObject(super.fieldName, InstanceConstructor<T> type) : _type = type;
+  JsonObject(super.fieldName);
 
   /// Gets the value of the JSON object field.
   ///
   /// **Returns:**
   /// - An instance of [T], or a new instance if the value is null.
   @override
-  T get value => rawValue ?? _type();
+  T get value {
+    if (rawValue == null) {
+      return getIt.get<T>();
+    }
+    return rawValue!;
+  }
 
   /// Sets the value of the JSON object field.
   ///
@@ -34,7 +36,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
       return;
     }
     if (value is Map<String, dynamic>) {
-      final model = _type();
+      final model = getIt.get<T>();
       model.fromJSON(value);
       rawValue = model;
     }

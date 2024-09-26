@@ -46,10 +46,7 @@ class Tenant extends JsonModel {
   JsonNumber tenantStatusId = JsonNumber('tenantStatusId');
 
   /// The status of the tenant as an [EnumModel].
-  JsonObject<EnumModel> tenantStatus = JsonObject<EnumModel>(
-    'tenantStatus',
-    EnumModel.new,
-  );
+  JsonObject<EnumModel> tenantStatus = JsonObject<EnumModel>('tenantStatus');
 
   /// The request property of the tenant.
   JsonString requestProperty = JsonString('requestProperty');

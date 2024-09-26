@@ -9,6 +9,7 @@ import 'package:supa_architecture/api_client/interceptors/device_info_intercepto
 import 'package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart';
 import 'package:supa_architecture/api_client/interceptors/refresh_interceptor.dart';
 import 'package:supa_architecture/api_client/interceptors/timezone_interceptor.dart';
+import 'package:supa_architecture/config/get_it.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'http_response.dart';

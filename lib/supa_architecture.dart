@@ -5,15 +5,8 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supa_architecture/data/app_user.dart';
-import 'package:supa_architecture/data/device_info.dart';
-import 'package:supa_architecture/data/enum_model.dart';
-import 'package:supa_architecture/data/file.dart';
-import 'package:supa_architecture/data/image.dart';
-import 'package:supa_architecture/data/recaptcha_config.dart';
-import 'package:supa_architecture/data/tenant.dart';
-import 'package:supa_architecture/data/user_notification.dart';
-import 'package:supa_architecture/json/json.dart';
+import 'package:supa_architecture/config/get_it.dart';
+import 'package:supa_architecture/data/data.dart';
 import 'package:supa_architecture/services/cookie_storage_service.dart';
 import 'package:supa_architecture/services/persistent_storage_service.dart';
 import 'package:supa_architecture/services/secure_storage_service.dart';
@@ -131,12 +124,12 @@ class SupaApplication {
 
   /// Registers JSON models used in the application.
   static void registerModels() {
-    JsonModel.registerType(AppUser, AppUser.new);
-    JsonModel.registerType(EnumModel, EnumModel.new);
-    JsonModel.registerType(File, File.new);
-    JsonModel.registerType(ImageModel, ImageModel.new);
-    JsonModel.registerType(Tenant, Tenant.new);
-    JsonModel.registerType(UserNotification, UserNotification.new);
+    getIt.registerFactory<AppUser>(() => AppUser());
+    getIt.registerFactory<EnumModel>(() => EnumModel());
+    getIt.registerFactory<File>(() => File());
+    getIt.registerFactory<ImageModel>(() => ImageModel());
+    getIt.registerFactory<Tenant>(() => Tenant());
+    getIt.registerFactory<UserNotification>(() => UserNotification());
   }
 
   /// Singleton instance of [AadOAuth] for Azure AD authentication.

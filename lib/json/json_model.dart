@@ -8,31 +8,6 @@ typedef InstanceConstructor<T extends JsonModel> = T Function();
 /// This class provides methods for handling JSON serialization and deserialization,
 /// managing fields, and handling errors, warnings, and informational messages.
 abstract class JsonModel with JsonSerializable {
-  /// A map to store registered types and their constructors.
-  static final Map<Type, InstanceConstructor> _types = {};
-
-  /// Registers a type and its constructor.
-  ///
-  /// **Parameters:**
-  /// - `type`: The type to register.
-  /// - `constructor`: The constructor function for the type.
-  static void registerType(Type type, InstanceConstructor constructor) {
-    _types[type] = constructor;
-  }
-
-  /// Constructs an instance of a registered type.
-  ///
-  /// **Parameters:**
-  /// - `type`: The type to construct.
-  ///
-  /// **Returns:**
-  /// - An instance of the specified type.
-  static T construct<T extends JsonModel>(Type type) {
-    assert(_types.containsKey(type));
-    final constructor = _types[type]!;
-    return constructor() as T;
-  }
-
   /// List of JSON fields representing the model attributes.
   List<JsonField> get fields;
 

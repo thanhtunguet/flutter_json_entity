@@ -19,7 +19,7 @@ class AppUser extends JsonModel {
 
   JsonDate birthday = JsonDate("birthday");
 
-  JsonObject<AppUser> supervisor = JsonObject("supervisor", AppUser.new);
+  JsonObject<AppUser> supervisor = JsonObject("supervisor");
 
-  JsonList<AppUser> students = JsonList("students", AppUser.new);
+  JsonList<AppUser> students = JsonList("students");
 }

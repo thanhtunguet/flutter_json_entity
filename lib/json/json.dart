@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:supa_architecture/config/get_it.dart';
 import 'package:supa_architecture/constants/constants.dart';
 import 'package:supa_architecture/extensions/datetime.dart';
 

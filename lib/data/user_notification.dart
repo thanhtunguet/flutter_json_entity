@@ -37,13 +37,13 @@ class UserNotification extends JsonModel {
   JsonString linkMobile = JsonString("linkMobile");
 
   /// The sender of the notification as an [AppUser].
-  JsonObject<AppUser> sender = JsonObject<AppUser>("sender", AppUser.new);
+  JsonObject<AppUser> sender = JsonObject<AppUser>("sender");
 
   /// The ID of the sender.
   JsonNumber senderId = JsonNumber("senderId");
 
   /// The recipient of the notification as an [AppUser].
-  JsonObject<AppUser> recipient = JsonObject<AppUser>("recipient", AppUser.new);
+  JsonObject<AppUser> recipient = JsonObject<AppUser>("recipient");
 
   /// The ID of the recipient.
   JsonNumber recipientId = JsonNumber("recipientId");

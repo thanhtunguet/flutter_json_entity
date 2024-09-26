@@ -45,18 +45,12 @@ abstract class Attachment extends JsonModel {
   /// The user who created the attachment.
   ///
   /// This is a nested JSON object representing the `AppUser` who created the attachment.
-  JsonObject<AppUser> appUser = JsonObject<AppUser>(
-    "appUser",
-    () => AppUser(),
-  );
+  JsonObject<AppUser> appUser = JsonObject<AppUser>("appUser");
 
   /// The file associated with the attachment.
   ///
   /// This is a nested JSON object representing the `File` linked to the attachment.
-  JsonObject<File> file = JsonObject<File>(
-    "file",
-    () => File(),
-  );
+  JsonObject<File> file = JsonObject<File>("file");
 
   /// The timestamp indicating when the attachment was created.
   JsonDate createdAt = JsonDate("createdAt");
