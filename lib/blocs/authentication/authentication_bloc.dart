@@ -187,12 +187,13 @@ class AuthenticationBloc
       Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationLoading());
-      GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>['email']);
+      GoogleSignIn googleSignIn =
+          GoogleSignIn(scopes: <String>['email', 'profile']);
       if (await googleSignIn.isSignedIn()) await googleSignIn.disconnect();
       final credentials = await googleSignIn.signIn();
       final googleKey = await credentials?.authentication;
-      if (googleKey != null) {
-        final tenants = await authRepo.loginWithGoogle(googleKey.idToken!);
+      if (googleKey?.idToken != null) {
+        final tenants = await authRepo.loginWithGoogle(googleKey!.idToken!);
         handleLoginWithTenants(tenants);
       } else {
         emit(AuthenticationInitial());
