@@ -15,7 +15,7 @@ class EnumModel extends JsonModel {
       ];
 
   /// The ID of the enumeration.
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   /// The code of the enumeration.
   JsonString code = JsonString("code");

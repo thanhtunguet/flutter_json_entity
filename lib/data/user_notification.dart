@@ -7,7 +7,7 @@ import 'package:supa_architecture/supa_architecture.dart';
 /// sender, recipient, and read status.
 class UserNotification extends JsonModel {
   /// The ID of the notification.
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   /// The title of the notification.
   JsonString title = JsonString("title");
@@ -40,13 +40,13 @@ class UserNotification extends JsonModel {
   JsonObject<AppUser> sender = JsonObject<AppUser>("sender");
 
   /// The ID of the sender.
-  JsonNumber senderId = JsonNumber("senderId");
+  JsonInteger senderId = JsonInteger("senderId");
 
   /// The recipient of the notification as an [AppUser].
   JsonObject<AppUser> recipient = JsonObject<AppUser>("recipient");
 
   /// The ID of the recipient.
-  JsonNumber recipientId = JsonNumber("recipientId");
+  JsonInteger recipientId = JsonInteger("recipientId");
 
   /// Indicates if the notification has been read.
   JsonBoolean read = JsonBoolean("read");

@@ -20,7 +20,7 @@ class File extends JsonModel {
       ];
 
   /// The ID of the file.
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   /// The name of the file.
   JsonString name = JsonString("name");
@@ -35,7 +35,7 @@ class File extends JsonModel {
   JsonString mimeType = JsonString("mimeType");
 
   /// The size of the file.
-  JsonNumber size = JsonNumber("size");
+  JsonInteger size = JsonInteger("size");
 
   /// The creation date of the file.
   JsonDate createdAt = JsonDate("createdAt");

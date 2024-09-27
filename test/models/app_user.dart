@@ -1,5 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:supa_architecture/json/json.dart';
 
+@injectable
 class AppUser extends JsonModel {
   @override
   List<JsonField> get fields => [

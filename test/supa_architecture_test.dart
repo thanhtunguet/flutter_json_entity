@@ -15,9 +15,7 @@ Future<void> configureDeps() async {
 }
 
 void main() {
-  setUpAll(() async {
-    await configureDeps();
-  });
+  setUpAll(configureDeps);
 
   group('JSON', () {
     final appUser = AppUser();

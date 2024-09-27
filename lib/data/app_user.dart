@@ -40,10 +40,10 @@ class AppUser extends JsonModel {
       ];
 
   /// The user ID.
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   /// The global user ID.
-  JsonNumber globalUserId = JsonNumber("globalUserId");
+  JsonInteger globalUserId = JsonInteger("globalUserId");
 
   /// The user's email address.
   JsonString email = JsonString("email");
@@ -73,13 +73,13 @@ class AppUser extends JsonModel {
   JsonObject<EnumModel> adminType = JsonObject<EnumModel>("adminType");
 
   /// The ID of the user's admin type.
-  JsonNumber adminTypeId = JsonNumber("adminTypeId");
+  JsonInteger adminTypeId = JsonInteger("adminTypeId");
 
   /// The user's gender as an [EnumModel].
   JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender");
 
   /// The ID of the user's gender.
-  JsonNumber genderId = JsonNumber("genderId");
+  JsonInteger genderId = JsonInteger("genderId");
 
   /// Indicates if the user has already gotten started.
   JsonBoolean isAlreadyGettingStarted = JsonBoolean("isAlreadyGettingStarted");
@@ -91,7 +91,7 @@ class AppUser extends JsonModel {
   JsonObject<EnumModel> language = JsonObject<EnumModel>("language");
 
   /// The ID of the user's language.
-  JsonNumber languageId = JsonNumber("languageId");
+  JsonInteger languageId = JsonInteger("languageId");
 
   /// Indicates if the user is receiving system emails.
   JsonBoolean receivingSystemEmail = JsonBoolean("receivingSystemEmail");
@@ -104,7 +104,7 @@ class AppUser extends JsonModel {
   JsonObject<EnumModel> timezone = JsonObject<EnumModel>("timezone");
 
   /// The ID of the user's timezone.
-  JsonNumber timezoneId = JsonNumber("timezoneId");
+  JsonInteger timezoneId = JsonInteger("timezoneId");
 
   /// The date the user was created.
   JsonDate createdAt = JsonDate("createdAt");

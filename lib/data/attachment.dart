@@ -10,7 +10,7 @@ import 'package:supa_architecture/json/json.dart';
 /// class to facilitate JSON serialization and deserialization.
 abstract class Attachment extends JsonModel {
   /// The unique identifier of the attachment.
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   /// A brief description of the attachment.
   JsonString description = JsonString("description");
@@ -27,7 +27,7 @@ abstract class Attachment extends JsonModel {
   /// The unique identifier of the associated file, if any.
   ///
   /// This field is used when the attachment is linked to a file stored in the system.
-  JsonNumber fileId = JsonNumber("fileId");
+  JsonInteger fileId = JsonInteger("fileId");
 
   /// The URL or link associated with the attachment, if any.
   ///
@@ -40,7 +40,7 @@ abstract class Attachment extends JsonModel {
   JsonString path = JsonString("path");
 
   /// The unique identifier of the user who created the attachment.
-  JsonNumber appUserId = JsonNumber("appUserId");
+  JsonInteger appUserId = JsonInteger("appUserId");
 
   /// The user who created the attachment.
   ///

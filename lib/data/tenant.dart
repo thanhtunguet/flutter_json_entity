@@ -22,7 +22,7 @@ class Tenant extends JsonModel {
       ];
 
   /// The ID of the tenant.
-  JsonNumber id = JsonNumber('id');
+  JsonInteger id = JsonInteger('id');
 
   /// The code of the tenant.
   JsonString code = JsonString('code');
@@ -34,7 +34,7 @@ class Tenant extends JsonModel {
   JsonString defaultPath = JsonString('defaultPath');
 
   /// The ID of the owner of the tenant.
-  JsonNumber ownerId = JsonNumber('ownerId');
+  JsonInteger ownerId = JsonInteger('ownerId');
 
   /// Indicates if the tenant has already gotten started.
   JsonBoolean isAlreadyGettingStarted = JsonBoolean('isAlreadyGettingStarted');
@@ -43,7 +43,7 @@ class Tenant extends JsonModel {
   JsonBoolean isOwner = JsonBoolean('isOwner');
 
   /// The ID of the tenant's status.
-  JsonNumber tenantStatusId = JsonNumber('tenantStatusId');
+  JsonInteger tenantStatusId = JsonInteger('tenantStatusId');
 
   /// The status of the tenant as an [EnumModel].
   JsonObject<EnumModel> tenantStatus = JsonObject<EnumModel>('tenantStatus');
