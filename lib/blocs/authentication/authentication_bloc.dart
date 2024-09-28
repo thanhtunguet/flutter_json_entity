@@ -194,6 +194,7 @@ class AuthenticationBloc
           'profile',
           'openid',
         ],
+        signInOption: SignInOption.standard,
       );
 
       final bool isSignedIn = await googleSignIn.isSignedIn();
@@ -201,12 +202,12 @@ class AuthenticationBloc
         await googleSignIn.disconnect();
       }
 
-      final GoogleSignInAccount? credentials = await googleSignIn.signIn();
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleKey =
-          await credentials?.authentication;
-      if (googleKey?.idToken != null) {
-        final List<Tenant> tenants =
-            await authRepo.loginWithGoogle(googleKey!.idToken!);
+          await account?.authentication;
+      if (googleKey?.idToken != null || googleKey?.accessToken != null) {
+        final List<Tenant> tenants = await authRepo
+            .loginWithGoogle(googleKey!.idToken ?? googleKey.accessToken!);
         handleLoginWithTenants(tenants);
       } else {
         emit(AuthenticationInitial());

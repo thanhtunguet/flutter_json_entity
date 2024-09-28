@@ -73,9 +73,12 @@ class SupaApplication {
         await dotenv.load();
 
         final cookieStorageService = await CookieStorageService.initialize();
+
         final persistentStorageService =
             await PersistentStorageService.initialize();
+
         final secureStorageService = SecureStorageService.initialize();
+
         final deviceInfo = await DeviceInfo.getDeviceInfo();
 
         instance = SupaApplication._(
@@ -86,6 +89,7 @@ class SupaApplication {
         );
 
         persistentStorageService.initializeBaseApiUrl();
+
         registerModels();
 
         _isInitialized = true;

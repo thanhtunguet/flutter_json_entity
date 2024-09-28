@@ -18,10 +18,29 @@ class DeviceInfoInterceptor extends InterceptorsWrapper {
     final deviceInfo = SupaApplication.instance.deviceInfo;
 
     options.headers['X-Device-Model'] = deviceInfo.deviceModel;
-    options.headers['X-Device-Name'] = deviceInfo.deviceName;
+    options.headers['X-Device-Name'] =
+        _sanitizeDeviceName(deviceInfo.deviceName);
     options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
     options.headers['X-System-Version'] = deviceInfo.systemVersion;
 
     super.onRequest(options, handler);
+  }
+
+  String _sanitizeDeviceName(String deviceName) {
+    // Remove leading and trailing whitespaces
+    String sanitized = deviceName.trim();
+
+    // Replace special characters with an empty string (keep letters, numbers, and spaces)
+    sanitized = sanitized.replaceAll(RegExp(r'[^\w\s-]'), '');
+
+    // Replace multiple spaces with a single space
+    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
+
+    // Limit the length to 50 characters (adjust the limit as necessary)
+    if (sanitized.length > 50) {
+      sanitized = sanitized.substring(0, 50);
+    }
+
+    return sanitized;
   }
 }

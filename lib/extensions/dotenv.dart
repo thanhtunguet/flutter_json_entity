@@ -1,7 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Extension on [DotEnv] to provide convenient access to environment variables.
-extension SupaDotEnv on DotEnv {
+extension SupaEnvironment on DotEnv {
   /// Gets the base API URL from the environment variables.
   ///
   /// **Returns:**
