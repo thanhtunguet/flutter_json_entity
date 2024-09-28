@@ -1,179 +1,327 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:get_it/get_it.dart';
+import 'package:supa_architecture/repositories/utils_notification_repository.dart';
+import 'package:supa_architecture/supa_architecture.dart';
 
 part 'push_notification_event.dart';
 part 'push_notification_state.dart';
 
-/// A BLoC (Business Logic Component) class for managing push notifications.
-///
-/// This class handles all actions and behavior for push notifications, including
-/// initializing the state, requesting permission, and handling notifications.
+/// Push notification BLoC for handling push notifications.
 class PushNotificationBloc
-    extends Bloc<PushNotificationEvent, PushNotificationState> {
-  /// The BLoC handles all actions and behavior for push notifications. It
-  /// initializes the state and handles all events related to push notifications.
-  ///
-  PushNotificationBloc() : super(PushNotificationInitial()) {
-    registerNotificationChannel();
-  }
+    extends Bloc<PushNotificationEvent, PushNotificationState> with Disposable {
+  /// Foreground message handler
+  StreamSubscription? _foregroundNotificationSubscription;
 
-  /// ## Events
-  ///
-  /// The BLoC listens to the following events:
-  ///
-  /// - [PushNotificationInitializeEvent]: Initializes the push notification state.
-  /// - [PushNotificationPermissionRequestEvent]: Requests permission for push notifications.
-  Future<bool> isAndroid13OrHigher() async {
-    // Only perform the check if the platform is Android
-    if (Platform.isAndroid) {
-      // Create an instance of DeviceInfoPlugin
-      final deviceInfo = DeviceInfoPlugin();
+  StreamSubscription? _notificationOpenSubscription;
 
-      // Get Android device info
-      final androidInfo = await deviceInfo.androidInfo;
-
-      // Check if the Android version is 13 (API level 33) or higher
-      return androidInfo.version.sdkInt >= 33;
+  @override
+  FutureOr onDispose() {
+    if (_foregroundNotificationSubscription != null) {
+      _foregroundNotificationSubscription!.cancel();
+      _foregroundNotificationSubscription = null;
     }
 
-    // If it's not Android, return false
+    if (_notificationOpenSubscription != null) {
+      _notificationOpenSubscription!.cancel();
+      _notificationOpenSubscription = null;
+    }
+  }
+
+  /// Dispose push notification BLoC
+  dispose() {
+    onDispose();
+  }
+
+  /// Push notification BLoC for handling push notifications.
+  PushNotificationBloc() : super(const PushNotificationInitial()) {
+    on<DidReceivedNotificationEvent>(_onDidNotificationReceived);
+    on<DidUserOpenedNotificationEvent>(_onDidUserOpenedNotification);
+    on<DidResetNotificationEvent>(_onDidResetNotification);
+  }
+
+  _onDidNotificationReceived(
+    DidReceivedNotificationEvent event,
+    Emitter<PushNotificationState> emit,
+  ) {
+    emit(PushNotificationReceived(
+      title: event.title,
+      body: event.body,
+      payload: event.payload,
+      linkMobile: event.linkMobile,
+    ));
+  }
+
+  _onDidUserOpenedNotification(
+    DidUserOpenedNotificationEvent event,
+    Emitter<PushNotificationState> emit,
+  ) {
+    emit(PushNotificationOpened(
+      title: event.title,
+      body: event.body,
+      payload: event.payload,
+      linkMobile: event.linkMobile,
+    ));
+  }
+
+  _onDidResetNotification(
+    DidResetNotificationEvent event,
+    Emitter<PushNotificationState> emit,
+  ) {
+    emit(const PushNotificationInitial());
+  }
+
+  /// Firebase messaging instance
+  FirebaseMessaging get _firebaseMessaging => FirebaseMessaging.instance;
+
+  /// Flutter local notifications instance
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  /// Initialize push notifications (with default channel for Android).
+  /// - Uses app id as the channel id.
+  Future<void> initializeNotifications({
+    required String appId,
+    String? channelName,
+  }) async {
+    // Check if the app requires notification permission (Android 13+ or iOS).
+    await requestNotificationPermission();
+
+    // Initialize Firebase Messaging
+    await _initializeFirebaseMessaging();
+
+    // Initialize Local Notifications
+    await _initializeLocalNotifications(
+      channelId: appId,
+      channelName: channelName,
+    );
+
+    /// Register device token for notifications.
+    await registerDeviceToken();
+
+    /// Set foreground message handler
+    setForegroundMessageHandler();
+
+    /// Set notification open app handler
+    setNotificationOpenAppHandler();
+  }
+
+  /// Check if the app requires notification permission (Android 13+ or iOS).
+  Future<bool> requiresNotificationPermission() async {
+    if (Platform.isIOS ||
+        (Platform.isAndroid && await _isAndroid13OrHigher())) {
+      NotificationSettings settings =
+          await _firebaseMessaging.getNotificationSettings();
+      return settings.authorizationStatus == AuthorizationStatus.notDetermined;
+    }
     return false;
   }
 
-  /// ## Platform Checks
-  ///
-  /// The BLoC provides the following methods to check the platform:
-  ///
-  /// - [isAndroid13OrHigher]: Checks if the platform is Android 13 (API level 33) or higher.
-  Future<bool> doesDeviceRequireNotificationPermission() async {
-    // Create an instance of DeviceInfoPlugin
-    final deviceInfo = DeviceInfoPlugin();
-
-    // Check for iOS devices
-    if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-
-      // iOS 10 or higher requires notification permission
-      final iosVersion = int.tryParse(iosInfo.systemVersion.split('.')[0]) ?? 0;
-      return iosVersion >= 10;
-    }
-
-    // Check for Android devices
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-
-      // Android 13 (API level 33) or higher requires notification permission
-      return androidInfo.version.sdkInt >= 33;
-    }
-
-    // For other platforms or if OS version is below required versions, no permission is needed
-    return false;
-  }
-
-  /// Checks if the app has notification permission.
-  ///
-  /// On iOS, the method checks if the notification permission has been granted using
-  /// [FlutterLocalNotificationsPlugin]. Starting from iOS 10, explicit permission is required.
-  ///
-  /// On Android, the method checks if the notification permission is granted starting from
-  /// Android 13 (API level 33). On Android versions below 13, notification permission is
-  /// granted by default.
-  ///
-  /// Returns a [Future<bool>] that completes with `true` if notification permission
-  /// is granted, or `false` otherwise.
+  /// Check if the app already has notification permission.
   Future<bool> hasNotificationPermission() async {
-    // For iOS
-    if (Platform.isIOS) {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
-      final bool? result = await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
-
-      return result ?? false;
-    }
-
-    // For Android
-    if (Platform.isAndroid) {
-      if (await _isAndroid13OrHigher()) {
-        final status = await Permission.notification.status;
-        return status.isGranted;
-      } else {
-        // Android versions below 13 do not require explicit notification permission
-        return true;
-      }
-    }
-
-    // Default to false for other platforms
-    return false;
+    NotificationSettings settings =
+        await _firebaseMessaging.getNotificationSettings();
+    return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
-  /// Private helper function to check if the Android version is 13 or higher (API level 33).
-  ///
-  /// This is required because Android 13 introduced explicit notification permission.
-  Future<bool> _isAndroid13OrHigher() async {
-    if (Platform.isAndroid) {
-      final androidInfo = await DeviceInfoPlugin().androidInfo;
-      return androidInfo.version.sdkInt >= 33;
-    }
-    return false;
+  /// Request notification permission on the corresponding platform.
+  Future<bool> requestNotificationPermission() async {
+    NotificationSettings settings =
+        await _firebaseMessaging.requestPermission();
+
+    return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
-  /// Registers a notification channel using the app's Bundle ID as the notification ID,
-  /// and the app's display name as the channel name.
-  ///
-  /// This method creates a high-priority notification channel for Android 8.0+ (API 26 or higher).
-  /// It does not affect iOS devices, as iOS does not use notification channels.
-  Future<void> registerNotificationChannel() async {
+  /// Specify background message handler
+  void setBackgroundMessageHandler(
+    Future<void> Function(RemoteMessage message) handler,
+  ) {
+    FirebaseMessaging.onBackgroundMessage(handler);
+  }
+
+  /// Specify foreground message handler
+  void setForegroundMessageHandler() {
+    _foregroundNotificationSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _handleForegroundNotification(message);
+    });
+  }
+
+  /// Specify notification open app handler
+  void setNotificationOpenAppHandler() {
+    _notificationOpenSubscription =
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      add(DidUserOpenedNotificationEvent(
+        title: message.notification?.title ?? '',
+        body: message.notification?.body ?? '',
+        payload: jsonEncode(message.data),
+        linkMobile: message.data['linkMobile'],
+      ));
+    });
+  }
+
+  /// Handle foreground notifications by showing a local notification
+  /// and passing it to the specified message handler.
+  void _handleForegroundNotification(RemoteMessage message) async {
+    // Show local notification to indicate incoming message.
+    await _showLocalNotification(message);
+    add(
+      DidReceivedNotificationEvent(
+        title: message.notification?.title ?? '',
+        body: message.notification?.body ?? '',
+        payload: jsonEncode(message.data),
+        linkMobile: message.data['linkMobile'],
+      ),
+    );
+  }
+
+  /// Initialize Firebase messaging
+  Future<void> _initializeFirebaseMessaging() async {
+    await _firebaseMessaging.requestPermission();
+    String? token = await _firebaseMessaging.getToken();
+    debugPrint("Firebase Messaging Token: $token");
+  }
+
+  /// Initialize local notifications (only for Android).
+  Future<void> _initializeLocalNotifications({
+    required String channelId,
+    String? channelName,
+  }) async {
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: const AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      ),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        onDidReceiveLocalNotification: _onDidReceiveLocalNotification,
+      ),
+    );
+
+    await _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: _onDidReceivedNotificationResponse,
+    );
+
+    // Set the default notification channel on Android.
     if (Platform.isAndroid) {
-      // Get app information (Bundle ID and Display Name)
-      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      final String appId = packageInfo.packageName; // Bundle ID
-      final String appName = packageInfo.appName; // App Display Name
-
-      // Initialize the Flutter Local Notifications Plugin
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
-      // Define the notification channel
       final AndroidNotificationChannel channel = AndroidNotificationChannel(
-        appId, // Use Bundle ID as the channel ID
-        appName, // Use Display Name as the channel name
-        description:
-            'Notifications for $appName.', // Description for the channel
-        importance: Importance.high, // Importance level
+        channelId,
+        channelName ?? channelId,
+        importance: Importance.high,
       );
 
-      // Register the notification channel
-      await flutterLocalNotificationsPlugin
+      await _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
-
-      debugPrint(
-        'Notification channel created with ID: $appId and Name: $appName',
-      );
     }
   }
 
-  /// Handles the [BackgroundMessageHandler] callback when a notification is received while the app is running in the background.
-  void registerBackgroundNotificationHandler(
-    BackgroundMessageHandler handler,
+  void _onDidReceivedNotificationResponse(
+    NotificationResponse notificationResponse,
   ) {
-    FirebaseMessaging.onBackgroundMessage(handler);
+    debugPrint(
+      "Received notification response: ${notificationResponse.id}, ${notificationResponse.payload}",
+    );
+  }
+
+  void _onDidReceiveLocalNotification(
+    int id,
+    String? title,
+    String? body,
+    String? payload,
+  ) {
+    debugPrint(
+      "Received notification: id: $id, title: $title, body: $body, payload: $payload",
+    );
+  }
+
+  /// Show a local notification on the device (use for foreground notifications).
+  Future<void> _showLocalNotification(
+    RemoteMessage message, {
+    String channelId = 'default_channel',
+    String? channelName,
+  }) async {
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      channelId,
+      channelName ?? channelId,
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    final NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await _flutterLocalNotificationsPlugin.show(
+      message.notification?.hashCode ?? 0,
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+    );
+  }
+
+  /// Private method to check if the device is Android 13 or higher.
+  Future<bool> _isAndroid13OrHigher() async {
+    if (!Platform.isAndroid) return false;
+
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    return androidInfo.version.sdkInt >= 33;
+  }
+
+  /// Register device token for notifications.
+  Future<void> registerDeviceToken() async {
+    final bool hasPermission = await hasNotificationPermission();
+    if (!hasPermission) return;
+
+    String? token = await _firebaseMessaging.getToken();
+    final DeviceInfo deviceInfo = SupaApplication.instance.deviceInfo;
+
+    if (token != null) {
+      try {
+        await UtilsNotificationRepository().createToken(
+          DeviceNotificationToken(
+            osVersion: deviceInfo.systemVersion,
+            deviceModel: deviceInfo.deviceModel,
+            token: token,
+          ),
+        );
+      } catch (error) {
+        debugPrint(error.toString());
+      }
+    }
+  }
+
+  /// Unregister device token for notifications.
+  Future<void> unregisterDeviceToken() async {
+    final bool hasPermission = await hasNotificationPermission();
+    if (!hasPermission) return;
+    String? token = await _firebaseMessaging.getToken();
+    final DeviceInfo deviceInfo = SupaApplication.instance.deviceInfo;
+    if (token != null) {
+      try {
+        await UtilsNotificationRepository().deleteToken(
+          DeviceNotificationToken(
+            osVersion: deviceInfo.systemVersion,
+            deviceModel: deviceInfo.deviceModel,
+            token: token,
+          ),
+        );
+      } catch (error) {
+        debugPrint(error.toString());
+      }
+    }
   }
 }
