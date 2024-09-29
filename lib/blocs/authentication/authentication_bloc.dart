@@ -223,7 +223,9 @@ class AuthenticationBloc
     final authentication = authRepo.loadAuthentication();
     if (authentication != null) {
       add(AuthenticationFinalEvent(
-          appUser: authentication.appUser, tenant: authentication.tenant));
+        appUser: authentication.appUser,
+        tenant: authentication.tenant,
+      ));
     }
   }
 

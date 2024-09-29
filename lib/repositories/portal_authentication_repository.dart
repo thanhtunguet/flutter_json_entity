@@ -30,13 +30,13 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Returns:**
   /// - A [Future] that completes when the token is created.
-  Future<void> createToken(Tenant tenant) async {
+  Future<String?> createToken(Tenant tenant) async {
     return dio
         .post(
           '/create-token',
           data: tenant.toJSON(),
         )
-        .then((response) => response.data);
+        .then((response) => response.data?.toString());
   }
 
   /// Retrieves the profile of the authenticated user.
