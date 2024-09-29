@@ -1,24 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:injectable/injectable.dart' hide test;
 import 'package:supa_architecture/config/get_it.dart';
-import 'package:supa_architecture/supa_architecture.dart' hide AppUser;
 
 import 'models/app_user.dart';
 
-@InjectableInit()
-Future<void> configureDeps() async {
+configureDeps() {
   getIt.registerFactory<AppUser>(AppUser.new);
-  // Asynchronous setup before each test
-  await SupaApplication.initialize();
 }
 
 void main() {
-  setUpAll(configureDeps);
+  configureDeps();
 
   group('JSON', () {
     final appUser = AppUser();
+
     appUser.fromJSON({
       'id': 1,
       'code': 'ThangLD',
