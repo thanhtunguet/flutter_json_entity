@@ -124,6 +124,9 @@ class SupaApplication {
   }
 
   /// Checks if reCAPTCHA is enabled.
+  ///
+  /// **Returns:**
+  /// - A boolean indicating whether reCAPTCHA is enabled.
   bool get useRecaptcha => _captchaConfig != null;
 
   /// Registers JSON models used in the application.
