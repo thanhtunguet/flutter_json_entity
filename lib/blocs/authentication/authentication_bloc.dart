@@ -5,11 +5,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:recaptcha_enterprise_flutter/recaptcha.dart';
 import 'package:recaptcha_enterprise_flutter/recaptcha_action.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:supa_architecture/config/get_it.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 import 'package:supa_architecture/repositories/portal_profile_repository.dart';
 import 'package:supa_architecture/repositories/utils_notification_repository.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
+part 'authentication_error.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
@@ -20,6 +22,11 @@ part 'authentication_state.dart';
 /// It also manages tenant selection and profile updates.
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  /// The [app] is an instance of [SupaApplication].
+  ///
+  /// This singleton instance is used to access shared resources and methods.
+  SupaApplication get app => SupaApplication.instance;
+
   /// The [authRepo] is an instance of [PortalAuthenticationRepository].
   ///
   /// This repository is used for handling authentication-related operations.
@@ -154,6 +161,7 @@ class AuthenticationBloc
       final tenants = await authRepo.loginWithApple(credential.identityToken!);
       handleLoginWithTenants(tenants);
     } catch (error) {
+      getIt.get<ErrorHandlingBloc>().captureException(error);
       add(AuthenticationErrorEvent(error));
     }
   }
@@ -166,13 +174,16 @@ class AuthenticationBloc
       final tenants = await authRepo.loginWithBiometric();
       handleLoginWithTenants(tenants);
     } catch (error) {
+      getIt.get<ErrorHandlingBloc>().captureException(error);
       add(AuthenticationErrorEvent(error));
     }
   }
 
   /// Handles error event.
   Future<void> _onError(
-      AuthenticationErrorEvent event, Emitter<AuthenticationState> emit) async {
+    AuthenticationErrorEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(AuthenticationError(event.error));
   }
 
@@ -191,8 +202,6 @@ class AuthenticationBloc
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: <String>[
           'email',
-          'profile',
-          'openid',
         ],
         signInOption: SignInOption.standard,
       );
@@ -213,6 +222,7 @@ class AuthenticationBloc
         emit(AuthenticationInitial());
       }
     } catch (error) {
+      getIt.get<ErrorHandlingBloc>().captureException(error);
       add(AuthenticationErrorEvent(error));
     }
   }
@@ -221,6 +231,7 @@ class AuthenticationBloc
   Future<void> _onInitial(AuthenticationInitialEvent event,
       Emitter<AuthenticationState> emit) async {
     final authentication = authRepo.loadAuthentication();
+
     if (authentication != null) {
       add(AuthenticationFinalEvent(
         appUser: authentication.appUser,
@@ -247,9 +258,8 @@ class AuthenticationBloc
       Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationLoading());
-      await SupaApplication.azureAuth.login();
-      final String? accessToken =
-          await SupaApplication.azureAuth.getAccessToken();
+      await app.azureAuth.login();
+      final String? accessToken = await app.azureAuth.getAccessToken();
       if (accessToken != null) {
         final tenants = await authRepo.loginWithMicrosoft(accessToken);
         handleLoginWithTenants(tenants);
@@ -264,13 +274,14 @@ class AuthenticationBloc
       Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationLoading());
+
       final username = event.username;
       final password = event.password;
-      final useCaptcha = SupaApplication.instance.useCaptcha;
+
       String captcha;
-      if (useCaptcha) {
-        final client = await Recaptcha.fetchClient(
-            SupaApplication.instance.captchaConfig.siteKey);
+
+      if (app.useCaptcha) {
+        final client = await Recaptcha.fetchClient(app.captchaConfig.siteKey);
         captcha = await client.execute(RecaptchaAction.LOGIN());
       } else {
         captcha = '';
@@ -304,8 +315,11 @@ class AuthenticationBloc
     final tenant = event.tenant;
     await authRepo.createToken(tenant);
     final appUser = await authRepo.getProfile();
-    authRepo.saveAuthentication(appUser, tenant);
-    add(AuthenticationFinalEvent(appUser: appUser, tenant: tenant));
+    add(AuthenticationFinalEvent(
+      appUser: appUser,
+      tenant: tenant,
+    ));
+    await authRepo.saveAuthentication(appUser, tenant);
   }
 
   /// Handles tenants loaded event.

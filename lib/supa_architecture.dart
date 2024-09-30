@@ -56,9 +56,15 @@ class SupaApplication {
   });
 
   /// Getter for the reCAPTCHA configuration.
+  ///
+  /// **Returns:**
+  /// - The reCAPTCHA configuration.
   RecaptchaConfig get captchaConfig => _captchaConfig!;
 
   /// Checks if reCAPTCHA is enabled.
+  ///
+  /// **Returns:**
+  /// - `true` if reCAPTCHA is enabled, `false` otherwise.
   bool get useCaptcha => _captchaConfig != null;
 
   /// Initializes the [SupaApplication].
@@ -123,12 +129,6 @@ class SupaApplication {
     _captchaConfig = captchaConfig;
   }
 
-  /// Checks if reCAPTCHA is enabled.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether reCAPTCHA is enabled.
-  bool get useRecaptcha => _captchaConfig != null;
-
   /// Registers JSON models used in the application.
   static void registerModels() {
     getIt.registerFactory<AppUser>(() => AppUser());
@@ -140,7 +140,18 @@ class SupaApplication {
   }
 
   /// Singleton instance of [AadOAuth] for Azure AD authentication.
-  static late AadOAuth azureAuth;
+  ///
+  /// **Returns:**
+  /// - The [AadOAuth] instance for Azure AD authentication.
+  late AadOAuth azureAuth;
+
+  bool _isAzureAdInitialized = false;
+
+  /// Getter for the [AadOAuth] instance for Azure AD authentication.
+  ///
+  /// **Returns:**
+  /// - The [AadOAuth] instance for Azure AD authentication.
+  bool get useAzureAd => _isAzureAdInitialized;
 
   /// Initializes the Azure AD authentication configuration.
   ///
@@ -163,7 +174,8 @@ class SupaApplication {
       redirectUri: redirectUri,
       webUseRedirect: true,
     );
-    azureAuth = AadOAuth(config);
+    instance.azureAuth = AadOAuth(config);
+    instance._isAzureAdInitialized = true;
   }
 }
 
