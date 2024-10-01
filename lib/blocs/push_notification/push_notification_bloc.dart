@@ -187,7 +187,7 @@ class PushNotificationBloc
   Future<void> _initializeFirebaseMessaging() async {
     await _firebaseMessaging.requestPermission();
     String? token = await _firebaseMessaging.getToken();
-    debugPrint("Firebase Messaging Token: $token");
+    debugPrint("FIREBASE_MESSAGING_TOKEN: $token");
   }
 
   /// Initialize local notifications (only for Android).
