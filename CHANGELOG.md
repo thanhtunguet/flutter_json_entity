@@ -1,3 +1,10 @@
+## 0.0.2+preview.2
+
+### Added
+
+- BLoC: PushNotification
+- BLoC: ErrorHandling
+
 ## 0.0.1+preview.12
 
 ### Added
