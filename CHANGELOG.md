@@ -1,3 +1,9 @@
+## 0.0.2+preview.5
+
+### Fixed
+
+- `read` -> `unread`
+
 ## 0.0.2+preview.4
 
 ### Added

@@ -48,8 +48,8 @@ class UserNotification extends JsonModel {
   /// The ID of the recipient.
   JsonInteger recipientId = JsonInteger("recipientId");
 
-  /// Indicates if the notification has been read.
-  JsonBoolean read = JsonBoolean("read");
+  /// Indicates if the notification is unread.
+  JsonBoolean unread = JsonBoolean("unread");
 
   /// List of JSON fields representing the notification attributes.
   @override
@@ -68,6 +68,6 @@ class UserNotification extends JsonModel {
         senderId,
         recipient,
         recipientId,
-        read,
+        unread,
       ];
 }
