@@ -17,7 +17,7 @@ final class DidReceivedNotificationEvent extends PushNotificationEvent {
   final String body;
 
   /// Push notification event when a notification is received
-  final String? payload;
+  final PushNotificationPayload payload;
 
   /// Push notification event when a notification is received
   final String? linkMobile;
@@ -35,7 +35,7 @@ final class DidReceivedNotificationEvent extends PushNotificationEvent {
   DidReceivedNotificationEvent({
     required this.title,
     required this.body,
-    this.payload,
+    required this.payload,
     this.linkMobile,
   });
 }
@@ -49,7 +49,7 @@ final class DidUserOpenedNotificationEvent extends PushNotificationEvent {
   final String body;
 
   /// Push notification event when a notification is received
-  final String? payload;
+  final PushNotificationPayload payload;
 
   /// Push notification event when a notification is received
   final String? linkMobile;
@@ -67,7 +67,7 @@ final class DidUserOpenedNotificationEvent extends PushNotificationEvent {
   DidUserOpenedNotificationEvent({
     required this.title,
     required this.body,
-    this.payload,
+    required this.payload,
     this.linkMobile,
   });
 }

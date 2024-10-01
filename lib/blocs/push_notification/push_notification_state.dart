@@ -20,7 +20,7 @@ final class PushNotificationReceived extends PushNotificationState {
   final String body;
 
   /// Push notification received state
-  final String? payload;
+  final PushNotificationPayload payload;
 
   /// Push notification received state
   final String? linkMobile;
@@ -29,9 +29,19 @@ final class PushNotificationReceived extends PushNotificationState {
   PushNotificationReceived({
     required this.title,
     required this.body,
-    this.payload,
+    required this.payload,
     this.linkMobile,
   });
+
+  /// Push notification opened state
+  DidUserOpenedNotificationEvent opened() {
+    return DidUserOpenedNotificationEvent(
+      title: title,
+      body: body,
+      payload: payload,
+      linkMobile: linkMobile,
+    );
+  }
 }
 
 /// Push notification opened state
@@ -43,7 +53,7 @@ final class PushNotificationOpened extends PushNotificationState {
   final String body;
 
   /// Push notification received state
-  final String? payload;
+  final PushNotificationPayload payload;
 
   /// Push notification received state
   final String? linkMobile;
@@ -52,7 +62,7 @@ final class PushNotificationOpened extends PushNotificationState {
   const PushNotificationOpened({
     required this.title,
     required this.body,
-    this.payload,
+    required this.payload,
     this.linkMobile,
   });
 }

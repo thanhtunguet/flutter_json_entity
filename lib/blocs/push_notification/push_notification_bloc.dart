@@ -13,6 +13,7 @@ import 'package:supa_architecture/repositories/utils_notification_repository.dar
 import 'package:supa_architecture/supa_architecture.dart';
 
 part 'push_notification_event.dart';
+part 'push_notification_payload.dart';
 part 'push_notification_state.dart';
 
 /// Push notification BLoC for handling push notifications.
@@ -22,6 +23,18 @@ class PushNotificationBloc
   StreamSubscription? _foregroundNotificationSubscription;
 
   StreamSubscription? _notificationOpenSubscription;
+
+  /// Show local notification
+  final bool showLocalNotification;
+
+  /// Push notification BLoC for handling push notifications.
+  PushNotificationBloc({
+    this.showLocalNotification = false,
+  }) : super(const PushNotificationInitial()) {
+    on<DidReceivedNotificationEvent>(_onDidNotificationReceived);
+    on<DidUserOpenedNotificationEvent>(_onDidUserOpenedNotification);
+    on<DidResetNotificationEvent>(_onDidResetNotification);
+  }
 
   @override
   FutureOr onDispose() {
@@ -39,13 +52,6 @@ class PushNotificationBloc
   /// Dispose push notification BLoC
   dispose() {
     onDispose();
-  }
-
-  /// Push notification BLoC for handling push notifications.
-  PushNotificationBloc() : super(const PushNotificationInitial()) {
-    on<DidReceivedNotificationEvent>(_onDidNotificationReceived);
-    on<DidUserOpenedNotificationEvent>(_onDidUserOpenedNotification);
-    on<DidResetNotificationEvent>(_onDidResetNotification);
   }
 
   _onDidNotificationReceived(
@@ -162,7 +168,7 @@ class PushNotificationBloc
       add(DidUserOpenedNotificationEvent(
         title: message.notification?.title ?? '',
         body: message.notification?.body ?? '',
-        payload: jsonEncode(message.data),
+        payload: PushNotificationPayload.fromJson(message.data),
         linkMobile: message.data['linkMobile'],
       ));
     });
@@ -171,13 +177,16 @@ class PushNotificationBloc
   /// Handle foreground notifications by showing a local notification
   /// and passing it to the specified message handler.
   void _handleForegroundNotification(RemoteMessage message) async {
-    // Show local notification to indicate incoming message.
-    await _showLocalNotification(message);
+    if (showLocalNotification) {
+      // Show local notification to indicate incoming message.
+      await _showLocalNotification(message);
+    }
+
     add(
       DidReceivedNotificationEvent(
         title: message.notification?.title ?? '',
         body: message.notification?.body ?? '',
-        payload: jsonEncode(message.data),
+        payload: PushNotificationPayload.fromJson(message.data),
         linkMobile: message.data['linkMobile'],
       ),
     );

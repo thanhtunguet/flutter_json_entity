@@ -1,3 +1,10 @@
+## 0.0.2+preview.3
+
+### Added
+
+- showLocalNotification: show local notification when receive a push notification
+
+
 ## 0.0.2+preview.2
 
 ### Added
