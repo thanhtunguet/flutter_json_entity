@@ -1,9 +1,14 @@
+## 0.0.2+preview.4
+
+### Added
+
+- Handle PushNotificationPayload
+
 ## 0.0.2+preview.3
 
 ### Added
 
 - showLocalNotification: show local notification when receive a push notification
-
 
 ## 0.0.2+preview.2
 
