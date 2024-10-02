@@ -1,3 +1,9 @@
+## 0.0.2+preview.6
+
+### Added
+
+- `UserNotificationFilter`: unread field
+
 ## 0.0.2+preview.5
 
 ### Fixed

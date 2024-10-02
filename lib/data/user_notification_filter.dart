@@ -11,4 +11,14 @@ class UserNotificationFilter extends DataFilter {
   /// specific filter criteria for user notifications.
   @override
   List<FilterField> get fields => [];
+
+  /// Whether the notification is unread.
+  bool? unread;
+
+  @override
+  Map<String, dynamic> toJSON() {
+    Map<String, dynamic> json = super.toJSON();
+    json['unread'] = unread;
+    return json;
+  }
 }
