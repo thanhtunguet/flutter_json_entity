@@ -7,12 +7,12 @@ class LoginForm extends FormGroup {
   /// Constructs a [LoginForm] with the specified initial email and password.
   ///
   /// **Parameters:**
-  /// - `initialEmail`: The initial email address.
+  /// - `initialUsername`: The initial username.
   /// - `initialPassword`: The initial password.
-  LoginForm(String initialEmail, String initialPassword)
+  LoginForm(String initialUsername, String initialPassword)
       : super({
-          'email': FormControl<String>(
-            value: initialEmail,
+          'username': FormControl<String>(
+            value: initialUsername,
             validators: [
               Validators.required,
             ],
@@ -26,7 +26,8 @@ class LoginForm extends FormGroup {
         });
 
   /// The email control of the form.
-  FormControl<String> get email => control('email') as FormControl<String>;
+  FormControl<String> get username =>
+      control('username') as FormControl<String>;
 
   /// The password control of the form.
   FormControl<String> get password =>
