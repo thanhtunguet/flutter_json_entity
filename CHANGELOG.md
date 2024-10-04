@@ -1,3 +1,16 @@
+# Changelog
+
+## 0.0.2+preview.7
+
+### Added
+
+- `LoginForm`: a form for user login
+- `CarbonButtons`: a widget for handling buttons with safe area inset
+### Fixed
+
+- `PushNotificationBloc`: a bloc for handling push notifications
+- Remove `showLocalNotifications` from `PushNotificationBloc`
+
 ## 0.0.2+preview.6
 
 ### Added

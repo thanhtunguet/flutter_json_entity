@@ -377,6 +377,8 @@ See package example here:
 
 [example/example.md](example/example.md)
 
+[Push Notification Bloc Documentation](docs/bloc_push_notification.md)
+
 ## Contributing
 Instructions for contributing to the library, including guidelines for submitting issues and pull requests.
 

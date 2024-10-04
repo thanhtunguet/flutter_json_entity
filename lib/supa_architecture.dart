@@ -18,6 +18,7 @@ export 'data/data.dart';
 export 'exceptions/exceptions.dart';
 export 'extensions/extensions.dart';
 export 'filters/filters.dart';
+export 'forms/forms.dart';
 export 'json/json.dart';
 export 'providers/providers.dart';
 export 'repositories/base_repository.dart';

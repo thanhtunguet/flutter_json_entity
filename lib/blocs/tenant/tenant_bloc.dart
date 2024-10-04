@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:supa_architecture/data/tenant.dart';
+import 'package:supa_architecture/models/tenant.dart';
 import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
 
 part 'tenant_event.dart';

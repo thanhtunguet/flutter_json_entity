@@ -1,7 +1,7 @@
 name: supa_architecture
 description: >
   A comprehensive set of tools and utilities designed to streamline the development of Flutter applications.
-version: 0.0.2+preview.6
+version: 0.0.2+preview.7
 homepage: https://github.com/thanhtunguet/supa_architecture
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
   cookie_jar: ^4.0.0
   dio: ^5.7.0
   dio_cookie_manager: ^3.1.0
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.0
   hive: ^2.2.0
   hive_flutter: ^1.1.0
   path: ^1.0.0
@@ -31,7 +31,6 @@ dependencies:
   bloc: ^8.1.0
   flutter_bloc: ^8.1.0
   supa_carbon_icons: ^0.0.1+4
-  pretty_dio_logger: ^1.0.0
   get_it: ^7.7.0
   injectable: ^2.4.0
   local_auth: ^2.0.0
@@ -46,7 +45,6 @@ dependencies:
   firebase_performance: ^0.10.0
   firebase_messaging: ^15.1.0
   sentry_flutter: ^8.9.0
-  flutter_local_notifications: ^17.2.0
   permission_handler: ^11.3.0
   package_info_plus: ^8.0.0
 
