@@ -36,13 +36,30 @@ void _printColored(String text, String color) {
 ///
 /// This interceptor is used to provide a visible indication of errors that
 /// occur during HTTP requests.
+///
+/// It is used to provide a visible indication of errors that occur during
+/// HTTP requests.
 class GeneralErrorLogInterceptor extends InterceptorsWrapper {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     switch (err.response?.statusCode) {
-      case 403:
+      case 500:
         _printColored(
-          'DIO REQUEST_FORBIDDEN 403 = ${err.requestOptions.uri.toString()}',
+          'DIO INTERNAL_SERVER_ERROR 500 = ${err.requestOptions.uri.toString()}',
+          'red',
+        );
+        break;
+
+      case 502:
+        _printColored(
+          'DIO BAD_GATEWAY 502 = ${err.requestOptions.uri.toString()}',
+          'red',
+        );
+        break;
+
+      case 503:
+        _printColored(
+          'DIO SERVICE_UNAVAILABLE 503 = ${err.requestOptions.uri.toString()}',
           'red',
         );
         break;
@@ -53,6 +70,13 @@ class GeneralErrorLogInterceptor extends InterceptorsWrapper {
           _printColored("DIO BAD_REQUEST 401 = ${jsonEncode(errors)}", 'red');
         }
 
+        break;
+
+      case 403:
+        _printColored(
+          'DIO REQUEST_FORBIDDEN 403 = ${err.requestOptions.uri.toString()}',
+          'red',
+        );
         break;
     }
     super.onError(err, handler);

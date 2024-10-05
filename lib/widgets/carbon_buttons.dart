@@ -21,12 +21,6 @@ class CarbonButton extends StatelessWidget {
   /// The icon to display on the button.
   final IconData? icon;
 
-  /// The size of the icon and the loading indicator.
-  final double size;
-
-  /// Indicates whether the button is a bottom button.
-  final bool isBottomButton;
-
   /// Constructs an instance of [CarbonButton].
   ///
   /// **Parameters:**
@@ -36,8 +30,6 @@ class CarbonButton extends StatelessWidget {
   /// - `isExpanded`: Indicates whether the button should expand to fill available space (default is false).
   /// - `color`: The background color of the button (optional).
   /// - `icon`: The icon to display on the button (optional).
-  /// - `size`: The size of the icon and the loading indicator (default is 16).
-  /// - `isBottomButton`: Indicates whether the button is a bottom button (default is false).
   const CarbonButton({
     super.key,
     required this.label,
@@ -46,15 +38,10 @@ class CarbonButton extends StatelessWidget {
     this.isExpanded = false,
     this.color,
     this.icon,
-    this.size = 16,
-    this.isBottomButton = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Accessing the safe area insets using MediaQuery
-    final bottomSafeAreaInset = MediaQuery.of(context).viewPadding.bottom;
-
     final child = ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -68,10 +55,7 @@ class CarbonButton extends StatelessWidget {
       ),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.only(
-          top: 16,
-          bottom: isBottomButton ? bottomSafeAreaInset : 16,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,8 +68,8 @@ class CarbonButton extends StatelessWidget {
             ),
             if (isLoading)
               SizedBox(
-                width: size,
-                height: size,
+                width: 24,
+                height: 24,
                 child: Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -97,17 +81,17 @@ class CarbonButton extends StatelessWidget {
             else
               Icon(
                 icon,
-                size: size,
                 color: Colors.white,
               ),
           ],
         ),
       ),
     );
-    return isExpanded
-        ? Expanded(
-            child: child,
-          )
-        : child;
+
+    if (isExpanded) {
+      return Expanded(child: child);
+    }
+
+    return child;
   }
 }
