@@ -111,12 +111,7 @@ abstract class ApiClient {
       },
     );
 
-    return dio
-        .post(
-          uploadUrl,
-          data: formData,
-        )
-        .then(
+    return dio.post(uploadUrl, data: formData).then(
           (response) => response.body<File>(),
         );
   }

@@ -67,7 +67,10 @@ class GeneralErrorLogInterceptor extends InterceptorsWrapper {
       case 400:
         if (err.response?.data is Map) {
           final errors = err.response?.data['errors'];
-          _printColored("DIO BAD_REQUEST 401 = ${jsonEncode(errors)}", 'red');
+          _printColored(
+            "DIO BAD_REQUEST 400 = ${jsonEncode(errors)}",
+            'red',
+          );
         }
 
         break;

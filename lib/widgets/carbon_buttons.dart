@@ -21,6 +21,9 @@ class CarbonButton extends StatelessWidget {
   /// The icon to display on the button.
   final IconData? icon;
 
+  /// Indicates whether the button is a bottom button.
+  final bool isBottomButton;
+
   /// Constructs an instance of [CarbonButton].
   ///
   /// **Parameters:**
@@ -30,6 +33,7 @@ class CarbonButton extends StatelessWidget {
   /// - `isExpanded`: Indicates whether the button should expand to fill available space (default is false).
   /// - `color`: The background color of the button (optional).
   /// - `icon`: The icon to display on the button (optional).
+  /// - `isBottomButton`: Indicates whether the button is a bottom button (default is false).
   const CarbonButton({
     super.key,
     required this.label,
@@ -38,10 +42,16 @@ class CarbonButton extends StatelessWidget {
     this.isExpanded = false,
     this.color,
     this.icon,
+    this.isBottomButton = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final padding = isBottomButton
+        ? EdgeInsets.only(top: 16, bottom: bottomInset == 0 ? 16 : bottomInset)
+        : const EdgeInsets.symmetric(vertical: 16);
+
     final child = ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -55,21 +65,21 @@ class CarbonButton extends StatelessWidget {
       ),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: padding,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
             if (isLoading)
               SizedBox(
-                width: 24,
-                height: 24,
+                width: IconTheme.of(context).size,
+                height: IconTheme.of(context).size,
                 child: Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
