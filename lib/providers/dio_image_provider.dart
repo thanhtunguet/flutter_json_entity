@@ -16,11 +16,11 @@ part of 'providers.dart';
 /// )
 /// ```
 class DioImageProvider extends ImageProvider<DioImageProvider> {
-  /// The default [Dio] instance used for network requests.
+  /// The [Dio] instance used for network requests.
   ///
   /// You can customize this instance by adding interceptors, modifying options,
   /// or setting custom headers to suit your networking needs.
-  static final Dio defaultDio = Dio();
+  final Dio dio = Dio();
 
   /// The network URL of the image to load.
   ///
@@ -46,7 +46,9 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
   DioImageProvider({
     required this.imageUrl,
     required this.fallbackAssetPath,
-  });
+  }) {
+    dio.interceptors.add(cookieStorageService.getCookieManager());
+  }
 
   /// Obtains the key for this image provider, which is used for caching purposes.
   ///
@@ -78,7 +80,7 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
     ImageDecoderCallback decode,
   ) async {
     try {
-      Response response = await defaultDio.get<List<int>>(
+      Response response = await dio.get<List<int>>(
         imageUrl.toString(),
         options: Options(responseType: ResponseType.bytes),
       );

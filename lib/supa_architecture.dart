@@ -135,7 +135,7 @@ class SupaApplication {
     getIt.registerFactory<AppUser>(() => AppUser());
     getIt.registerFactory<EnumModel>(() => EnumModel());
     getIt.registerFactory<File>(() => File());
-    getIt.registerFactory<ImageModel>(() => ImageModel());
+    getIt.registerFactory<Image>(() => Image());
     getIt.registerFactory<Tenant>(() => Tenant());
     getIt.registerFactory<UserNotification>(() => UserNotification());
   }

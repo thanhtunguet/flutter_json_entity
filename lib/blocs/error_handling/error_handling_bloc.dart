@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -46,6 +47,11 @@ class ErrorHandlingBloc extends Cubit<void> {
       }
       // Log to Sentry for web and all other platforms
       Sentry.captureException(error);
+      return;
+    }
+    if (error is DioException) {
+      Sentry.captureException(error);
+      return;
     }
   }
 }
