@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Admin",
+        "code": "ADMIN",
+        "color": "#FF0000"
+    },
+    {
+        "id": 2,
+        "name": "User",
+        "code": "USER",
+        "color": "#00FF00"
+    },
+    {
+        "id": 3,
+        "name": "Guest",
+        "code": "GUEST",
+        "color": "#0000FF"
+    }
+]
