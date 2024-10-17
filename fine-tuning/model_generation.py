@@ -1,10 +1,21 @@
 import json
 import os
 
-import pandas as pd
-from datasets import Dataset
+import torch
+
+from datasets import load_dataset, Dataset
+from huggingface_hub import login
+from pandas import DataFrame
 from transformers import (AutoModelForCausalLM, AutoTokenizer, Trainer,
                           TrainingArguments)
+
+# Step 1: Login to Hugging Face
+huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
+login(huggingface_token)
+
+
+model_name = "meta-llama/Llama-3.2-1B"
+
 
 # Folder containing the code snippets
 folder_path = "./model-generation"
@@ -44,23 +55,24 @@ def load_code_snippets(folder_path):
 data = load_code_snippets(folder_path)
 
 # Convert the data into Hugging Face Dataset format
-dataset = Dataset.from_pandas(pd.DataFrame(data))
+dataset = Dataset.from_pandas(DataFrame(data))
 
 # Load pre-trained model and tokenizer
-model_name = "gpt-3.5-turbo"  # You can replace this with the model you prefer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+# Set the `eos_token` as the padding token
+tokenizer.pad_token = tokenizer.eos_token
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto")
 
 # Tokenize the dataset
 def tokenize_function(example):
-    return tokenizer(example['prompt'], text_target=example['completion'], truncation=True)
+    return tokenizer(example['prompt'], text_target=example['completion'], truncation=True, max_length=118, return_tensors='pt', padding=True)
 
 tokenized_datasets = dataset.map(tokenize_function, batched=True)
 
 # Define training arguments
 training_args = TrainingArguments(
     output_dir="./fine-tuned-model",
-    evaluation_strategy="steps",
+    eval_strategy="steps",
     eval_steps=500,
     per_device_train_batch_size=2,
     per_device_eval_batch_size=2,
