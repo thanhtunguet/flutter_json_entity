@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.2+preview.11
+
+### Added
+
+- Add options to use Firebase or not
+
 ## 0.0.2+preview.7
 
 ### Added

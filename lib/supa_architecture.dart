@@ -46,6 +46,9 @@ class SupaApplication {
   /// Information about the device.
   final DeviceInfo deviceInfo;
 
+  /// Indicates whether Firebase is used.
+  final bool useFirebase;
+
   RecaptchaConfig? _captchaConfig;
 
   /// Private constructor for creating an instance of [SupaApplication].
@@ -54,6 +57,7 @@ class SupaApplication {
     required this.secureStorageService,
     required this.persistentStorageService,
     required this.deviceInfo,
+    required this.useFirebase,
   });
 
   /// Getter for the reCAPTCHA configuration.
@@ -74,7 +78,9 @@ class SupaApplication {
   ///
   /// **Returns:**
   /// - A [Future] that resolves to the singleton instance of [SupaApplication].
-  static Future<SupaApplication> initialize() async {
+  static Future<SupaApplication> initialize({
+    bool useFirebase = true,
+  }) async {
     if (!_isInitialized) {
       try {
         await dotenv.load();
@@ -93,6 +99,7 @@ class SupaApplication {
           secureStorageService: secureStorageService,
           persistentStorageService: persistentStorageService,
           deviceInfo: deviceInfo,
+          useFirebase: useFirebase,
         );
 
         persistentStorageService.initializeBaseApiUrl();

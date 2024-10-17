@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:supa_architecture/supa_architecture.dart';
 
 part 'error_handling_event.dart';
 part 'error_handling_state.dart';
@@ -23,12 +22,16 @@ class ErrorHandlingBloc extends Cubit<void> {
   void initialize() {
     // Pass all uncaught errors to Crashlytics
     FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      if (SupaApplication.instance.useFirebase) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      }
     };
 
     // Pass all platform dispatcher errors to Crashlytics
     PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      if (SupaApplication.instance.useFirebase) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      }
       return true;
     };
   }
@@ -42,7 +45,7 @@ class ErrorHandlingBloc extends Cubit<void> {
   void captureException(dynamic error) {
     if (error is Error) {
       // Log to Firebase Crashlytics on supported platforms (Android, iOS)
-      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      if (!kIsWeb && SupaApplication.instance.useFirebase) {
         FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
       }
       // Log to Sentry for web and all other platforms
