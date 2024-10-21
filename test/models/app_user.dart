@@ -13,7 +13,7 @@ class AppUser extends JsonModel {
         students,
       ];
 
-  JsonNumber id = JsonNumber("id");
+  JsonInteger id = JsonInteger("id");
 
   JsonString code = JsonString("code");
 

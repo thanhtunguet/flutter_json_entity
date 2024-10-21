@@ -87,5 +87,9 @@ void main() {
       expect(appUser['supervisor'], appUser.supervisor.value);
       expect(appUser['students'], appUser.students.value);
     });
+
+    test('equality operator', () {
+      expect(appUser.id == appUser.id.value, equals(true));
+    });
   });
 }

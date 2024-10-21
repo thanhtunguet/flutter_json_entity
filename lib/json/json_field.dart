@@ -37,6 +37,31 @@ abstract class JsonField<T> {
     rawValue = value;
   }
 
+  /// Overrides the equality operator.
+  ///
+  /// **Parameters:**
+  /// - `other`: The object to compare with.
+  ///
+  /// **Returns:**
+  /// - `true` if the objects are equal, `false` otherwise.
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is T) {
+      return other == rawValue;
+    }
+    return other is JsonField<T> &&
+        other.fieldName == fieldName &&
+        other.rawValue == rawValue;
+  }
+
+  /// Overrides the hash code.
+  ///
+  /// **Returns:**
+  /// - The hash code for this object.
+  @override
+  int get hashCode => Object.hash(fieldName, rawValue);
+
   /// Constructs an instance of [JsonField].
   ///
   /// **Parameters:**
