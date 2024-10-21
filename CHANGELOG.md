@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.2+preview.12
+
+### Added
+
+- `JsonField`: equality operator
+
 ## 0.0.2+preview.11
 
 ### Added
