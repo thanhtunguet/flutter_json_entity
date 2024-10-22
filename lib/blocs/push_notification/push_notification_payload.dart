@@ -11,11 +11,14 @@ class PushNotificationPayload {
   /// Link mobile
   final String linkMobile;
 
+  final Map<String, dynamic>? data;
+
   /// Push notification payload
   PushNotificationPayload({
     required this.titleMobile,
     required this.createdAt,
     required this.linkMobile,
+    this.data,
   });
 
   /// Factory method to create an instance of PushNotificationPayload from JSON
@@ -39,6 +42,7 @@ class PushNotificationPayload {
       titleMobile: jsonMap['TitleMobile'] ?? '',
       createdAt: jsonMap['CreatedAt'] ?? '',
       linkMobile: jsonMap['LinkMobile'] ?? '',
+      data: jsonMap,
     );
   }
 
@@ -48,6 +52,7 @@ class PushNotificationPayload {
       'TitleMobile': titleMobile,
       'CreatedAt': createdAt,
       'LinkMobile': linkMobile,
+      'Data': data,
     };
   }
 }

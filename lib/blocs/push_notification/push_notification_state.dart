@@ -65,4 +65,17 @@ final class PushNotificationOpened extends PushNotificationState {
     required this.payload,
     this.linkMobile,
   });
+
+  /// Converts the PushNotificationOpened state to a JSON map.
+  ///
+  /// **Returns:**
+  /// - A Map<String, dynamic> representing the state in JSON format.
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'body': body,
+      'payload': payload.toJson(),
+      'linkMobile': linkMobile,
+    };
+  }
 }
