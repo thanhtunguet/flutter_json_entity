@@ -11,6 +11,7 @@ class PushNotificationPayload {
   /// Link mobile
   final String linkMobile;
 
+  /// Data
   final Map<String, dynamic>? data;
 
   /// Push notification payload
