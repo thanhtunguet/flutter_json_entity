@@ -1,5 +1,13 @@
 # Changelog
 
+
+## 0.0.2+preview.13
+
+### Added
+
+- Compatibility table in README
+- toJson for PushNotificationState and PushNotificationPayload
+
 ## 0.0.2+preview.12
 
 ### Added
