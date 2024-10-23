@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.2+preview.14
+
+### Added
+
+- `DeviceInfoInterceptor`: add device UUID to request headers
 
 ## 0.0.2+preview.13
 
