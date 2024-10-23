@@ -1,4 +1,4 @@
-part of 'push_notification_bloc.dart';
+part of "push_notification_bloc.dart";
 
 /// Push notification payload
 class PushNotificationPayload {
@@ -40,9 +40,9 @@ class PushNotificationPayload {
     }
 
     return PushNotificationPayload(
-      titleMobile: jsonMap['TitleMobile'] ?? '',
-      createdAt: jsonMap['CreatedAt'] ?? '',
-      linkMobile: jsonMap['LinkMobile'] ?? '',
+      titleMobile: jsonMap["titleMobile"] ?? "",
+      createdAt: jsonMap["createdAt"] ?? "",
+      linkMobile: jsonMap["linkMobile"] ?? "",
       data: jsonMap,
     );
   }
@@ -50,10 +50,10 @@ class PushNotificationPayload {
   /// Convert the PushNotificationPayload instance to a JSON map
   Map<String, dynamic> toJson() {
     return {
-      'TitleMobile': titleMobile,
-      'CreatedAt': createdAt,
-      'LinkMobile': linkMobile,
-      'Data': data,
+      "titleMobile": titleMobile,
+      "createdAt": createdAt,
+      "linkMobile": linkMobile,
+      "data": data,
     };
   }
 }

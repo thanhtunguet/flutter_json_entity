@@ -1,6 +1,6 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:flutter_dotenv/flutter_dotenv.dart";
+import "package:hive_flutter/hive_flutter.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
 /// An abstract interface class for managing persistent storage.
 ///
@@ -9,18 +9,18 @@ import 'package:supa_architecture/supa_architecture.dart';
 /// handling logout operations.
 abstract interface class PersistentStorageService {
   // Constants for keys
-  static const String _tenantBoxName = 'tenant';
-  static const String _userBoxName = 'user';
+  static const String _tenantBoxName = "tenant";
+  static const String _userBoxName = "user";
 
   /// Initializes the [PersistentStorageService] by setting up Hive storage.
   ///
   /// **Parameters:**
-  /// - `boxName`: The name of the Hive box to open. Defaults to 'supa_architecture'.
+  /// - `boxName`: The name of the Hive box to open. Defaults to "supa_architecture".
   ///
   /// **Returns:**
   /// - A [Future] that resolves to an instance of [PersistentStorageService].
   static Future<PersistentStorageService> initialize({
-    String boxName = 'supa_architecture',
+    String boxName = "supa_architecture",
   }) async {
     await Hive.initFlutter();
     await Hive.openBox(boxName);
@@ -89,8 +89,8 @@ abstract interface class PersistentStorageService {
 /// Uses a Hive box for persistent storage and provides methods for managing
 /// biometric settings, API URLs, tenant and user data, and logout operations.
 class _PersistentStorageServiceImpl implements PersistentStorageService {
-  static const String _isBiometricEnabledKey = 'isBiometricEnabled';
-  static const String _baseApiUrlKey = 'baseApiUrl';
+  static const String _isBiometricEnabledKey = "isBiometricEnabled";
+  static const String _baseApiUrlKey = "baseApiUrl";
 
   final Box box;
 

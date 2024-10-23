@@ -1,4 +1,4 @@
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:supa_architecture/supa_architecture.dart";
 
 /// A repository class for managing user profiles.
 ///
@@ -9,7 +9,7 @@ class PortalProfileRepository extends ApiClient {
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
       .replace(
-        path: '/rpc/portal/app-user-profile',
+        path: "/rpc/portal/app-user-profile",
       )
       .toString();
 
@@ -23,7 +23,7 @@ class PortalProfileRepository extends ApiClient {
   Future<AppUser> switchEmail(AppUser user) async {
     return dio
         .post(
-          '/switch-email',
+          "/switch-email",
           data: user.toJSON(),
         )
         .then(
@@ -41,7 +41,7 @@ class PortalProfileRepository extends ApiClient {
   Future<AppUser> switchNotification(AppUser user) async {
     return dio
         .post(
-          '/switch-notification',
+          "/switch-notification",
           data: user.toJSON(),
         )
         .then(
@@ -55,7 +55,7 @@ class PortalProfileRepository extends ApiClient {
   /// - A [Future] that completes when the OTP is retrieved.
   Future<void> getOtp() async {
     return dio.post(
-      '/get-otp',
+      "/get-otp",
       data: {},
     ).then(
       (response) => response.data,
@@ -79,12 +79,12 @@ class PortalProfileRepository extends ApiClient {
     required String? otpCode,
   }) async {
     return dio.post(
-      '/change-password-otp',
+      "/change-password-otp",
       data: {
-        'oldPassword': oldPassword,
-        'newPassword': newPassword,
-        'verifyNewPassword': verifyNewPassword,
-        'otpCode': otpCode,
+        "oldPassword": oldPassword,
+        "newPassword": newPassword,
+        "verifyNewPassword": verifyNewPassword,
+        "otpCode": otpCode,
       },
     ).then(
       (response) => response.data,

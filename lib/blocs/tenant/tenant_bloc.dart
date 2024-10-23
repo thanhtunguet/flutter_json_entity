@@ -1,10 +1,10 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:supa_architecture/models/tenant.dart';
-import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
+import "package:bloc/bloc.dart";
+import "package:equatable/equatable.dart";
+import "package:supa_architecture/models/tenant.dart";
+import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 
-part 'tenant_event.dart';
-part 'tenant_state.dart';
+part "tenant_event.dart";
+part "tenant_state.dart";
 
 /// A BLoC (Business Logic Component) class for managing tenant state.
 ///

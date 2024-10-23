@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 /// A stateless widget that displays a field label.
 ///
@@ -40,7 +40,7 @@ class FieldLabel extends StatelessWidget {
           ),
           if (isRequired)
             TextSpan(
-              text: ' *',
+              text: " *",
               style: labelStyle?.copyWith(
                 color: Theme.of(context).colorScheme.error,
               ),

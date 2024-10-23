@@ -1,4 +1,4 @@
-part of 'filters.dart';
+part of "filters.dart";
 
 /// This class defines filter operations for ID (primary key, foreign key) fields
 /// that is in int type

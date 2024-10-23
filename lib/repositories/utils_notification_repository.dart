@@ -1,4 +1,4 @@
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:supa_architecture/supa_architecture.dart";
 
 /// A repository class for managing user notifications.
 ///
@@ -11,7 +11,7 @@ class UtilsNotificationRepository
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
       .replace(
-        path: '/rpc/utils-notification/notification',
+        path: "/rpc/utils-notification/notification",
       )
       .toString();
 
@@ -27,7 +27,7 @@ class UtilsNotificationRepository
   ) async {
     return dio
         .post(
-          '/create-token',
+          "/create-token",
           data: deviceNotificationToken.toJSON(),
         )
         .then(
@@ -47,7 +47,7 @@ class UtilsNotificationRepository
   ) async {
     return dio
         .post(
-          '/delete-token',
+          "/delete-token",
           data: deviceNotificationToken.toJSON(),
         )
         .then(
@@ -65,7 +65,7 @@ class UtilsNotificationRepository
   Future<List<UserNotification>> listRead(UserNotificationFilter filter) async {
     return dio
         .post(
-          '/list-read',
+          "/list-read",
           data: filter.toJSON(),
         )
         .then(
@@ -84,7 +84,7 @@ class UtilsNotificationRepository
       UserNotificationFilter filter) async {
     return dio
         .post(
-          '/list-unread',
+          "/list-unread",
           data: filter.toJSON(),
         )
         .then(
@@ -102,7 +102,7 @@ class UtilsNotificationRepository
   Future<int> countRead(UserNotificationFilter filter) async {
     return dio
         .post(
-          '/count-read',
+          "/count-read",
           data: filter.toJSON(),
         )
         .then(
@@ -120,7 +120,7 @@ class UtilsNotificationRepository
   Future<int> countUnread(UserNotificationFilter filter) async {
     return dio
         .post(
-          '/count-unread',
+          "/count-unread",
           data: filter.toJSON(),
         )
         .then(
@@ -138,7 +138,7 @@ class UtilsNotificationRepository
   Future<String> read(UserNotification userNotification) async {
     return dio
         .post(
-          '/read',
+          "/read",
           data: userNotification.toJSON(),
         )
         .then(
@@ -152,7 +152,7 @@ class UtilsNotificationRepository
   /// - A [Future] that completes when all notifications are marked as read.
   Future<void> readAll() async {
     return dio.post(
-      '/read-all',
+      "/read-all",
       data: {},
     ).then(
       (response) => response.data,

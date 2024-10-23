@@ -1,4 +1,4 @@
-import 'package:reactive_forms/reactive_forms.dart';
+import "package:reactive_forms/reactive_forms.dart";
 
 /// A form for user login.
 ///
@@ -11,13 +11,13 @@ class LoginForm extends FormGroup {
   /// - `initialPassword`: The initial password.
   LoginForm(String initialUsername, String initialPassword)
       : super({
-          'username': FormControl<String>(
+          "username": FormControl<String>(
             value: initialUsername,
             validators: [
               Validators.required,
             ],
           ),
-          'password': FormControl<String>(
+          "password": FormControl<String>(
             value: initialPassword,
             validators: [
               Validators.required,
@@ -27,9 +27,9 @@ class LoginForm extends FormGroup {
 
   /// The email control of the form.
   FormControl<String> get username =>
-      control('username') as FormControl<String>;
+      control("username") as FormControl<String>;
 
   /// The password control of the form.
   FormControl<String> get password =>
-      control('password') as FormControl<String>;
+      control("password") as FormControl<String>;
 }

@@ -1,4 +1,4 @@
-part of 'filters.dart';
+part of "filters.dart";
 
 /// Base class for filter classes.
 ///

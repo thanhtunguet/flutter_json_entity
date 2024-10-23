@@ -1,14 +1,14 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:equatable/equatable.dart';
+import "package:equatable/equatable.dart";
 
 /// A class representing an application token, containing access and refresh tokens.
 ///
 /// This class extends [Equatable] for value comparison and provides a
 /// constructor for creating instances from a list of [Cookie]s.
 class AppToken extends Equatable {
-  static const String _accessTokenKey = 'Token';
-  static const String _refreshTokenKey = 'RefreshToken';
+  static const String _accessTokenKey = "Token";
+  static const String _refreshTokenKey = "RefreshToken";
 
   /// The access token.
   final String? accessToken;

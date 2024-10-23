@@ -7,7 +7,7 @@ extension SupaRoute on String {
   String withId(num id) {
     return Uri.parse(this).replace(
       queryParameters: {
-        'id': "$id",
+        "id": "$id",
       },
     ).toString();
   }

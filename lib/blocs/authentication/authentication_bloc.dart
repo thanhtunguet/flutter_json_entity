@@ -1,19 +1,19 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:recaptcha_enterprise_flutter/recaptcha.dart';
-import 'package:recaptcha_enterprise_flutter/recaptcha_action.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:supa_architecture/config/get_it.dart';
-import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
-import 'package:supa_architecture/repositories/portal_profile_repository.dart';
-import 'package:supa_architecture/repositories/utils_notification_repository.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:bloc/bloc.dart";
+import "package:equatable/equatable.dart";
+import "package:flutter/foundation.dart";
+import "package:google_sign_in/google_sign_in.dart";
+import "package:recaptcha_enterprise_flutter/recaptcha.dart";
+import "package:recaptcha_enterprise_flutter/recaptcha_action.dart";
+import "package:sign_in_with_apple/sign_in_with_apple.dart";
+import "package:supa_architecture/config/get_it.dart";
+import "package:supa_architecture/repositories/portal_authentication_repository.dart";
+import "package:supa_architecture/repositories/portal_profile_repository.dart";
+import "package:supa_architecture/repositories/utils_notification_repository.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
-part 'authentication_error.dart';
-part 'authentication_event.dart';
-part 'authentication_state.dart';
+part "authentication_error.dart";
+part "authentication_event.dart";
+part "authentication_state.dart";
 
 /// BLoC for managing authentication state and events.
 ///
@@ -201,7 +201,7 @@ class AuthenticationBloc
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: <String>[
-          'email',
+          "email",
         ],
         signInOption: SignInOption.standard,
       );
@@ -284,7 +284,7 @@ class AuthenticationBloc
         final client = await Recaptcha.fetchClient(app.captchaConfig.siteKey);
         captcha = await client.execute(RecaptchaAction.LOGIN());
       } else {
-        captcha = '';
+        captcha = "";
       }
 
       await authRepo.login(username, password, captcha).then((tenants) {

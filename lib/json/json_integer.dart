@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A JSON field that handles integer values.
 ///
@@ -7,14 +7,14 @@ part of 'json.dart';
 ///
 /// **Example Usage:**
 /// ```dart
-/// // Creating a JsonInteger instance with the field name 'age'
-/// JsonInteger ageField = JsonInteger('age');
+/// // Creating a JsonInteger instance with the field name "age"
+/// JsonInteger ageField = JsonInteger("age");
 ///
 /// // Setting the value using an integer
 /// ageField.value = 25;
 ///
 /// // Setting the value using a string that can be parsed to an integer
-/// ageField.value = '30';
+/// ageField.value = "30";
 ///
 /// // Getting the integer value (returns 30)
 /// int age = ageField.value;
@@ -43,16 +43,16 @@ class JsonInteger extends JsonField<int> {
   ///
   /// **Examples:**
   /// ```dart
-  /// JsonInteger ageField = JsonInteger('age');
+  /// JsonInteger ageField = JsonInteger("age");
   ///
   /// // Setting with an integer
   /// ageField.value = 25; // rawValue is 25
   ///
   /// // Setting with a numeric string
-  /// ageField.value = '30'; // rawValue is 30
+  /// ageField.value = "30"; // rawValue is 30
   ///
   /// // Setting with a non-numeric string
-  /// ageField.value = 'abc'; // rawValue is null
+  /// ageField.value = "abc"; // rawValue is null
   /// ```
   @override
   set value(dynamic value) {
@@ -74,10 +74,10 @@ class JsonInteger extends JsonField<int> {
   ///
   /// **Example:**
   /// ```dart
-  /// JsonInteger ageField = JsonInteger('age');
+  /// JsonInteger ageField = JsonInteger("age");
   /// ageField.value = 25;
   ///
-  /// Map<String, dynamic> json = {'age': ageField.toJSON()}; // {'age': 25}
+  /// Map<String, dynamic> json = {"age": ageField.toJSON()}; // {"age": 25}
   /// ```
   @override
   int? toJSON() {

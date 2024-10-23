@@ -1,4 +1,4 @@
-part of 'tenant_bloc.dart';
+part of "tenant_bloc.dart";
 
 /// Abstract class representing tenant-related events.
 sealed class TenantEvent extends Equatable {

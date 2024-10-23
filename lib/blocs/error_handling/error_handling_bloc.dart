@@ -1,12 +1,12 @@
-import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:bloc/bloc.dart";
+import "package:dio/dio.dart";
+import "package:firebase_crashlytics/firebase_crashlytics.dart";
+import "package:flutter/foundation.dart";
+import "package:sentry_flutter/sentry_flutter.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
-part 'error_handling_event.dart';
-part 'error_handling_state.dart';
+part "error_handling_event.dart";
+part "error_handling_state.dart";
 
 /// Bloc that handles error capturing and reporting to Firebase Crashlytics and Sentry.
 class ErrorHandlingBloc extends Cubit<void> {

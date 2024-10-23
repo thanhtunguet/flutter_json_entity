@@ -1,17 +1,17 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:supa_architecture/json/json.dart';
+import "package:supa_architecture/json/json.dart";
 
-part 'abstract_id_filter.dart';
-part 'abstract_number_filter.dart';
-part 'date_filter.dart';
-part 'double_filter.dart';
-part 'filter_field.dart';
-part 'guid_filter.dart';
-part 'id_filter.dart';
-part 'int_filter.dart';
-part 'number_filter.dart';
-part 'string_filter.dart';
+part "abstract_id_filter.dart";
+part "abstract_number_filter.dart";
+part "date_filter.dart";
+part "double_filter.dart";
+part "filter_field.dart";
+part "guid_filter.dart";
+part "id_filter.dart";
+part "int_filter.dart";
+part "number_filter.dart";
+part "string_filter.dart";
 
 /// Base class for creating data filters.
 ///

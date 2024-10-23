@@ -1,18 +1,18 @@
-import 'dart:async';
-import 'dart:io' as io;
+import "dart:async";
+import "dart:io" as io;
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:path/path.dart' as path;
-import 'package:path/path.dart';
-import 'package:supa_architecture/api_client/interceptors/device_info_interceptor.dart';
-import 'package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart';
-import 'package:supa_architecture/api_client/interceptors/refresh_interceptor.dart';
-import 'package:supa_architecture/api_client/interceptors/timezone_interceptor.dart';
-import 'package:supa_architecture/config/get_it.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:path/path.dart" as path;
+import "package:path/path.dart";
+import "package:supa_architecture/api_client/interceptors/device_info_interceptor.dart";
+import "package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart";
+import "package:supa_architecture/api_client/interceptors/refresh_interceptor.dart";
+import "package:supa_architecture/api_client/interceptors/timezone_interceptor.dart";
+import "package:supa_architecture/config/get_it.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
-part 'http_response.dart';
+part "http_response.dart";
 
 /// An abstract class representing a client for interacting with an API.
 ///
@@ -102,12 +102,12 @@ abstract class ApiClient {
   /// - A [Future] that resolves to a [File] object representing the uploaded file.
   Future<File> uploadFile({
     required String filePath,
-    String uploadUrl = '/upload-file',
+    String uploadUrl = "/upload-file",
   }) async {
     String filename = path.basename(filePath);
     FormData formData = FormData.fromMap(
       {
-        'file': await MultipartFile.fromFile(filePath, filename: filename),
+        "file": await MultipartFile.fromFile(filePath, filename: filename),
       },
     );
 

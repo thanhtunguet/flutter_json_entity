@@ -1,6 +1,6 @@
-import 'package:supa_architecture/json/json.dart';
-import 'package:supa_architecture/models/app_user.dart';
-import 'package:supa_architecture/models/file.dart';
+import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/app_user.dart";
+import "package:supa_architecture/models/file.dart";
 
 /// An abstract class representing an attachment model.
 ///

@@ -1,4 +1,4 @@
-part of 'authentication_bloc.dart';
+part of "authentication_bloc.dart";
 
 /// Enumeration of authentication statuses.
 enum AuthenticationStatus {

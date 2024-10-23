@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A class representing a JSON boolean field.
 ///

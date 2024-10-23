@@ -1,6 +1,6 @@
-import 'package:supa_architecture/api_client/api_client.dart';
-import 'package:supa_architecture/filters/filters.dart';
-import 'package:supa_architecture/json/json.dart';
+import "package:supa_architecture/api_client/api_client.dart";
+import "package:supa_architecture/filters/filters.dart";
+import "package:supa_architecture/json/json.dart";
 
 /// An abstract class that extends [ApiClient] to provide base CRUD operations
 /// for repositories.
@@ -21,7 +21,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<List<T>> list(TFilter filter) async {
     return dio
         .post(
-          '/list',
+          "/list",
           data: filter.toJSON(),
         )
         .then(
@@ -39,7 +39,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<int> count(TFilter filter) async {
     return dio
         .post(
-          '/count',
+          "/count",
           data: filter.toJSON(),
         )
         .then(
@@ -56,9 +56,9 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   /// - A [Future] that resolves to the entity of type [T].
   Future<T> getById(num id) async {
     return dio.post(
-      '/get',
+      "/get",
       data: {
-        'id': id,
+        "id": id,
       },
     ).then(
       (response) => response.body<T>(),
@@ -75,7 +75,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<T> create(T entity) async {
     return dio
         .post(
-          '/create',
+          "/create",
           data: entity.toJSON(),
         )
         .then(
@@ -93,7 +93,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<T> update(T entity) async {
     return dio
         .post(
-          '/update',
+          "/update",
           data: entity.toJSON(),
         )
         .then(
@@ -111,7 +111,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<T> deleteByEntity(T entity) async {
     return dio
         .post(
-          '/delete',
+          "/delete",
           data: entity.toJSON(),
         )
         .then(
@@ -128,9 +128,9 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   /// - A [Future] that resolves to the deleted entity of type [T].
   Future<T> deleteById(num id) async {
     return dio.post(
-      '/delete',
+      "/delete",
       data: {
-        'id': id,
+        "id": id,
       },
     ).then(
       (response) => response.body<T>(),
@@ -147,7 +147,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<T> approve(T entity) async {
     return dio
         .post(
-          '/approve',
+          "/approve",
           data: entity.toJSON(),
         )
         .then(
@@ -165,7 +165,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   Future<T> reject(T entity) async {
     return dio
         .post(
-          '/reject',
+          "/reject",
           data: entity.toJSON(),
         )
         .then(
@@ -182,9 +182,9 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   /// - A [Future] that resolves to the approved entity of type [T].
   Future<T> approveById(num id) async {
     return dio.post(
-      '/approve',
+      "/approve",
       data: {
-        'id': id,
+        "id": id,
       },
     ).then(
       (response) => response.body<T>(),
@@ -200,9 +200,9 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   /// - A [Future] that resolves to the rejected entity of type [T].
   Future<T> rejectById(num id) async {
     return dio.post(
-      '/reject',
+      "/reject",
       data: {
-        'id': id,
+        "id": id,
       },
     ).then(
       (response) => response.body<T>(),

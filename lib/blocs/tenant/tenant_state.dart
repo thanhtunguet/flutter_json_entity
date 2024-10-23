@@ -1,4 +1,4 @@
-part of 'tenant_bloc.dart';
+part of "tenant_bloc.dart";
 
 /// Represents the initial state of the tenant management.
 final class TenantInitial extends TenantState {}

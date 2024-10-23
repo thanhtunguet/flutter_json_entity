@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A class representing a JSON string field.
 ///
@@ -25,5 +25,5 @@ class JsonString extends JsonField<String> {
   /// **Returns:**
   /// - The string value, or a null string if the value is null.
   @override
-  String get value => rawValue ?? '';
+  String get value => rawValue ?? "";
 }

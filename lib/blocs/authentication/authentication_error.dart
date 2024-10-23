@@ -1,10 +1,10 @@
-part of 'authentication_bloc.dart';
+part of "authentication_bloc.dart";
 
 /// A class representing an error during authentication.
 sealed class AuthenticationException extends Equatable {
   @override
   List<Object?> get props => [
-        'AuthenticationException',
+        "AuthenticationException",
       ];
 }
 
@@ -12,6 +12,6 @@ sealed class AuthenticationException extends Equatable {
 final class AuthenticationGoogleException extends AuthenticationException {
   @override
   List<Object?> get props => [
-        'AuthenticationGoogleException',
+        "AuthenticationGoogleException",
       ];
 }

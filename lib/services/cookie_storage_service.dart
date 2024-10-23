@@ -1,7 +1,7 @@
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:cookie_jar/cookie_jar.dart";
+import "package:dio_cookie_manager/dio_cookie_manager.dart";
+import "package:path_provider/path_provider.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
 /// An abstract class for managing cookie storage and related operations.
 ///
@@ -84,8 +84,8 @@ abstract interface class CookieStorageService {
 class _CookieStorageServiceImpl implements CookieStorageService {
   final PersistCookieJar persistCookieJar;
 
-  static const _authenticationPath = '/rpc/portal/authentication';
-  static const _rpcPath = '/rpc/';
+  static const _authenticationPath = "/rpc/portal/authentication";
+  static const _rpcPath = "/rpc/";
 
   static Uri get _authenticationUri =>
       Uri.parse(persistentStorageService.baseApiUrl)
@@ -122,7 +122,7 @@ class _CookieStorageServiceImpl implements CookieStorageService {
   Future<void> deleteAccessTokenOnly() async {
     final cookies = await persistCookieJar.loadForRequest(_authenticationUri);
     final newCookies = cookies
-        .where((cookie) => cookie.name.toLowerCase() != 'token')
+        .where((cookie) => cookie.name.toLowerCase() != "token")
         .toList();
     await persistCookieJar.delete(_rpcUri);
     await persistCookieJar.saveFromResponse(_authenticationUri, newCookies);
@@ -140,7 +140,7 @@ class _CookieStorageServiceImpl implements CookieStorageService {
     final queryParameters = uri.queryParameters;
     return uri.replace(queryParameters: {
       ...queryParameters,
-      'token': cookies.accessToken,
+      "token": cookies.accessToken,
     }).toString();
   }
 
@@ -158,5 +158,5 @@ extension _CookiesExtensions on List<Cookie> {
   /// **Returns:**
   /// - The access token as a [String].
   String get accessToken =>
-      firstWhere((cookie) => cookie.name.toLowerCase() == 'token').value;
+      firstWhere((cookie) => cookie.name.toLowerCase() == "token").value;
 }

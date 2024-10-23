@@ -1,39 +1,39 @@
-import 'package:reactive_forms/reactive_forms.dart';
+import "package:reactive_forms/reactive_forms.dart";
 
 /// Change password form
 class ChangePasswordForm extends FormGroup {
   /// OTP regex
-  static const otpRegex = r'^[0-9]{6}$';
+  static const otpRegex = r"^[0-9]{6}$";
 
   /// Password regex
   static const passwordRegex =
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$';
+      r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$";
 
   /// Change password form
   ChangePasswordForm()
       : super({
-          'oldPassword': FormControl<String>(
-            value: '',
+          "oldPassword": FormControl<String>(
+            value: "",
             validators: [
               Validators.required,
             ],
           ),
-          'newPassword': FormControl<String>(
-            value: '',
-            validators: [
-              Validators.required,
-              Validators.pattern(passwordRegex),
-            ],
-          ),
-          'verifyNewPassword': FormControl<String>(
-            value: '',
+          "newPassword": FormControl<String>(
+            value: "",
             validators: [
               Validators.required,
               Validators.pattern(passwordRegex),
             ],
           ),
-          'otpCode': FormControl<String>(
-            value: '',
+          "verifyNewPassword": FormControl<String>(
+            value: "",
+            validators: [
+              Validators.required,
+              Validators.pattern(passwordRegex),
+            ],
+          ),
+          "otpCode": FormControl<String>(
+            value: "",
             validators: [
               Validators.required,
               Validators.pattern(otpRegex),
@@ -41,23 +41,23 @@ class ChangePasswordForm extends FormGroup {
           ),
         }, validators: [
           Validators.mustMatch(
-            'newPassword',
-            'verifyNewPassword',
+            "newPassword",
+            "verifyNewPassword",
           ),
         ]);
 
   /// Old password
   FormControl<String> get oldPassword =>
-      control('oldPassword') as FormControl<String>;
+      control("oldPassword") as FormControl<String>;
 
   /// New password
   FormControl<String> get newPassword =>
-      control('newPassword') as FormControl<String>;
+      control("newPassword") as FormControl<String>;
 
   /// Verify new password
   FormControl<String> get verifyNewPassword =>
-      control('verifyNewPassword') as FormControl<String>;
+      control("verifyNewPassword") as FormControl<String>;
 
   /// OTP code
-  FormControl<String> get otpCode => control('otpCode') as FormControl<String>;
+  FormControl<String> get otpCode => control("otpCode") as FormControl<String>;
 }

@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A class representing a JSON list field.
 ///
@@ -65,7 +65,7 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
       return null;
     }
     if (index < 0 || index >= rawValue!.length) {
-      throw Exception('Index $index is out of range');
+      throw Exception("Index $index is out of range");
     }
     return rawValue![index];
   }
@@ -81,10 +81,10 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
   operator []=(int index, value) {
     assert(rawValue != null);
     if (rawValue == null) {
-      throw Exception('Index $index is out of range');
+      throw Exception("Index $index is out of range");
     }
     if (index < 0 || index >= rawValue!.length) {
-      throw Exception('Index $index is out of range');
+      throw Exception("Index $index is out of range");
     }
     rawValue![index] = value;
   }

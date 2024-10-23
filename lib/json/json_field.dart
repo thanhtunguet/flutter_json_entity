@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// An abstract class representing a JSON field.
 ///

@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A JSON field that handles double-precision floating-point values.
 ///
@@ -7,14 +7,14 @@ part of 'json.dart';
 ///
 /// **Example Usage:**
 /// ```dart
-/// // Creating a JsonDouble instance with the field name 'price'
-/// JsonDouble priceField = JsonDouble('price');
+/// // Creating a JsonDouble instance with the field name "price"
+/// JsonDouble priceField = JsonDouble("price");
 ///
 /// // Setting the value using a double
 /// priceField.value = 19.99;
 ///
 /// // Setting the value using a string that can be parsed to a double
-/// priceField.value = '29.99';
+/// priceField.value = "29.99";
 ///
 /// // Getting the double value (returns 29.99)
 /// double price = priceField.value;
@@ -43,16 +43,16 @@ class JsonDouble extends JsonField<double> {
   ///
   /// **Examples:**
   /// ```dart
-  /// JsonDouble priceField = JsonDouble('price');
+  /// JsonDouble priceField = JsonDouble("price");
   ///
   /// // Setting with a double
   /// priceField.value = 19.99; // rawValue is 19.99
   ///
   /// // Setting with a numeric string
-  /// priceField.value = '29.99'; // rawValue is 29.99
+  /// priceField.value = "29.99"; // rawValue is 29.99
   ///
   /// // Setting with a non-numeric string
-  /// priceField.value = 'abc'; // rawValue is null
+  /// priceField.value = "abc"; // rawValue is null
   /// ```
   @override
   set value(dynamic value) {
@@ -74,10 +74,10 @@ class JsonDouble extends JsonField<double> {
   ///
   /// **Example:**
   /// ```dart
-  /// JsonDouble priceField = JsonDouble('price');
+  /// JsonDouble priceField = JsonDouble("price");
   /// priceField.value = 19.99;
   ///
-  /// Map<String, dynamic> json = {'price': priceField.toJSON()}; // {'price': 19.99}
+  /// Map<String, dynamic> json = {"price": priceField.toJSON()}; // {"price": 19.99}
   /// ```
   @override
   double? toJSON() {

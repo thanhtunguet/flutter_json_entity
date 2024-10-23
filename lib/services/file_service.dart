@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:supa_carbon_icons/supa_carbon_icons.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import "package:flutter/material.dart";
+import "package:supa_carbon_icons/supa_carbon_icons.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 /// A service class for handling file-related operations.
 ///
@@ -16,12 +16,12 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is an office file.
   static bool isOfficeFile(String filename) {
-    return filename.endsWith('.doc') ||
-        filename.endsWith('.docx') ||
-        filename.endsWith('.xls') ||
-        filename.endsWith('.xlsx') ||
-        filename.endsWith('.ppt') ||
-        filename.endsWith('.pptx');
+    return filename.endsWith(".doc") ||
+        filename.endsWith(".docx") ||
+        filename.endsWith(".xls") ||
+        filename.endsWith(".xlsx") ||
+        filename.endsWith(".ppt") ||
+        filename.endsWith(".pptx");
   }
 
   /// Checks if the given filename corresponds to a document file.
@@ -32,7 +32,7 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is a document file.
   static bool isDocFile(String filename) {
-    return filename.endsWith('.doc') || filename.endsWith('.docx');
+    return filename.endsWith(".doc") || filename.endsWith(".docx");
   }
 
   /// Checks if the given filename corresponds to a spreadsheet file.
@@ -43,7 +43,7 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is a spreadsheet file.
   static bool isSpreadSheetFile(String filename) {
-    return filename.endsWith('.xls') || filename.endsWith('.xlsx');
+    return filename.endsWith(".xls") || filename.endsWith(".xlsx");
   }
 
   /// Checks if the given filename corresponds to a presentation file.
@@ -54,7 +54,7 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is a presentation file.
   static bool isPresentationFile(String filename) {
-    return filename.endsWith('.ppt') || filename.endsWith('.pptx');
+    return filename.endsWith(".ppt") || filename.endsWith(".pptx");
   }
 
   /// Checks if the given filename corresponds to an image file.
@@ -65,9 +65,9 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is an image file.
   static bool isImageFile(String filename) {
-    return filename.endsWith('.jpg') ||
-        filename.endsWith('.jpeg') ||
-        filename.endsWith('.png');
+    return filename.endsWith(".jpg") ||
+        filename.endsWith(".jpeg") ||
+        filename.endsWith(".png");
   }
 
   /// Checks if the given filename corresponds to a PDF file.
@@ -78,7 +78,7 @@ class FileService {
   /// **Returns:**
   /// - A boolean indicating whether the file is a PDF file.
   static bool isPDFFile(String filename) {
-    return filename.endsWith('.pdf');
+    return filename.endsWith(".pdf");
   }
 
   /// Launches the specified URL using the default web browser.
@@ -103,7 +103,7 @@ class FileService {
   /// - A string representing the viewer URL.
   static String createOfficeViewerUrl(String fileUrl) {
     fileUrl = Uri.encodeComponent(fileUrl);
-    return 'https://view.officeapps.live.com/op/view.aspx?src=$fileUrl';
+    return "https://view.officeapps.live.com/op/view.aspx?src=$fileUrl";
   }
 
   /// Creates a URL for viewing a file using the Google Docs web viewer.
@@ -115,7 +115,7 @@ class FileService {
   /// - A string representing the viewer URL.
   static String createGoogleDocsViewerUrl(String fileUrl) {
     fileUrl = Uri.encodeComponent(fileUrl);
-    return 'https://docs.google.com/gview?embedded=true&url=$fileUrl';
+    return "https://docs.google.com/gview?embedded=true&url=$fileUrl";
   }
 
   /// Retrieves the appropriate icon for the given filename.
@@ -126,30 +126,30 @@ class FileService {
   /// **Returns:**
   /// - The [IconData] representing the icon for the file.
   static IconData iconData(String filename) {
-    if (filename.endsWith('.pdf')) {
+    if (filename.endsWith(".pdf")) {
       return CarbonIcons.pdf;
     }
-    if (filename.endsWith('doc') || filename.endsWith('docx')) {
+    if (filename.endsWith("doc") || filename.endsWith("docx")) {
       return CarbonIcons.doc;
     }
-    if (filename.endsWith('ppt') || filename.endsWith('pptx')) {
+    if (filename.endsWith("ppt") || filename.endsWith("pptx")) {
       return CarbonIcons.ppt;
     }
-    if (filename.endsWith('xls') || filename.endsWith('xlsx')) {
+    if (filename.endsWith("xls") || filename.endsWith("xlsx")) {
       return CarbonIcons.xls;
     }
-    if (filename.endsWith('zip')) {
+    if (filename.endsWith("zip")) {
       return CarbonIcons.zip;
     }
-    if (filename.endsWith('txt')) {
+    if (filename.endsWith("txt")) {
       return CarbonIcons.txt;
     }
-    if (filename.endsWith('jpg') ||
-        filename.endsWith('jpeg') ||
-        filename.endsWith('png') ||
-        filename.endsWith('gif') ||
-        filename.endsWith('bmp') ||
-        filename.endsWith('webp')) {
+    if (filename.endsWith("jpg") ||
+        filename.endsWith("jpeg") ||
+        filename.endsWith("png") ||
+        filename.endsWith("gif") ||
+        filename.endsWith("bmp") ||
+        filename.endsWith("webp")) {
       return CarbonIcons.image;
     }
     return Icons.attachment;
@@ -165,14 +165,14 @@ class FileService {
   static bool isSupportedFile(String filename) {
     // Define supported file extensions
     const supportedExtensions = [
-      'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', // Image files
-      'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Office files
-      'pdf', // PDF files
-      'zip', // Zip files
-      'txt' // Text files
+      "jpg", "jpeg", "png", "gif", "bmp", "webp", // Image files
+      "doc", "docx", "xls", "xlsx", "ppt", "pptx", // Office files
+      "pdf", // PDF files
+      "zip", // Zip files
+      "txt" // Text files
     ];
     // Get the file extension
-    final fileExtension = filename.split('.').last.toLowerCase();
+    final fileExtension = filename.split(".").last.toLowerCase();
     // Check if the file extension is in the list of supported extensions
     return supportedExtensions.contains(fileExtension);
   }

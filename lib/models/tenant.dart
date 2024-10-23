@@ -1,4 +1,4 @@
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:supa_architecture/supa_architecture.dart";
 
 /// A class representing a tenant.
 ///
@@ -22,32 +22,32 @@ class Tenant extends JsonModel {
       ];
 
   /// The ID of the tenant.
-  JsonInteger id = JsonInteger('id');
+  JsonInteger id = JsonInteger("id");
 
   /// The code of the tenant.
-  JsonString code = JsonString('code');
+  JsonString code = JsonString("code");
 
   /// The name of the tenant.
-  JsonString name = JsonString('name');
+  JsonString name = JsonString("name");
 
   /// The default path of the tenant.
-  JsonString defaultPath = JsonString('defaultPath');
+  JsonString defaultPath = JsonString("defaultPath");
 
   /// The ID of the owner of the tenant.
-  JsonInteger ownerId = JsonInteger('ownerId');
+  JsonInteger ownerId = JsonInteger("ownerId");
 
   /// Indicates if the tenant has already gotten started.
-  JsonBoolean isAlreadyGettingStarted = JsonBoolean('isAlreadyGettingStarted');
+  JsonBoolean isAlreadyGettingStarted = JsonBoolean("isAlreadyGettingStarted");
 
   /// Indicates if the user is the owner of the tenant.
-  JsonBoolean isOwner = JsonBoolean('isOwner');
+  JsonBoolean isOwner = JsonBoolean("isOwner");
 
-  /// The ID of the tenant's status.
-  JsonInteger tenantStatusId = JsonInteger('tenantStatusId');
+  /// The ID of the tenant"s status.
+  JsonInteger tenantStatusId = JsonInteger("tenantStatusId");
 
   /// The status of the tenant as an [EnumModel].
-  JsonObject<EnumModel> tenantStatus = JsonObject<EnumModel>('tenantStatus');
+  JsonObject<EnumModel> tenantStatus = JsonObject<EnumModel>("tenantStatus");
 
   /// The request property of the tenant.
-  JsonString requestProperty = JsonString('requestProperty');
+  JsonString requestProperty = JsonString("requestProperty");
 }

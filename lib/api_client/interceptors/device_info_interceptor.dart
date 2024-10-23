@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:dio/dio.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
 /// An interceptor for adding device information headers to outgoing requests.
 ///
@@ -17,11 +17,11 @@ class DeviceInfoInterceptor extends InterceptorsWrapper {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final deviceInfo = SupaApplication.instance.deviceInfo;
 
-    options.headers['X-Device-Model'] = deviceInfo.deviceModel;
-    options.headers['X-Device-Name'] =
+    options.headers["X-Device-Model"] = deviceInfo.deviceModel;
+    options.headers["X-Device-Name"] =
         _sanitizeDeviceName(deviceInfo.deviceName);
-    options.headers['X-Operating-System'] = deviceInfo.operatingSystem;
-    options.headers['X-System-Version'] = deviceInfo.systemVersion;
+    options.headers["X-Operating-System"] = deviceInfo.operatingSystem;
+    options.headers["X-System-Version"] = deviceInfo.systemVersion;
 
     super.onRequest(options, handler);
   }
@@ -31,10 +31,10 @@ class DeviceInfoInterceptor extends InterceptorsWrapper {
     String sanitized = deviceName.trim();
 
     // Replace special characters with an empty string (keep letters, numbers, and spaces)
-    sanitized = sanitized.replaceAll(RegExp(r'[^\w\s-]'), '');
+    sanitized = sanitized.replaceAll(RegExp(r"[^\w\s-]"), "");
 
     // Replace multiple spaces with a single space
-    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
+    sanitized = sanitized.replaceAll(RegExp(r"\s+"), " ");
 
     // Limit the length to 50 characters (adjust the limit as necessary)
     if (sanitized.length > 50) {

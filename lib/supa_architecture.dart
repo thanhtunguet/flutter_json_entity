@@ -1,28 +1,28 @@
 library supa_architecture;
 
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' hide Image;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supa_architecture/config/get_it.dart';
-import 'package:supa_architecture/data/data.dart';
-import 'package:supa_architecture/services/cookie_storage_service.dart';
-import 'package:supa_architecture/services/persistent_storage_service.dart';
-import 'package:supa_architecture/services/secure_storage_service.dart';
+import "package:aad_oauth/aad_oauth.dart";
+import "package:aad_oauth/model/config.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/widgets.dart" hide Image;
+import "package:flutter_dotenv/flutter_dotenv.dart";
+import "package:supa_architecture/config/get_it.dart";
+import "package:supa_architecture/data/data.dart";
+import "package:supa_architecture/services/cookie_storage_service.dart";
+import "package:supa_architecture/services/persistent_storage_service.dart";
+import "package:supa_architecture/services/secure_storage_service.dart";
 
-export 'api_client/api_client.dart';
-export 'blocs/blocs.dart';
-export 'constants/constants.dart';
-export 'data/data.dart';
-export 'exceptions/exceptions.dart';
-export 'extensions/extensions.dart';
-export 'filters/filters.dart';
-export 'forms/forms.dart';
-export 'json/json.dart';
-export 'providers/providers.dart';
-export 'repositories/base_repository.dart';
-export 'widgets/widgets.dart';
+export "api_client/api_client.dart";
+export "blocs/blocs.dart";
+export "constants/constants.dart";
+export "data/data.dart";
+export "exceptions/exceptions.dart";
+export "extensions/extensions.dart";
+export "filters/filters.dart";
+export "forms/forms.dart";
+export "json/json.dart";
+export "providers/providers.dart";
+export "repositories/base_repository.dart";
+export "widgets/widgets.dart";
 
 /// The main class for the Supa Architecture package.
 ///

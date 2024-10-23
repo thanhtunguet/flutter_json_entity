@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A mixin that provides methods for JSON serialization and deserialization.
 mixin JsonSerializable {

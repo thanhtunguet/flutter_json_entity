@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A class representing a JSON object field.
 ///
@@ -70,7 +70,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
         return field.value;
       }
     }
-    throw Exception('Field $name does not exist');
+    throw Exception("Field $name does not exist");
   }
 
   /// Sets the value of a nested field by name.
@@ -84,7 +84,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   operator []=(String name, value) {
     assert(rawValue != null);
     if (rawValue == null) {
-      throw Exception('Field $name does not exist');
+      throw Exception("Field $name does not exist");
     }
     for (final field in rawValue!.fields) {
       if (field.fieldName == name) {
@@ -92,6 +92,6 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
         return;
       }
     }
-    throw Exception('Field $name does not exist');
+    throw Exception("Field $name does not exist");
   }
 }

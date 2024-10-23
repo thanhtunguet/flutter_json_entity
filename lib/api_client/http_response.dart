@@ -1,4 +1,4 @@
-part of 'api_client.dart';
+part of "api_client.dart";
 
 /// Extension methods for handling HTTP responses from the [Dio] package.
 ///

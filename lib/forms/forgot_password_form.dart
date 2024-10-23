@@ -1,12 +1,12 @@
-import 'package:reactive_forms/reactive_forms.dart';
+import "package:reactive_forms/reactive_forms.dart";
 
 /// Forgot password form
 class ForgotPasswordForm extends FormGroup {
   /// Forgot password form
   ForgotPasswordForm()
       : super({
-          'email': FormControl<String>(
-            value: '',
+          "email": FormControl<String>(
+            value: "",
             validators: [
               Validators.required,
               Validators.email,
@@ -15,5 +15,5 @@ class ForgotPasswordForm extends FormGroup {
         });
 
   /// Email
-  FormControl<String> get email => control('email') as FormControl<String>;
+  FormControl<String> get email => control("email") as FormControl<String>;
 }

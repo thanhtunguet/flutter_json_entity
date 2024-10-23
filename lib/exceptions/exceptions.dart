@@ -1,6 +1,6 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:dio/dio.dart';
+import "package:dio/dio.dart";
 
 /// A sealed class representing a custom exception in Supa.
 ///
@@ -24,30 +24,30 @@ sealed class SupaException extends HttpException {
     if (exception is DioException && exception.response != null) {
       switch (exception.response!.statusCode) {
         case 401:
-          return SupaUnauthorizedException('Thông tin đăng nhập hết hạn');
+          return SupaUnauthorizedException("Thông tin đăng nhập hết hạn");
 
         case 404:
           return SupaNotFoundException(
-            'Nội dung không tồn tại trên hệ thống',
+            "Nội dung không tồn tại trên hệ thống",
           );
 
         case 400:
           return SupaNotFoundException(
-              exception.response!.data['generalErrors'][0]);
+              exception.response!.data["generalErrors"][0]);
 
         case 403:
           return SupaForbiddenException(
-            'Bạn không có quyền truy cập vào nội dung này',
+            "Bạn không có quyền truy cập vào nội dung này",
           );
 
         default:
           return SupaUnknownException(
-            'Có lỗi xảy ra trong quá trình tải dữ liệu',
+            "Có lỗi xảy ra trong quá trình tải dữ liệu",
           );
       }
     }
     return SupaUnknownException(
-      'Có lỗi xảy ra trong quá trình tải dữ liệu',
+      "Có lỗi xảy ra trong quá trình tải dữ liệu",
     );
   }
 }

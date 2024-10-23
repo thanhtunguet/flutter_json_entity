@@ -1,29 +1,29 @@
-part of 'filters.dart';
+part of "filters.dart";
 
 /// This class defines filter operations for String type
 class StringFilter extends FilterField {
-  /// Query all records that has its field's value equals to this property's value
+  /// Query all records that has its field"s value equals to this property"s value
   String? equal;
 
-  /// Query all records that has its field's value different from this property's value
+  /// Query all records that has its field"s value different from this property"s value
   String? notEqual;
 
-  /// Query all records that has its field's value starts with this property's value
+  /// Query all records that has its field"s value starts with this property"s value
   String? startWith;
 
-  /// Query all records that has its field's value does not start with this property's value
+  /// Query all records that has its field"s value does not start with this property"s value
   String? notStartWith;
 
-  /// Query all records that has its field's value ends with this property's value
+  /// Query all records that has its field"s value ends with this property"s value
   String? endWith;
 
-  /// Query all records that has its field's value does not end with this property's value
+  /// Query all records that has its field"s value does not end with this property"s value
   String? notEndWith;
 
-  /// Query all records that has its field's value contains this property's value
+  /// Query all records that has its field"s value contains this property"s value
   String? contain;
 
-  /// Query all records that has its field's value does not contain this property's value
+  /// Query all records that has its field"s value does not contain this property"s value
   String? notContain;
 
   /// Initialize new StringFilter instance

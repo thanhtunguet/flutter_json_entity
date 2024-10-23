@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import "package:equatable/equatable.dart";
 
 /// A class representing a device notification token.
 ///
@@ -32,9 +32,9 @@ class DeviceNotificationToken extends Equatable {
   /// **Parameters:**
   /// - `json`: The JSON map containing the token data.
   DeviceNotificationToken.fromJSON(Map<String, dynamic> json)
-      : osVersion = json['osVersion'],
-        deviceModel = json['deviceModel'],
-        token = json['token'];
+      : osVersion = json["osVersion"],
+        deviceModel = json["deviceModel"],
+        token = json["token"];
 
   /// Converts the [DeviceNotificationToken] instance to a JSON map.
   ///
@@ -42,9 +42,9 @@ class DeviceNotificationToken extends Equatable {
   /// - A JSON map containing the token data.
   Map<String, dynamic> toJSON() {
     return {
-      'osVersion': osVersion,
-      'deviceModel': deviceModel,
-      'token': token,
+      "osVersion": osVersion,
+      "deviceModel": deviceModel,
+      "token": token,
     };
   }
 

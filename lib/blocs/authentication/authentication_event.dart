@@ -1,4 +1,4 @@
-part of 'authentication_bloc.dart';
+part of "authentication_bloc.dart";
 
 /// Event triggered when an authentication error occurs.
 final class AuthenticationErrorEvent extends AuthenticationEvent {
@@ -12,7 +12,7 @@ final class AuthenticationErrorEvent extends AuthenticationEvent {
   const AuthenticationErrorEvent(this.error);
 
   @override
-  List<Object> get props => ['AuthenticationErrorEvent', error];
+  List<Object> get props => ["AuthenticationErrorEvent", error];
 }
 
 /// Abstract base class for all authentication events.
@@ -42,19 +42,19 @@ final class AuthenticationFinalEvent extends AuthenticationEvent {
   });
 
   @override
-  List<Object> get props => ['AuthenticationFinalEvent', appUser, tenant];
+  List<Object> get props => ["AuthenticationFinalEvent", appUser, tenant];
 }
 
 /// Event triggered to initialize the authentication process.
 final class AuthenticationInitialEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationInitialEvent'];
+  List<Object> get props => ["AuthenticationInitialEvent"];
 }
 
 /// Event triggered to log out the user.
 final class AuthenticationLogoutEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationLogoutEvent'];
+  List<Object> get props => ["AuthenticationLogoutEvent"];
 }
 
 /// Event triggered when the tenant is changed.
@@ -71,7 +71,7 @@ final class AuthenticationTenantChangedEvent extends AuthenticationEvent {
   });
 
   @override
-  List<Object> get props => ['AuthenticationTenantChangedEvent', tenant];
+  List<Object> get props => ["AuthenticationTenantChangedEvent", tenant];
 }
 
 /// Event triggered when a tenant is selected.
@@ -88,7 +88,7 @@ final class AuthenticationTenantSelectedEvent extends AuthenticationEvent {
   });
 
   @override
-  List<Object> get props => ['AuthenticationTenantSelectedEvent', tenant];
+  List<Object> get props => ["AuthenticationTenantSelectedEvent", tenant];
 }
 
 /// Event triggered when tenants are loaded.
@@ -106,31 +106,31 @@ final class AuthenticationTenantsLoadedEvent extends AuthenticationEvent {
 
   @override
   List<Object> get props =>
-      ['AuthenticationTenantsLoadedEvent', tenants, ...tenants];
+      ["AuthenticationTenantsLoadedEvent", tenants, ...tenants];
 }
 
 /// Event triggered to initiate Apple login.
 final class AuthenticationWithAppleEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationWithAppleEvent'];
+  List<Object> get props => ["AuthenticationWithAppleEvent"];
 }
 
 /// Event triggered to initiate biometric login.
 final class AuthenticationWithBiometricEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationWithBiometricEvent'];
+  List<Object> get props => ["AuthenticationWithBiometricEvent"];
 }
 
 /// Event triggered to initiate Google login.
 final class AuthenticationWithGoogleEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationWithGoogleEvent'];
+  List<Object> get props => ["AuthenticationWithGoogleEvent"];
 }
 
 /// Event triggered to initiate Microsoft login.
 final class AuthenticationWithMicrosoftEvent extends AuthenticationEvent {
   @override
-  List<Object> get props => ['AuthenticationWithMicrosoftEvent'];
+  List<Object> get props => ["AuthenticationWithMicrosoftEvent"];
 }
 
 /// Event triggered to initiate password login.
@@ -153,5 +153,5 @@ final class AuthenticationWithPasswordEvent extends AuthenticationEvent {
 
   @override
   List<Object> get props =>
-      ['AuthenticationWithPasswordEvent', username, password];
+      ["AuthenticationWithPasswordEvent", username, password];
 }

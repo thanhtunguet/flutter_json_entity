@@ -1,4 +1,4 @@
-part of 'json.dart';
+part of "json.dart";
 
 /// A type definition for a function that constructs an instance of [JsonModel].
 typedef InstanceConstructor<T extends JsonModel> = T Function();
@@ -56,29 +56,29 @@ abstract class JsonModel with JsonSerializable {
   void fromJSON(dynamic json) {
     assert(json is Map<dynamic, dynamic>);
     if (json is Map<dynamic, dynamic>) {
-      if (json.containsKey('generalErrors') && json['generalErrors'] is List) {
-        generalErrors = (json['generalErrors'] as List<dynamic>)
+      if (json.containsKey("generalErrors") && json["generalErrors"] is List) {
+        generalErrors = (json["generalErrors"] as List<dynamic>)
             .map((dynamic item) => item as String)
             .toList();
       }
 
-      if (json.containsKey('generalWarnings') &&
-          json['generalWarnings'] is List) {
-        generalWarnings = (json['generalWarnings'] as List<dynamic>)
+      if (json.containsKey("generalWarnings") &&
+          json["generalWarnings"] is List) {
+        generalWarnings = (json["generalWarnings"] as List<dynamic>)
             .map((dynamic item) => item as String)
             .toList();
       }
 
-      if (json.containsKey('generalInformations') &&
-          json['generalInformations'] is List) {
-        generalInformations = (json['generalInformations'] as List<dynamic>)
+      if (json.containsKey("generalInformations") &&
+          json["generalInformations"] is List) {
+        generalInformations = (json["generalInformations"] as List<dynamic>)
             .map((dynamic item) => item as String)
             .toList();
       }
 
-      if (json.containsKey('errors') && json['errors'] is Map) {
+      if (json.containsKey("errors") && json["errors"] is Map) {
         errors = Map.fromEntries(
-          (json['errors'] as Map)
+          (json["errors"] as Map)
               .entries
               .map((MapEntry<dynamic, dynamic> entry) {
             final key = entry.key as String;
@@ -88,9 +88,9 @@ abstract class JsonModel with JsonSerializable {
         );
       }
 
-      if (json.containsKey('warnings') && json['warnings'] is Map) {
+      if (json.containsKey("warnings") && json["warnings"] is Map) {
         warnings = Map.fromEntries(
-          (json['warnings'] as Map)
+          (json["warnings"] as Map)
               .entries
               .map((MapEntry<dynamic, dynamic> entry) {
             final key = entry.key as String;
@@ -100,9 +100,9 @@ abstract class JsonModel with JsonSerializable {
         );
       }
 
-      if (json.containsKey('informations') && json['informations'] is Map) {
+      if (json.containsKey("informations") && json["informations"] is Map) {
         informations = Map.fromEntries(
-          (json['informations'] as Map)
+          (json["informations"] as Map)
               .entries
               .map((MapEntry<dynamic, dynamic> entry) {
             final key = entry.key as String;
@@ -173,7 +173,7 @@ abstract class JsonModel with JsonSerializable {
         return field.value;
       }
     }
-    throw Exception('Field $name does not exist');
+    throw Exception("Field $name does not exist");
   }
 
   /// Sets the value of a field by name.
@@ -191,6 +191,6 @@ abstract class JsonModel with JsonSerializable {
         return;
       }
     }
-    throw Exception('Field $name does not exist');
+    throw Exception("Field $name does not exist");
   }
 }

@@ -1,4 +1,4 @@
-part of 'push_notification_bloc.dart';
+part of "push_notification_bloc.dart";
 
 /// Push notification state
 sealed class PushNotificationState {
@@ -57,10 +57,10 @@ final class PushNotificationReceived extends PushNotificationState {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
-      'body': body,
-      'payload': payload.toJson(),
-      'linkMobile': linkMobile,
+      "title": title,
+      "body": body,
+      "payload": payload.toJson(),
+      "linkMobile": linkMobile,
     };
   }
 }
@@ -90,10 +90,10 @@ final class PushNotificationOpened extends PushNotificationState {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
-      'body': body,
-      'payload': payload.toJson(),
-      'linkMobile': linkMobile,
+      "title": title,
+      "body": body,
+      "payload": payload.toJson(),
+      "linkMobile": linkMobile,
     };
   }
 }

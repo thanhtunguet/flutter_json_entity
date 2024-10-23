@@ -1,4 +1,4 @@
-part of 'error_handling_bloc.dart';
+part of "error_handling_bloc.dart";
 
 /// Abstract base class for all error handling events.
 abstract class ErrorHandlingEvent {}

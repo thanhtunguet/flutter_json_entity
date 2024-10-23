@@ -1,5 +1,5 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:supa_architecture/data/secure_authentication_info.dart';
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
+import "package:supa_architecture/data/secure_authentication_info.dart";
 
 /// An abstract interface class for managing secure storage.
 ///
@@ -50,16 +50,16 @@ class _SecureStorageServiceImpl extends SecureStorageService {
     final accessToken = info.accessToken;
     final tenantId = info.tenantId;
 
-    await secureStorage.write(key: 'refreshToken', value: refreshToken);
+    await secureStorage.write(key: "refreshToken", value: refreshToken);
     if (accessToken != null) {
-      await secureStorage.write(key: 'accessToken', value: accessToken);
+      await secureStorage.write(key: "accessToken", value: accessToken);
     } else {
-      await secureStorage.delete(key: 'accessToken');
+      await secureStorage.delete(key: "accessToken");
     }
     if (tenantId != null) {
-      await secureStorage.write(key: 'tenantId', value: tenantId.toString());
+      await secureStorage.write(key: "tenantId", value: tenantId.toString());
     } else {
-      await secureStorage.delete(key: 'tenantId');
+      await secureStorage.delete(key: "tenantId");
     }
   }
 
@@ -70,18 +70,18 @@ class _SecureStorageServiceImpl extends SecureStorageService {
 
   @override
   Future<SecureAuthenticationInfo?> getSavedAuthenticationInfo() async {
-    final refreshToken = await secureStorage.read(key: 'refreshToken');
+    final refreshToken = await secureStorage.read(key: "refreshToken");
     if (refreshToken == null) {
       return null;
     }
 
-    final accessToken = await secureStorage.read(key: 'accessToken');
-    final tenantId = await secureStorage.read(key: 'tenantId');
+    final accessToken = await secureStorage.read(key: "accessToken");
+    final tenantId = await secureStorage.read(key: "tenantId");
 
     return SecureAuthenticationInfo(
       refreshToken: refreshToken,
       accessToken: accessToken,
-      tenantId: int.tryParse(tenantId ?? ''),
+      tenantId: int.tryParse(tenantId ?? ""),
     );
   }
 }

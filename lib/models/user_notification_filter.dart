@@ -1,4 +1,4 @@
-import 'package:supa_architecture/filters/filters.dart';
+import "package:supa_architecture/filters/filters.dart";
 
 /// A class representing a filter for user notifications.
 ///
@@ -18,7 +18,7 @@ class UserNotificationFilter extends DataFilter {
   @override
   Map<String, dynamic> toJSON() {
     Map<String, dynamic> json = super.toJSON();
-    json['unread'] = unread;
+    json["unread"] = unread;
     return json;
   }
 }

@@ -1,26 +1,26 @@
-part of 'filters.dart';
+part of "filters.dart";
 
-/// This class defines filter operations for all Dart's number types
+/// This class defines filter operations for all Dart"s number types
 /// (including int, double or generic num)
 ///
 /// This class also be used as interface of DateFilter
 class AbstractNumberFilter<T> extends FilterField {
-  /// Query all records that has its field's value is greater than or equal to this property's value
+  /// Query all records that has its field"s value is greater than or equal to this property"s value
   T? greaterEqual;
 
-  /// Query all records that has its field's value is less than or equal to this property's value
+  /// Query all records that has its field"s value is less than or equal to this property"s value
   T? lessEqual;
 
-  /// Query all records that has its field's value is greater than this property's value
+  /// Query all records that has its field"s value is greater than this property"s value
   T? greater;
 
-  /// Query all records that has its field's value is less than this property's value
+  /// Query all records that has its field"s value is less than this property"s value
   T? less;
 
-  /// Query all records that has its field's value is equal to this property's value
+  /// Query all records that has its field"s value is equal to this property"s value
   T? equal;
 
-  /// Query all records that has its field's value is not equal to this property's value
+  /// Query all records that has its field"s value is not equal to this property"s value
   T? notEqual;
 
   /// Initialize new NumberFilter instance

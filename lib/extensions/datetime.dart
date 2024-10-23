@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:intl/intl.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
 /// Extension on [DateTime] to provide convenient date formatting.
 extension DateTimeFormatter on DateTime {

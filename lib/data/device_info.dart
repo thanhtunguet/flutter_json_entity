@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import "package:device_info_plus/device_info_plus.dart";
 
 /// A class representing device information.
 ///
@@ -52,7 +52,7 @@ class DeviceInfo {
       return DeviceInfo(
         deviceName: androidInfo.brand,
         deviceModel: androidInfo.model,
-        operatingSystem: 'Android',
+        operatingSystem: "Android",
         systemVersion: androidInfo.version.release,
       );
     } else if (deviceInfoPlatform is IosDeviceInfo) {
@@ -61,16 +61,16 @@ class DeviceInfo {
       return DeviceInfo(
         deviceName: iosInfo.name,
         deviceModel: iosInfo.model,
-        operatingSystem: 'iOS',
+        operatingSystem: "iOS",
         systemVersion: iosInfo.systemVersion,
       );
     } else {
       // Unknown platform
       return DeviceInfo(
-        deviceName: 'Unknown',
-        deviceModel: 'Unknown',
-        operatingSystem: 'Unknown',
-        systemVersion: 'Unknown',
+        deviceName: "Unknown",
+        deviceModel: "Unknown",
+        operatingSystem: "Unknown",
+        systemVersion: "Unknown",
       );
     }
   }

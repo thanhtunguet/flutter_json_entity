@@ -1,9 +1,9 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
-import 'package:supa_architecture/repositories/portal_authentication_repository.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:dio/dio.dart";
+import "package:get_it/get_it.dart";
+import "package:supa_architecture/repositories/portal_authentication_repository.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
 /// An interceptor for handling HTTP errors and refreshing tokens.
 ///

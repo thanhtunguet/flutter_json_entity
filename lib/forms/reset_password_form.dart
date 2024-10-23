@@ -1,4 +1,4 @@
-import 'package:reactive_forms/reactive_forms.dart';
+import "package:reactive_forms/reactive_forms.dart";
 
 /// Form for resetting password
 class ResetPasswordForm extends FormGroup {
@@ -6,20 +6,20 @@ class ResetPasswordForm extends FormGroup {
   ResetPasswordForm()
       : super(
           {
-            'password': FormControl<String>(
-              value: '',
+            "password": FormControl<String>(
+              value: "",
               validators: [
                 Validators.required,
               ],
             ),
-            'confirmPassword': FormControl<String>(
-              value: '',
+            "confirmPassword": FormControl<String>(
+              value: "",
               validators: [
                 Validators.required,
               ],
             ),
-            'otpCode': FormControl<String>(
-              value: '',
+            "otpCode": FormControl<String>(
+              value: "",
               validators: [
                 Validators.required,
               ],
@@ -27,20 +27,20 @@ class ResetPasswordForm extends FormGroup {
           },
           validators: [
             Validators.mustMatch(
-              'password',
-              'confirmPassword',
+              "password",
+              "confirmPassword",
             ),
           ],
         );
 
   /// Password
   FormControl<String> get password =>
-      control('password') as FormControl<String>;
+      control("password") as FormControl<String>;
 
   /// Confirm password
   FormControl<String> get confirmPassword =>
-      control('confirmPassword') as FormControl<String>;
+      control("confirmPassword") as FormControl<String>;
 
   /// OTP code
-  FormControl<String> get otpCode => control('otpCode') as FormControl<String>;
+  FormControl<String> get otpCode => control("otpCode") as FormControl<String>;
 }

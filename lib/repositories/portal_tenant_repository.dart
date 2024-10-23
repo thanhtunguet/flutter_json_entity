@@ -1,4 +1,4 @@
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:supa_architecture/supa_architecture.dart";
 
 /// A repository class for managing tenants.
 ///
@@ -7,7 +7,7 @@ import 'package:supa_architecture/supa_architecture.dart';
 class PortalTenantRepository extends BaseRepository<Tenant, TenantFilter> {
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
-      .replace(path: '/rpc/portal/mobile/authentication')
+      .replace(path: "/rpc/portal/mobile/authentication")
       .toString();
 
   /// Lists tenants based on the provided filter.
@@ -21,7 +21,7 @@ class PortalTenantRepository extends BaseRepository<Tenant, TenantFilter> {
   Future<List<Tenant>> list(TenantFilter filter) async {
     return dio
         .post(
-          '/list-tenant',
+          "/list-tenant",
           data: filter.toJSON(),
         )
         .then(
@@ -40,7 +40,7 @@ class PortalTenantRepository extends BaseRepository<Tenant, TenantFilter> {
   Future<int> count(TenantFilter filter) async {
     return dio
         .post(
-          '/count-tenant',
+          "/count-tenant",
           data: filter.toJSON(),
         )
         .then(

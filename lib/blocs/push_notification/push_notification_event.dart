@@ -1,10 +1,10 @@
-part of 'push_notification_bloc.dart';
+part of "push_notification_bloc.dart";
 
 /// Push notification event
 sealed class PushNotificationEvent extends Equatable {
   @override
   List<Object?> get props => [
-        'PushNotificationEvent',
+        "PushNotificationEvent",
       ];
 }
 
@@ -24,7 +24,7 @@ final class DidReceivedNotificationEvent extends PushNotificationEvent {
 
   @override
   List<Object?> get props => [
-        'DidReceivedNotificationEvent',
+        "DidReceivedNotificationEvent",
         title,
         body,
         payload,
@@ -56,7 +56,7 @@ final class DidUserOpenedNotificationEvent extends PushNotificationEvent {
 
   @override
   List<Object?> get props => [
-        'DidUserOpenedNotificationEvent',
+        "DidUserOpenedNotificationEvent",
         title,
         body,
         payload,
@@ -76,6 +76,6 @@ final class DidUserOpenedNotificationEvent extends PushNotificationEvent {
 final class DidResetNotificationEvent extends PushNotificationEvent {
   @override
   List<Object?> get props => [
-        'DidResetNotificationEvent',
+        "DidResetNotificationEvent",
       ];
 }

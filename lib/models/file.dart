@@ -1,4 +1,4 @@
-import 'package:supa_architecture/json/json.dart';
+import "package:supa_architecture/json/json.dart";
 
 /// A class representing a file model.
 ///

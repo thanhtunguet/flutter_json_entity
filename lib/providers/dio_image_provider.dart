@@ -1,4 +1,4 @@
-part of 'providers.dart';
+part of "providers.dart";
 
 /// An [ImageProvider] that uses [Dio] to fetch images from a network URL,
 /// with support for a fallback asset image if the network image fails to load.
@@ -10,8 +10,8 @@ part of 'providers.dart';
 /// ```dart
 /// Image(
 ///   image: DioImage(
-///     imageUrl: Uri.parse('https://example.com/image.png'),
-///     fallbackAssetPath: 'assets/images/fallback.png',
+///     imageUrl: Uri.parse("https://example.com/image.png"),
+///     fallbackAssetPath: "assets/images/fallback.png",
 ///   ),
 /// )
 /// ```
@@ -29,7 +29,7 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
 
   /// The asset path of the fallback image to use if the network image fails to load.
   ///
-  /// This should be a valid asset path included in your Flutter project's `pubspec.yaml`.
+  /// This should be a valid asset path included in your Flutter project"s `pubspec.yaml`.
   final String fallbackAssetPath;
 
   /// Creates a new [DioImageProvider] with the given [imageUrl] and [fallbackAssetPath].
@@ -39,8 +39,8 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
   /// **Example:**
   /// ```dart
   /// DioImage(
-  ///   imageUrl: Uri.parse('https://example.com/image.png'),
-  ///   fallbackAssetPath: 'assets/images/fallback.png',
+  ///   imageUrl: Uri.parse("https://example.com/image.png"),
+  ///   fallbackAssetPath: "assets/images/fallback.png",
   /// )
   /// ```
   DioImageProvider({
@@ -129,7 +129,7 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
   /// ```
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'DioImageProvider')}(url: $imageUrl, fallback: $fallbackAssetPath)';
+      "${objectRuntimeType(this, "DioImageProvider")}(url: $imageUrl, fallback: $fallbackAssetPath)";
 
   // Private method to load the image asynchronously.
   //

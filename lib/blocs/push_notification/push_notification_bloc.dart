@@ -1,19 +1,19 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+import "dart:async";
+import "dart:convert";
+import "dart:io";
 
-import 'package:bloc/bloc.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:supa_architecture/repositories/utils_notification_repository.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+import "package:bloc/bloc.dart";
+import "package:device_info_plus/device_info_plus.dart";
+import "package:equatable/equatable.dart";
+import "package:firebase_messaging/firebase_messaging.dart";
+import "package:flutter/material.dart";
+import "package:get_it/get_it.dart";
+import "package:supa_architecture/repositories/utils_notification_repository.dart";
+import "package:supa_architecture/supa_architecture.dart";
 
-part 'push_notification_event.dart';
-part 'push_notification_payload.dart';
-part 'push_notification_state.dart';
+part "push_notification_event.dart";
+part "push_notification_payload.dart";
+part "push_notification_state.dart";
 
 /// Push notification BLoC for handling push notifications.
 class PushNotificationBloc
@@ -150,10 +150,10 @@ class PushNotificationBloc
     _notificationOpenSubscription =
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       add(DidUserOpenedNotificationEvent(
-        title: message.notification?.title ?? '',
-        body: message.notification?.body ?? '',
+        title: message.notification?.title ?? "",
+        body: message.notification?.body ?? "",
         payload: PushNotificationPayload.fromJson(message.data),
-        linkMobile: message.data['linkMobile'],
+        linkMobile: message.data["linkMobile"],
       ));
     });
   }
@@ -163,10 +163,10 @@ class PushNotificationBloc
   void _handleForegroundNotification(RemoteMessage message) async {
     add(
       DidReceivedNotificationEvent(
-        title: message.notification?.title ?? '',
-        body: message.notification?.body ?? '',
+        title: message.notification?.title ?? "",
+        body: message.notification?.body ?? "",
         payload: PushNotificationPayload.fromJson(message.data),
-        linkMobile: message.data['linkMobile'],
+        linkMobile: message.data["linkMobile"],
       ),
     );
   }
