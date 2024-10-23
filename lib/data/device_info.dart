@@ -19,6 +19,9 @@ class DeviceInfo {
   /// The system version of the device.
   final String systemVersion;
 
+  /// The UUID of the device.
+  final String deviceUuid;
+
   /// Constructs an instance of [DeviceInfo].
   ///
   /// **Parameters:**
@@ -31,6 +34,7 @@ class DeviceInfo {
     required this.deviceModel,
     required this.operatingSystem,
     required this.systemVersion,
+    required this.deviceUuid,
   });
 
   /// Asynchronously fetches the device information.
@@ -54,6 +58,7 @@ class DeviceInfo {
         deviceModel: androidInfo.model,
         operatingSystem: "Android",
         systemVersion: androidInfo.version.release,
+        deviceUuid: androidInfo.serialNumber,
       );
     } else if (deviceInfoPlatform is IosDeviceInfo) {
       // iOS-specific info
@@ -63,6 +68,7 @@ class DeviceInfo {
         deviceModel: iosInfo.model,
         operatingSystem: "iOS",
         systemVersion: iosInfo.systemVersion,
+        deviceUuid: iosInfo.identifierForVendor ?? iosInfo.utsname.machine,
       );
     } else {
       // Unknown platform
@@ -71,6 +77,7 @@ class DeviceInfo {
         deviceModel: "Unknown",
         operatingSystem: "Unknown",
         systemVersion: "Unknown",
+        deviceUuid: "Unknown",
       );
     }
   }

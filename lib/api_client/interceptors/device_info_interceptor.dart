@@ -22,6 +22,7 @@ class DeviceInfoInterceptor extends InterceptorsWrapper {
         _sanitizeDeviceName(deviceInfo.deviceName);
     options.headers["X-Operating-System"] = deviceInfo.operatingSystem;
     options.headers["X-System-Version"] = deviceInfo.systemVersion;
+    options.headers["X-Device-UUID"] = deviceInfo.deviceUuid;
 
     super.onRequest(options, handler);
   }
