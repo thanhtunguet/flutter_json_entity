@@ -8,6 +8,9 @@ Empowering Your Flutter Projects with Clean Architecture and Pre-Built Functiona
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
+  - [Compatibility](#compatibility)
+    - [Key:](#key)
+    - [Notes:](#notes)
   - [Usage](#usage)
     - [ApiClient](#apiclient)
     - [Blocs](#blocs)
@@ -51,6 +54,43 @@ Instructions for adding the library to a Flutter project, including how to updat
 dependencies:
   supa_application: ^1.0.0
 ```
+
+## Compatibility
+
+The `supa_architecture` package is designed to support multiple platforms. However, some features depend on underlying platform-specific implementations, which may limit functionality on certain platforms. Below is a summary of feature compatibility:
+
+| **Feature**                                                                                          | **Android**  | **iOS** | **Web**    | **Windows** | **macOS**         | **Linux** |
+|------------------------------------------------------------------------------------------------------|--------------|---------|------------|-------------|-------------------|-----------|
+| **Cookie Management** (`cookie_jar`, `dio_cookie_manager`)                                           | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Dio HTTP Client** (`dio`)                                                                          | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Secure Storage** (`flutter_secure_storage`)                                                        | ✅            | ✅       | ✅          | ❌           | ✅                 | ✅         |
+| **Local Database** (`hive`, `hive_flutter`)                                                          | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Path Management** (`path`, `path_provider`)                                                        | ✅            | ✅       | ❌          | ✅           | ✅                 | ✅         |
+| **State Management** (`bloc`, `flutter_bloc`, `rxdart`)                                              | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Routing** (`go_router`)                                                                            | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **OAuth** (`aad_oauth`, `google_sign_in`, `sign_in_with_apple`)                                      | ✅ (limited)* | ✅       | ✅ (Google) | ❌           | ✅ (Apple, Google) | ❌         |
+| **Environment Variables** (`flutter_dotenv`)                                                         | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Firebase** (`firebase_core`, `firebase_crashlytics`, `firebase_performance`, `firebase_messaging`) | ✅            | ✅       | ✅          | ❌           | ✅                 | ❌         |
+| **Sentry Integration** (`sentry_flutter`)                                                            | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Permissions** (`permission_handler`)                                                               | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Package Information** (`package_info_plus`)                                                        | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Reactive Forms** (`reactive_forms`)                                                                | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Biometric Authentication** (`local_auth`)                                                          | ✅            | ✅       | ❌          | ❌           | ✅                 | ❌         |
+| **Device Information** (`device_info_plus`)                                                          | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **Internationalization** (`intl`)                                                                    | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+| **ReCAPTCHA** (`recaptcha_enterprise_flutter`)                                                       | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
+
+### Key:
+- ✅ = Supported
+- ❌ = Not Supported
+- * = Limited Support
+
+### Notes:
+- **OAuth**: While `aad_oauth` and `sign_in_with_apple` provide strong support for mobile and macOS, web and desktop support are limited or unavailable.
+- **Secure Storage**: `flutter_secure_storage` lacks support for Windows, but alternatives like `shared_preferences` can be used on unsupported platforms.
+- **Biometric Authentication**: `local_auth` is supported on mobile and macOS, but not on web, Windows, or Linux.
+
+For cross-platform development, ensure to handle platform-specific limitations using conditional imports or platform checks. For unsupported features on specific platforms, consider alternative implementations.
 
 ## Usage
 ### ApiClient
