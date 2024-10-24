@@ -22,7 +22,7 @@ Future<void> main() async {
     ),
   );
 
-  GetIt.instance.get<AuthenticationBloc>().handleInitialize();
+  GetIt.instance.get<AuthenticationBloc>().add(AuthenticationInitialEvent());
 
   WidgetsFlutterBinding.ensureInitialized();
 

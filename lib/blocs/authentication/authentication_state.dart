@@ -1,117 +1,65 @@
 part of "authentication_bloc.dart";
 
-/// Enumeration of authentication statuses.
-enum AuthenticationStatus {
-  /// User is authenticated.
-  authenticated,
-
-  /// User is not authenticated.
-  unauthenticated,
-
-  /// Authentication status is unknown.
-  unknown,
-
-  /// Authentication process is in progress.
-  loading,
-
-  /// An error occurred during authentication.
-  error,
-}
-
-/// State representing an error during authentication.
-final class AuthenticationError extends AuthenticationState {
-  /// The error that occurred.
-  final dynamic error;
-
-  /// Constructs an instance of [AuthenticationError].
-  ///
-  /// **Parameters:**
-  /// - `error`: The error that occurred.
-  const AuthenticationError(this.error);
-
-  @override
-  List<Object> get props => [status, error];
-
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.error;
-}
-
-/// Initial state of the authentication process.
-final class AuthenticationInitial extends AuthenticationState {
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.unknown;
-}
-
-/// State representing that authentication is in progress.
-final class AuthenticationLoading extends AuthenticationState {
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.loading;
-}
-
-/// Abstract base class for all authentication states.
-sealed class AuthenticationState extends Equatable {
+sealed class AuthenticationState {
   const AuthenticationState();
 
-  /// Indicates if the user is authenticated.
-  bool get isAuthenticated => status == AuthenticationStatus.authenticated;
+  bool get isAuthenticated => this is UserAuthenticatedWithSelectedTenantState;
 
-  /// Indicates if the authentication process is in progress.
-  bool get isLoading => status == AuthenticationStatus.loading;
+  bool get isSelectingTenant =>
+      this is UserAuthenticatedWithMultipleTenantsState;
 
-  @override
-  List<Object> get props => [status];
+  bool get isLoading => this is AuthenticationProcessingState;
 
-  /// The current authentication status.
-  AuthenticationStatus get status;
+  bool get hasError => this is AuthenticationErrorState;
 }
 
-/// State representing a successful authentication.
-final class AuthenticationSuccess extends AuthenticationState {
-  /// The authenticated tenant.
-  final Tenant tenant;
+final class AuthenticationInitialState extends AuthenticationState {}
 
-  /// The authenticated user.
-  final AppUser appUser;
+final class UserAuthenticatedState extends AuthenticationState {
+  final AppUser user;
 
-  /// Constructs an instance of [AuthenticationSuccess].
-  ///
-  /// **Parameters:**
-  /// - `tenant`: The authenticated tenant.
-  /// - `appUser`: The authenticated user.
-  const AuthenticationSuccess(this.tenant, this.appUser);
-
-  @override
-  List<Object> get props => [status, tenant, tenant.id.value, appUser];
-
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.authenticated;
-
-  /// Creates a copy of this state with a different tenant.
-  ///
-  /// **Parameters:**
-  /// - `tenant`: The new tenant.
-  ///
-  /// **Returns:**
-  /// - A new instance of [AuthenticationSuccess] with the new tenant.
-  AuthenticationSuccess changeTenant(Tenant tenant) {
-    return AuthenticationSuccess(tenant, appUser);
-  }
+  const UserAuthenticatedState(this.user);
 }
 
-/// State representing that multiple tenants are available for selection.
-final class AuthenticationTenants extends AuthenticationState {
-  /// The list of available tenants.
+final class UserAuthenticatedWithMultipleTenantsState
+    extends AuthenticationState {
   final List<Tenant> tenants;
 
-  /// Constructs an instance of [AuthenticationTenants].
-  ///
-  /// **Parameters:**
-  /// - `tenants`: The list of available tenants.
-  const AuthenticationTenants(this.tenants);
+  const UserAuthenticatedWithMultipleTenantsState({
+    required this.tenants,
+  });
+}
 
-  @override
-  List<Object> get props => [status, tenants, ...tenants];
+final class UserAuthenticatedWithSelectedTenantState
+    extends AuthenticationState {
+  final AppUser user;
 
-  @override
-  AuthenticationStatus get status => AuthenticationStatus.unknown;
+  final Tenant tenant;
+
+  const UserAuthenticatedWithSelectedTenantState({
+    required this.user,
+    required this.tenant,
+  });
+}
+
+final class AuthenticationLogoutState extends AuthenticationState {}
+
+final class AuthenticationProcessingState extends AuthenticationState {
+  final AuthenticationAction action;
+
+  const AuthenticationProcessingState(this.action);
+}
+
+final class AuthenticationErrorState extends AuthenticationState {
+  final String title;
+
+  final String message;
+
+  final Object? error;
+
+  const AuthenticationErrorState({
+    required this.title,
+    required this.message,
+    this.error,
+  });
 }

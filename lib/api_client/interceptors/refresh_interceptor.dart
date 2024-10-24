@@ -36,7 +36,7 @@ class RefreshInterceptor extends InterceptorsWrapper {
         final response = await dio.fetch(err.requestOptions);
         return handler.resolve(response);
       } catch (refreshError) {
-        GetIt.instance.get<AuthenticationBloc>().handleLogout();
+        GetIt.instance.get<AuthenticationBloc>().add(UserLogoutEvent());
         await cookieStorageService.deleteCookies();
         return handler.next(err);
       }

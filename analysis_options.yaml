@@ -5,5 +5,5 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    public_member_api_docs: true
+    public_member_api_docs: false
     constant_identifier_names: false

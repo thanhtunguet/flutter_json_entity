@@ -20,7 +20,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   @override
   T get value {
     if (rawValue == null) {
-      return getIt.get<T>();
+      return GetIt.instance.get<T>();
     }
     return rawValue!;
   }
@@ -36,7 +36,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
       return;
     }
     if (value is Map<String, dynamic>) {
-      final model = getIt.get<T>();
+      final model = GetIt.instance.get<T>();
       model.fromJSON(value);
       rawValue = model;
     }

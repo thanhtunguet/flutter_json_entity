@@ -5,7 +5,7 @@ import "package:aad_oauth/model/config.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/widgets.dart" hide Image;
 import "package:flutter_dotenv/flutter_dotenv.dart";
-import "package:supa_architecture/config/get_it.dart";
+import "package:get_it/get_it.dart";
 import "package:supa_architecture/data/data.dart";
 import "package:supa_architecture/services/cookie_storage_service.dart";
 import "package:supa_architecture/services/persistent_storage_service.dart";
@@ -139,12 +139,12 @@ class SupaApplication {
 
   /// Registers JSON models used in the application.
   static void registerModels() {
-    getIt.registerFactory<AppUser>(() => AppUser());
-    getIt.registerFactory<EnumModel>(() => EnumModel());
-    getIt.registerFactory<File>(() => File());
-    getIt.registerFactory<Image>(() => Image());
-    getIt.registerFactory<Tenant>(() => Tenant());
-    getIt.registerFactory<UserNotification>(() => UserNotification());
+    GetIt.instance.registerFactory<AppUser>(() => AppUser());
+    GetIt.instance.registerFactory<EnumModel>(() => EnumModel());
+    GetIt.instance.registerFactory<File>(() => File());
+    GetIt.instance.registerFactory<Image>(() => Image());
+    GetIt.instance.registerFactory<Tenant>(() => Tenant());
+    GetIt.instance.registerFactory<UserNotification>(() => UserNotification());
   }
 
   /// Singleton instance of [AadOAuth] for Azure AD authentication.

@@ -34,7 +34,7 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
     }
     if (value is List) {
       rawValue = value.map((element) {
-        final model = getIt.get<T>();
+        final model = GetIt.instance.get<T>();
         model.fromJSON(element);
         return model;
       }).toList();

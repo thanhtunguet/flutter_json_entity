@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.2+preview.15
+
+### Added
+
+- `AuthenticationBloc`: add Google login scope
+
 ## 0.0.2+preview.14
 
 ### Added

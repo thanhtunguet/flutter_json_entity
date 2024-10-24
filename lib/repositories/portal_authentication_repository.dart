@@ -183,12 +183,12 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Returns:**
   /// - A [Future] that resolves to a boolean indicating whether the logout was successful.
-  Future<bool> logout() async {
+  Future<dynamic> logout() async {
     await _removeAuthentication();
     return dio.post(
       "/logout",
       data: {},
-    ).then((response) => response.bodyAsBoolean());
+    ).then((response) => response.data);
   }
 
   /// Refreshes the authentication token.
