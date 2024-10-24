@@ -1,4 +1,5 @@
 import "package:bloc/bloc.dart";
+import "package:flutter/foundation.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:recaptcha_enterprise_flutter/recaptcha.dart";
 import "package:recaptcha_enterprise_flutter/recaptcha_action.dart";
@@ -16,7 +17,6 @@ class AuthenticationBloc
       PortalAuthenticationRepository();
 
   AuthenticationBloc() : super(AuthenticationInitialState()) {
-    on<AuthenticationInitialEvent>(_onAuthenticationInitialEvent);
     on<AuthenticationProcessingEvent>(_onAuthenticationProcessingEvent);
     on<LoginWithGoogleEvent>(_onLoginWithGoogleEvent);
     on<LoginWithAppleEvent>(_onLoginWithAppleEvent);
@@ -27,6 +27,18 @@ class AuthenticationBloc
     on<LoginWithSelectedTenantEvent>(_onLoginWithSelectedTenantEvent);
     on<LoginWithMultipleTenantsEvent>(_onLoginWithMultipleTenantsEvent);
     on<AuthenticationErrorEvent>(_onAuthenticationErrorEvent);
+    on<InitializeWithSavedAuthenticationEvent>(
+        _onInitializeWithSavedAuthenticationEvent);
+  }
+
+  Future<void> _onInitializeWithSavedAuthenticationEvent(
+    InitializeWithSavedAuthenticationEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(UserAuthenticatedWithSelectedTenantState(
+      tenant: event.tenant,
+      user: event.user,
+    ));
   }
 
   Future<void> _onAuthenticationErrorEvent(
@@ -40,14 +52,13 @@ class AuthenticationBloc
     ));
   }
 
-  Future<void> _onAuthenticationInitialEvent(
-    AuthenticationInitialEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
+  Future<void> handleInitialize() async {
+    add(const AuthenticationProcessingEvent(AuthenticationAction.initialize));
     final authentication = authRepo.loadAuthentication();
     if (authentication != null) {
-      add(LoginWithSelectedTenantEvent(
+      add(InitializeWithSavedAuthenticationEvent(
         tenant: authentication.tenant,
+        user: authentication.appUser,
       ));
     }
   }
@@ -234,6 +245,9 @@ class AuthenticationBloc
       user: user,
       tenant: event.tenant,
     ));
+    await authRepo.saveAuthentication(user, event.tenant).catchError((error) {
+      debugPrint('Saving authentication failed');
+    });
   }
 
   Future<void> _onLoginWithMultipleTenantsEvent(

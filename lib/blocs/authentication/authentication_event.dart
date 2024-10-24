@@ -5,8 +5,6 @@ sealed class AuthenticationEvent {
   const AuthenticationEvent();
 }
 
-final class AuthenticationInitialEvent extends AuthenticationEvent {}
-
 final class AuthenticationProcessingEvent extends AuthenticationEvent {
   final AuthenticationAction action;
 
@@ -30,6 +28,17 @@ final class LoginWithPasswordEvent extends AuthenticationEvent {
 }
 
 final class LoginWithSavedLoginEvent extends AuthenticationEvent {}
+
+final class InitializeWithSavedAuthenticationEvent extends AuthenticationEvent {
+  final Tenant tenant;
+
+  final AppUser user;
+
+  const InitializeWithSavedAuthenticationEvent({
+    required this.tenant,
+    required this.user,
+  });
+}
 
 final class LoginWithSelectedTenantEvent extends AuthenticationEvent {
   final Tenant tenant;

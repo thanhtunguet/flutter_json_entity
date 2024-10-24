@@ -22,8 +22,6 @@ Future<void> main() async {
     ),
   );
 
-  GetIt.instance.get<AuthenticationBloc>().add(AuthenticationInitialEvent());
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await SentryFlutter.init(
