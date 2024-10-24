@@ -200,9 +200,7 @@ class AuthenticationBloc
       emit(AuthenticationLoading());
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: <String>[
-          "email",
-        ],
+        scopes: <String>["openid", "profile", "email"],
         signInOption: SignInOption.standard,
       );
 
