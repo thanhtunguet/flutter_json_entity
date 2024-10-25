@@ -17,6 +17,7 @@ class AuthenticationBloc
       PortalAuthenticationRepository();
 
   AuthenticationBloc() : super(AuthenticationInitialState()) {
+    on<AuthenticationInitializeEvent>(_onAuthenticationInitializeEvent);
     on<AuthenticationProcessingEvent>(_onAuthenticationProcessingEvent);
     on<LoginWithGoogleEvent>(_onLoginWithGoogleEvent);
     on<LoginWithAppleEvent>(_onLoginWithAppleEvent);
@@ -29,6 +30,13 @@ class AuthenticationBloc
     on<AuthenticationErrorEvent>(_onAuthenticationErrorEvent);
     on<InitializeWithSavedAuthenticationEvent>(
         _onInitializeWithSavedAuthenticationEvent);
+  }
+
+  Future<void> _onAuthenticationInitializeEvent(
+    AuthenticationInitializeEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(AuthenticationInitialState());
   }
 
   Future<void> _onInitializeWithSavedAuthenticationEvent(
@@ -60,7 +68,9 @@ class AuthenticationBloc
         tenant: authentication.tenant,
         user: authentication.appUser,
       ));
+      return;
     }
+    add(AuthenticationInitializeEvent());
   }
 
   void _onAuthenticationProcessingEvent(

@@ -14,9 +14,7 @@ class ChangePasswordForm extends FormGroup {
       : super({
           "oldPassword": FormControl<String>(
             value: "",
-            validators: [
-              Validators.required,
-            ],
+            validators: [],
           ),
           "newPassword": FormControl<String>(
             value: "",
@@ -35,7 +33,6 @@ class ChangePasswordForm extends FormGroup {
           "otpCode": FormControl<String>(
             value: "",
             validators: [
-              Validators.required,
               Validators.pattern(otpRegex),
             ],
           ),

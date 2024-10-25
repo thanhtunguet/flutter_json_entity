@@ -5,6 +5,8 @@ sealed class AuthenticationEvent {
   const AuthenticationEvent();
 }
 
+final class AuthenticationInitializeEvent extends AuthenticationEvent {}
+
 final class AuthenticationProcessingEvent extends AuthenticationEvent {
   final AuthenticationAction action;
 
