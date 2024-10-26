@@ -69,3 +69,9 @@ final class AuthenticationErrorEvent extends AuthenticationEvent {
     this.error,
   });
 }
+
+final class UpdateAppUserProfileEvent extends AuthenticationEvent {
+  final AppUser user;
+
+  const UpdateAppUserProfileEvent(this.user);
+}

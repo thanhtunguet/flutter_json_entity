@@ -30,6 +30,22 @@ class AuthenticationBloc
     on<AuthenticationErrorEvent>(_onAuthenticationErrorEvent);
     on<InitializeWithSavedAuthenticationEvent>(
         _onInitializeWithSavedAuthenticationEvent);
+    on<UpdateAppUserProfileEvent>(_onUpdateAppUserProfileEvent);
+  }
+
+  Future<void> _onUpdateAppUserProfileEvent(
+    UpdateAppUserProfileEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    if (state is UserAuthenticatedWithSelectedTenantState) {
+      final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
+      final user = event.user;
+      emit(UserAuthenticatedWithSelectedTenantState(
+        user: user,
+        tenant: tenant,
+      ));
+      await authRepo.saveAuthentication(user, tenant);
+    }
   }
 
   Future<void> _onAuthenticationInitializeEvent(
