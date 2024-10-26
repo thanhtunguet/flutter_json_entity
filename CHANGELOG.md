@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.2:
+
+### Added
+
+- `AuthenticationBloc`: add Microsoft login scope
+- Optimize authentication flow
+
 ## 0.0.2+preview.15
 
 ### Added
