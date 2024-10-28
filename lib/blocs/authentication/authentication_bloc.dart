@@ -5,6 +5,7 @@ import "package:recaptcha_enterprise_flutter/recaptcha.dart";
 import "package:recaptcha_enterprise_flutter/recaptcha_action.dart";
 import "package:sign_in_with_apple/sign_in_with_apple.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
+import "package:supa_architecture/repositories/portal_profile_repository.dart";
 import "package:supa_architecture/supa_architecture.dart";
 
 part "authentication_action.dart";
@@ -15,6 +16,8 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   PortalAuthenticationRepository get authRepo =>
       PortalAuthenticationRepository();
+
+  PortalProfileRepository get profileRepo => PortalProfileRepository();
 
   AuthenticationBloc() : super(AuthenticationInitialState()) {
     on<AuthenticationInitializeEvent>(_onAuthenticationInitializeEvent);
@@ -31,6 +34,8 @@ class AuthenticationBloc
     on<InitializeWithSavedAuthenticationEvent>(
         _onInitializeWithSavedAuthenticationEvent);
     on<UpdateAppUserProfileEvent>(_onUpdateAppUserProfileEvent);
+    on<AppUserSwitchEmailEvent>(_onAppUserSwitchEmailEvent);
+    on<AppUserSwitchNotificationEvent>(_onAppUserSwitchNotificationEvent);
   }
 
   Future<void> _onUpdateAppUserProfileEvent(
@@ -283,5 +288,37 @@ class AuthenticationBloc
     emit(UserAuthenticatedWithMultipleTenantsState(
       tenants: event.tenants,
     ));
+  }
+
+  Future<void> _onAppUserSwitchEmailEvent(
+    AppUserSwitchEmailEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    if (state is UserAuthenticatedWithSelectedTenantState) {
+      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+      final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
+      await profileRepo.switchEmail(user).then((updatedUser) {
+        emit(UserAuthenticatedWithSelectedTenantState(
+          user: updatedUser,
+          tenant: tenant,
+        ));
+      }).catchError((error) {});
+    }
+  }
+
+  Future<void> _onAppUserSwitchNotificationEvent(
+    AppUserSwitchNotificationEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    if (state is UserAuthenticatedWithSelectedTenantState) {
+      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+      final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
+      await profileRepo.switchNotification(user).then((updatedUser) {
+        emit(UserAuthenticatedWithSelectedTenantState(
+          user: updatedUser,
+          tenant: tenant,
+        ));
+      }).catchError((error) {});
+    }
   }
 }

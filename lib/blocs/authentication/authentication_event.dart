@@ -75,3 +75,11 @@ final class UpdateAppUserProfileEvent extends AuthenticationEvent {
 
   const UpdateAppUserProfileEvent(this.user);
 }
+
+final class AppUserSwitchEmailEvent extends AuthenticationEvent {
+  const AppUserSwitchEmailEvent();
+}
+
+final class AppUserSwitchNotificationEvent extends AuthenticationEvent {
+  const AppUserSwitchNotificationEvent();
+}
