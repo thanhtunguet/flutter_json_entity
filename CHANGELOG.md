@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3+preview.1
+
+### Added
+
+- `AuthenticationBloc`: add switch email and notification
+
 ## 0.0.2:
 
 ### Added

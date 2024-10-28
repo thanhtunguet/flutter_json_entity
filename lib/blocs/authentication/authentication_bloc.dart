@@ -295,8 +295,9 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     if (state is UserAuthenticatedWithSelectedTenantState) {
-      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
       final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
+      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+
       await profileRepo.switchEmail(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(
           user: updatedUser,
@@ -311,8 +312,9 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     if (state is UserAuthenticatedWithSelectedTenantState) {
-      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
       final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
+      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+
       await profileRepo.switchNotification(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(
           user: updatedUser,

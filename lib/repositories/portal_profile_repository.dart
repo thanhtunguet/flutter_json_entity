@@ -21,6 +21,7 @@ class PortalProfileRepository extends ApiClient {
   /// **Returns:**
   /// - A [Future] that resolves to the updated [AppUser].
   Future<AppUser> switchEmail(AppUser user) async {
+    user.receivingSystemEmail.value = !user.receivingSystemEmail.value;
     return dio
         .post(
           "/switch-email",
@@ -39,6 +40,8 @@ class PortalProfileRepository extends ApiClient {
   /// **Returns:**
   /// - A [Future] that resolves to the updated [AppUser].
   Future<AppUser> switchNotification(AppUser user) async {
+    user.receivingSystemNotification.value =
+        !user.receivingSystemNotification.value;
     return dio
         .post(
           "/switch-notification",
