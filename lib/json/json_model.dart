@@ -54,7 +54,6 @@ abstract class JsonModel with JsonSerializable {
   /// - `json`: The JSON data to deserialize.
   @override
   void fromJSON(dynamic json) {
-    assert(json is Map<dynamic, dynamic>);
     if (json is Map<dynamic, dynamic>) {
       if (json.containsKey("generalErrors") && json["generalErrors"] is List) {
         generalErrors = (json["generalErrors"] as List<dynamic>)

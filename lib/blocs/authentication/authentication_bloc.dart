@@ -271,7 +271,7 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     await authRepo.createToken(event.tenant);
-    final user = await authRepo.getProfile();
+    final user = await authRepo.getProfileInfo();
     emit(UserAuthenticatedWithSelectedTenantState(
       user: user,
       tenant: event.tenant,

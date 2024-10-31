@@ -43,10 +43,25 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Returns:**
   /// - A [Future] that resolves to the authenticated [AppUser].
+  @Deprecated("Due to change of backend authentication")
   Future<AppUser> getProfile() async {
     final url = Uri.parse(baseUrl)
         .replace(
           path: "/rpc/portal/app-user-profile/get",
+        )
+        .toString();
+    return dio.post(url, data: {}).then(
+      (response) {
+        response.data["id"] = response.data["userId"];
+        return response.body<AppUser>();
+      },
+    );
+  }
+
+  Future<AppUser> getProfileInfo() async {
+    final url = Uri.parse(baseUrl)
+        .replace(
+          path: "/rpc/portal/profile/get-info",
         )
         .toString();
     return dio.post(url, data: {}).then(

@@ -28,6 +28,10 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
   /// - `value`: The new value of the field.
   @override
   set value(dynamic value) {
+    if (value == null) {
+      rawValue = [];
+      return;
+    }
     if (value is List<T>) {
       rawValue = value;
       return;

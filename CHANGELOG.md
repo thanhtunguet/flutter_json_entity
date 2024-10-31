@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.3+preview.2
+
+### Added
+
+- `AuthenticationRepository`: add `getProfileInfo` method
+
+### Deprecated
+
+- `AuthenticationRepository`: `getProfile` method
+
 ## 0.0.3+preview.1
 
 ### Added

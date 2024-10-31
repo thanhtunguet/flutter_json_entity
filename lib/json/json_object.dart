@@ -31,6 +31,10 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   /// - `value`: The new value of the field.
   @override
   set value(dynamic value) {
+    if (value == null) {
+      rawValue = null;
+      return;
+    }
     if (value is T) {
       rawValue = value;
       return;
