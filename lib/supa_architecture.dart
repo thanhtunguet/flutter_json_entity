@@ -108,7 +108,7 @@ class SupaApplication {
 
         _isInitialized = true;
       } catch (error) {
-        if (kDebugMode) {
+        if (kDebugMode || kIsWeb) {
           print(error);
         }
       }
