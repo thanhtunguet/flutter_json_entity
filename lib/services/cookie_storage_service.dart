@@ -1,5 +1,6 @@
 import "package:cookie_jar/cookie_jar.dart";
 import "package:dio_cookie_manager/dio_cookie_manager.dart";
+import "package:flutter/foundation.dart";
 import "package:path_provider/path_provider.dart";
 import "package:supa_architecture/supa_architecture.dart";
 
@@ -15,6 +16,13 @@ abstract interface class CookieStorageService {
   /// **Returns:**
   /// - A [Future] that resolves to an instance of [CookieStorageService].
   static Future<CookieStorageService> initialize() async {
+    if (kIsWeb) {
+      final cookieJar = WebCookieJar();
+      return _CookieStorageServiceImpl._(
+        persistCookieJar: cookieJar,
+      );
+    }
+
     final documentsDir = await getApplicationCacheDirectory();
 
     PersistCookieJar persistCookieJar = PersistCookieJar(
@@ -82,7 +90,7 @@ abstract interface class CookieStorageService {
 /// Uses a [PersistCookieJar] for persistent cookie storage and provides
 /// methods for managing cookies.
 class _CookieStorageServiceImpl implements CookieStorageService {
-  final PersistCookieJar persistCookieJar;
+  final CookieJar persistCookieJar;
 
   static const _authenticationPath = "/rpc/portal/authentication";
   static const _rpcPath = "/rpc/";

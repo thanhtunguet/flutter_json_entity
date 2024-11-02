@@ -40,7 +40,9 @@ abstract class ApiClient {
   /// refreshing tokens.
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
-    dio.interceptors.add(cookieStorageService.getCookieManager());
+    if (!kIsWeb) {
+      dio.interceptors.add(cookieStorageService.getCookieManager());
+    }
     dio.interceptors.add(DeviceInfoInterceptor());
     dio.interceptors.add(TimezoneInterceptor());
     dio.interceptors.add(RefreshInterceptor());
