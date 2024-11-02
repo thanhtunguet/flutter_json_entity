@@ -130,7 +130,7 @@ class AuthenticationBloc
           AuthenticationAction.loginWithGoogle));
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: <String>["email", "profile", "openid"],
+        scopes: <String>["email"],
         signInOption: SignInOption.standard,
       );
 
