@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3+preview.5
+
+### Fixed
+
+- `ApiClient`: fixed `uploadFilesFromImagePicker` and `uploadFilesFromFilePicker` methods for web
+
 ## 0.0.3+preview.4
 
 ### Added

@@ -189,42 +189,17 @@ abstract class ApiClient {
     List<XFile> files, {
     String uploadUrl = '/multi-upload-file',
   }) async {
-    FormData formData = FormData();
-    for (var file in files) {
-      if (kIsWeb) {
-        final bytes = await file.readAsBytes();
-        formData.files.add(MapEntry('files', MultipartFile.fromBytes(bytes)));
-      } else {
-        formData.files
-            .add(MapEntry('files', await MultipartFile.fromFile(file.path)));
+    if (kIsWeb) {
+      final List<File> uploadedFiles = [];
+      for (var f in files) {
+        uploadedFiles.add(await uploadFileFromImagePicker(f));
       }
+      return uploadedFiles;
     }
-    return dio
-        .post(uploadUrl, data: formData)
-        .then((response) => response.bodyAsList<File>());
-  }
-
-  /// Uploads multiple files from a list of [PlatformFile] objects to the specified upload URL.
-  ///
-  /// **Parameters:**
-  /// - `files`: A list of [PlatformFile] objects representing the files to be uploaded.
-  /// - `uploadUrl`: The URL to which the files will be uploaded. Defaults to `/multi-upload-file`.
-  ///
-  /// **Returns:**
-  /// - A [Future] that resolves to a list of [File] objects representing the uploaded files.
-  Future<List<File>> uploadFilesFromFilePicker(
-    List<PlatformFile> files, {
-    String uploadUrl = '/multi-upload-file',
-  }) async {
     FormData formData = FormData();
     for (var file in files) {
-      if (kIsWeb) {
-        formData.files
-            .add(MapEntry('files', MultipartFile.fromBytes(file.bytes!)));
-      } else {
-        formData.files
-            .add(MapEntry('files', await MultipartFile.fromFile(file.path!)));
-      }
+      formData.files
+          .add(MapEntry('files', await MultipartFile.fromFile(file.path)));
     }
     return dio
         .post(uploadUrl, data: formData)
@@ -258,5 +233,34 @@ abstract class ApiClient {
     return dio
         .post(uploadUrl, data: formData)
         .then((response) => response.body<File>());
+  }
+
+  /// Uploads multiple files from a list of [PlatformFile] objects to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `files`: A list of [PlatformFile] objects representing the files to be uploaded.
+  /// - `uploadUrl`: The URL to which the files will be uploaded. Defaults to `/multi-upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [File] objects representing the uploaded files.
+  Future<List<File>> uploadFilesFromFilePicker(
+    List<PlatformFile> files, {
+    String uploadUrl = '/multi-upload-file',
+  }) async {
+    if (kIsWeb) {
+      final List<File> uploadedFiles = [];
+      for (var f in files) {
+        uploadedFiles.add(await uploadFileFromFilePicker(f));
+      }
+      return uploadedFiles;
+    }
+    FormData formData = FormData();
+    for (var file in files) {
+      formData.files
+          .add(MapEntry('files', await MultipartFile.fromFile(file.path!)));
+    }
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.bodyAsList<File>());
   }
 }
