@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3+preview.7
+
+### Added
+
+- `ApiClient`: add `filename` parameter to `uploadFiles` method
+
 ## 0.0.3+preview.6
 
 ### Added

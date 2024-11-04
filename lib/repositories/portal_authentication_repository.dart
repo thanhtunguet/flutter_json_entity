@@ -246,7 +246,8 @@ class PortalAuthenticationRepository extends ApiClient {
     persistentStorageService.tenant = tenant;
     persistentStorageService.appUser = appUser;
     final cookies = await cookieStorageService.getAuthenticationCookies();
-    final appToken = AppToken.fromCookies(cookies);
+    final appToken =
+        kIsWeb ? AppToken.fromWebCookies() : AppToken.fromCookies(cookies);
     final SecureAuthenticationInfo authInfo = SecureAuthenticationInfo(
       refreshToken: appToken.refreshToken ?? "",
       accessToken: appToken.accessToken ?? "",

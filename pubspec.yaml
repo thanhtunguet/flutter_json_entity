@@ -1,7 +1,7 @@
 name: supa_architecture
 description: >
   A comprehensive set of tools and utilities designed to streamline the development of Flutter applications.
-version: 0.0.3+preview.6
+version: 0.0.3+preview.7
 homepage: https://github.com/thanhtunguet/supa_architecture
 
 environment:

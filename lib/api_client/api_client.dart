@@ -6,7 +6,6 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
 import "package:image_picker/image_picker.dart";
-import "package:path/path.dart" as path;
 import "package:path/path.dart";
 import "package:supa_architecture/api_client/interceptors/device_info_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart";
@@ -107,15 +106,23 @@ abstract class ApiClient {
   Future<File> uploadFile({
     required String filePath,
     String uploadUrl = "/upload-file",
+    String? filename,
   }) async {
-    String filename = path.basename(filePath);
     FormData formData = FormData.fromMap(
       {
-        "file": await MultipartFile.fromFile(filePath, filename: filename),
+        "file": await MultipartFile.fromFile(
+          filePath,
+          filename: filename ?? basename(filePath),
+        ),
       },
     );
 
-    return dio.post(uploadUrl, data: formData).then(
+    return dio
+        .post(
+          uploadUrl,
+          data: formData,
+        )
+        .then(
           (response) => response.body<File>(),
         );
   }
@@ -139,7 +146,7 @@ abstract class ApiClient {
           'files',
           await MultipartFile.fromFile(
             filePath,
-            filename: path.basename(filePath),
+            filename: basename(filePath),
           ),
         ),
       );
@@ -167,17 +174,24 @@ abstract class ApiClient {
     FormData formData = FormData();
     if (kIsWeb) {
       final bytes = await file.readAsBytes();
-      formData.files.add(MapEntry('file', MultipartFile.fromBytes(bytes)));
+      formData.files.add(MapEntry(
+        'file',
+        MultipartFile.fromBytes(
+          bytes,
+          filename: file.name,
+        ),
+      ));
     } else {
       formData.files.add(MapEntry(
         'file',
         await MultipartFile.fromFile(
           file.path,
-          filename: file.name,
         ),
       ));
     }
-    return dio.post(uploadUrl, data: formData).then((response) => response.body<File>());
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.body<File>());
   }
 
   /// Uploads multiple files from a list of [XFile] objects to the specified upload URL.
@@ -205,11 +219,12 @@ abstract class ApiClient {
         'files',
         await MultipartFile.fromFile(
           file.path,
-          filename: file.name,
         ),
       ));
     }
-    return dio.post(uploadUrl, data: formData).then((response) => response.bodyAsList<File>());
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.bodyAsList<File>());
   }
 
   /// Uploads a file from a [PlatformFile] object to the specified upload URL.
@@ -244,7 +259,9 @@ abstract class ApiClient {
         ),
       );
     }
-    return dio.post(uploadUrl, data: formData).then((response) => response.body<File>());
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.body<File>());
   }
 
   /// Uploads multiple files from a list of [PlatformFile] objects to the specified upload URL.
@@ -269,12 +286,15 @@ abstract class ApiClient {
     FormData formData = FormData();
     for (var file in files) {
       formData.files.add(MapEntry(
-          'files',
-          await MultipartFile.fromFile(
-            file.path!,
-            filename: file.name,
-          )));
+        'files',
+        await MultipartFile.fromFile(
+          file.path!,
+          filename: file.name,
+        ),
+      ));
     }
-    return dio.post(uploadUrl, data: formData).then((response) => response.bodyAsList<File>());
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.bodyAsList<File>());
   }
 }
