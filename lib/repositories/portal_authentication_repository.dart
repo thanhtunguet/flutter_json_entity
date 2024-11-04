@@ -215,7 +215,9 @@ class PortalAuthenticationRepository extends ApiClient {
   /// - A [Future] that completes when the token is refreshed.
   Future<void> refreshToken({String? refreshToken}) async {
     final dio = Dio();
-    dio.interceptors.add(cookieStorageService.getCookieManager());
+    if (!kIsWeb) {
+      dio.interceptors.add(cookieStorageService.getCookieManager());
+    }
     dio.options.baseUrl = persistentStorageService.baseApiUrl;
 
     final refreshTokenUrl = Uri.parse(persistentStorageService.baseApiUrl)

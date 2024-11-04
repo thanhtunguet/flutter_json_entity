@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/supa_architecture.dart";
@@ -32,7 +33,9 @@ class RefreshInterceptor extends InterceptorsWrapper {
       try {
         await _refreshCompleter?.future;
         final dio = Dio();
-        dio.interceptors.add(cookieStorageService.getCookieManager());
+        if (!kIsWeb) {
+          dio.interceptors.add(cookieStorageService.getCookieManager());
+        }
         final response = await dio.fetch(err.requestOptions);
         return handler.resolve(response);
       } catch (refreshError) {

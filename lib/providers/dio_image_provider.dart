@@ -47,7 +47,9 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
     required this.imageUrl,
     required this.fallbackAssetPath,
   }) {
-    dio.interceptors.add(cookieStorageService.getCookieManager());
+    if (!kIsWeb) {
+      dio.interceptors.add(cookieStorageService.getCookieManager());
+    }
   }
 
   /// Obtains the key for this image provider, which is used for caching purposes.
