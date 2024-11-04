@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.3+preview.6
+
+### Added
+
+- `ApiClient`: add `uploadFilesFromImagePicker` and `uploadFilesFromFilePicker` methods
+- Check is web for where using cookie manager
+
 ## 0.0.3+preview.5
 
 ### Fixed
