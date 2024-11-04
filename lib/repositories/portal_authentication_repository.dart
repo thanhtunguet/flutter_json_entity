@@ -243,17 +243,18 @@ class PortalAuthenticationRepository extends ApiClient {
   /// - `appUser`: The authenticated user.
   /// - `tenant`: The authenticated tenant.
   Future<void> saveAuthentication(AppUser appUser, Tenant tenant) async {
-    persistentStorageService.tenant = tenant;
-    persistentStorageService.appUser = appUser;
-    final cookies = await cookieStorageService.getAuthenticationCookies();
-    final appToken =
-        kIsWeb ? AppToken.fromWebCookies() : AppToken.fromCookies(cookies);
-    final SecureAuthenticationInfo authInfo = SecureAuthenticationInfo(
-      refreshToken: appToken.refreshToken ?? "",
-      accessToken: appToken.accessToken ?? "",
-      tenantId: tenant.id.value,
-    );
-    secureStorageService.saveAuthenticationInfo(authInfo);
+    if (!kIsWeb) {
+      persistentStorageService.tenant = tenant;
+      persistentStorageService.appUser = appUser;
+      final cookies = await cookieStorageService.getAuthenticationCookies();
+      final appToken = AppToken.fromCookies(cookies);
+      final SecureAuthenticationInfo authInfo = SecureAuthenticationInfo(
+        refreshToken: appToken.refreshToken ?? "",
+        accessToken: appToken.accessToken ?? "",
+        tenantId: tenant.id.value,
+      );
+      secureStorageService.saveAuthenticationInfo(authInfo);
+    }
   }
 
   /// Removes the authentication information.
