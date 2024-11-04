@@ -1,7 +1,7 @@
 name: supa_architecture
 description: >
   A comprehensive set of tools and utilities designed to streamline the development of Flutter applications.
-version: 0.0.3+preview.2
+version: 0.0.3+preview.3
 homepage: https://github.com/thanhtunguet/supa_architecture
 
 environment:
@@ -47,6 +47,8 @@ dependencies:
   sentry_flutter: ^8.9.0
   permission_handler: ^11.3.0
   package_info_plus: ^8.0.0
+  image_picker: ^1.1.0
+  file_picker: ^8.1.0
 
 dev_dependencies:
   flutter_test:

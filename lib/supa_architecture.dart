@@ -109,7 +109,7 @@ class SupaApplication {
         _isInitialized = true;
       } catch (error) {
         if (kDebugMode || kIsWeb) {
-          print(error);
+          debugPrint(error.toString());
         }
       }
     }

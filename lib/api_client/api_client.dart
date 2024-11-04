@@ -2,8 +2,10 @@ import "dart:async";
 import "dart:io" as io;
 
 import "package:dio/dio.dart";
+import "package:file_picker/file_picker.dart";
 import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
+import "package:image_picker/image_picker.dart";
 import "package:path/path.dart" as path;
 import "package:path/path.dart";
 import "package:supa_architecture/api_client/interceptors/device_info_interceptor.dart";
@@ -116,5 +118,91 @@ abstract class ApiClient {
     return dio.post(uploadUrl, data: formData).then(
           (response) => response.body<File>(),
         );
+  }
+
+  /// Uploads multiple files to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `filePaths`: A list of file paths to be uploaded.
+  /// - `uploadUrl`: The URL to which the files will be uploaded. Defaults to `/multi-upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [File] objects representing the uploaded files.
+  Future<List<File>> uploadFiles({
+    required List<String> filePaths,
+    String uploadUrl = '/multi-upload-file',
+  }) async {
+    FormData formData = FormData();
+    for (var filePath in filePaths) {
+      formData.files.add(
+        MapEntry(
+          'files',
+          await MultipartFile.fromFile(
+            filePath,
+            filename: path.basename(filePath),
+          ),
+        ),
+      );
+    }
+    return dio
+        .post(
+          uploadUrl,
+          data: formData,
+        )
+        .then((response) => response.bodyAsList<File>());
+  }
+
+  /// Uploads a file from an [XFile] object to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `file`: The [XFile] object representing the file to be uploaded.
+  /// - `uploadUrl`: The URL to which the file will be uploaded. Defaults to `/upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a [File] object representing the uploaded file.
+  Future<File> uploadFileFromImagePicker(
+    XFile file, {
+    String uploadUrl = '/upload-file',
+  }) async {
+    FormData formData = FormData();
+    if (kIsWeb) {
+      final bytes = await file.readAsBytes();
+      formData.files.add(MapEntry('file', MultipartFile.fromBytes(bytes)));
+    } else {
+      formData.files
+          .add(MapEntry('file', await MultipartFile.fromFile(file.path)));
+    }
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.body<File>());
+  }
+
+  /// Uploads a file from a [PlatformFile] object to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `file`: The [PlatformFile] object representing the file to be uploaded.
+  /// - `uploadUrl`: The URL to which the file will be uploaded. Defaults to `/upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a [File] object representing the uploaded file.
+  Future<File> uploadFileFromFilePicker(
+    PlatformFile file, {
+    String uploadUrl = '/upload-file',
+  }) async {
+    FormData formData = FormData();
+    if (kIsWeb && file.bytes != null) {
+      formData.files
+          .add(MapEntry('file', MultipartFile.fromBytes(file.bytes!)));
+    } else {
+      formData.files.add(
+        MapEntry(
+          'file',
+          await MultipartFile.fromFile(file.path!),
+        ),
+      );
+    }
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.body<File>());
   }
 }
