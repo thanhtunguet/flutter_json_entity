@@ -177,6 +177,60 @@ abstract class ApiClient {
         .then((response) => response.body<File>());
   }
 
+  /// Uploads multiple files from a list of [XFile] objects to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `files`: A list of [XFile] objects representing the files to be uploaded.
+  /// - `uploadUrl`: The URL to which the files will be uploaded. Defaults to `/multi-upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [File] objects representing the uploaded files.
+  Future<List<File>> uploadFilesFromImagePicker(
+    List<XFile> files, {
+    String uploadUrl = '/multi-upload-file',
+  }) async {
+    FormData formData = FormData();
+    for (var file in files) {
+      if (kIsWeb) {
+        final bytes = await file.readAsBytes();
+        formData.files.add(MapEntry('files', MultipartFile.fromBytes(bytes)));
+      } else {
+        formData.files
+            .add(MapEntry('files', await MultipartFile.fromFile(file.path)));
+      }
+    }
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.bodyAsList<File>());
+  }
+
+  /// Uploads multiple files from a list of [PlatformFile] objects to the specified upload URL.
+  ///
+  /// **Parameters:**
+  /// - `files`: A list of [PlatformFile] objects representing the files to be uploaded.
+  /// - `uploadUrl`: The URL to which the files will be uploaded. Defaults to `/multi-upload-file`.
+  ///
+  /// **Returns:**
+  /// - A [Future] that resolves to a list of [File] objects representing the uploaded files.
+  Future<List<File>> uploadFilesFromFilePicker(
+    List<PlatformFile> files, {
+    String uploadUrl = '/multi-upload-file',
+  }) async {
+    FormData formData = FormData();
+    for (var file in files) {
+      if (kIsWeb) {
+        formData.files
+            .add(MapEntry('files', MultipartFile.fromBytes(file.bytes!)));
+      } else {
+        formData.files
+            .add(MapEntry('files', await MultipartFile.fromFile(file.path!)));
+      }
+    }
+    return dio
+        .post(uploadUrl, data: formData)
+        .then((response) => response.bodyAsList<File>());
+  }
+
   /// Uploads a file from a [PlatformFile] object to the specified upload URL.
   ///
   /// **Parameters:**

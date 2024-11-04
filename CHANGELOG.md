@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3+preview.4
+
+### Added
+
+- `ApiClient`: add `uploadFilesFromImagePicker` and `uploadFilesFromFilePicker` methods
+
 ## 0.0.3+preview.3
 
 ### Added
