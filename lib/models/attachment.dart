@@ -81,10 +81,17 @@ abstract class Attachment extends JsonModel {
     fileId.value = file.id.value;
     isFile.value = true;
     link.value = null;
+    name.value = file.name.value;
   }
 
-  void setLink(String link) {
+  void setLink(
+    String link, {
+    String? name,
+  }) {
     this.link.value = link;
+    if (name != null) {
+      this.name.value = name;
+    }
     isFile.value = false;
     fileId.value = null;
     file.value = null;
