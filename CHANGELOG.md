@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3+preview.8
+
+### Added
+
+- `Attachment`: add `setFile` and `setLink` methods
+
 ## 0.0.3+preview.7
 
 ### Added
