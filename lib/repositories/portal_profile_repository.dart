@@ -9,7 +9,7 @@ class PortalProfileRepository extends ApiClient {
   @override
   String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
       .replace(
-        path: "/rpc/portal/app-user-profile",
+        path: "/rpc/portal/profile",
       )
       .toString();
 
