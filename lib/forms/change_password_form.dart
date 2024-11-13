@@ -12,9 +12,11 @@ class ChangePasswordForm extends FormGroup {
   /// Change password form
   ChangePasswordForm()
       : super({
-          "oldPassword": FormControl<String>(
+          "password": FormControl<String>(
             value: "",
-            validators: [],
+            validators: [
+              Validators.required,
+            ],
           ),
           "newPassword": FormControl<String>(
             value: "",
@@ -44,8 +46,8 @@ class ChangePasswordForm extends FormGroup {
         ]);
 
   /// Old password
-  FormControl<String> get oldPassword =>
-      control("oldPassword") as FormControl<String>;
+  FormControl<String> get password =>
+      control("password") as FormControl<String>;
 
   /// New password
   FormControl<String> get newPassword =>
