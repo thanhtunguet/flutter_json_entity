@@ -76,7 +76,7 @@ class PortalProfileRepository extends ApiClient {
   /// **Returns:**
   /// - A [Future] that completes when the password is changed.
   Future<void> changePasswordOtp({
-    required String? oldPassword,
+    required String? password,
     required String? newPassword,
     required String? verifyNewPassword,
     required String? otpCode,
@@ -84,7 +84,7 @@ class PortalProfileRepository extends ApiClient {
     return dio.post(
       "/change-password-otp",
       data: {
-        "oldPassword": oldPassword,
+        "password": password,
         "newPassword": newPassword,
         "verifyNewPassword": verifyNewPassword,
         "otpCode": otpCode,
