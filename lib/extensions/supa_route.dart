@@ -1,3 +1,5 @@
+import 'package:go_router/go_router.dart';
+
 /// Extension on [String] to provide convenient methods for generating URLs.
 ///
 /// This extension provides the [withId] method to easily generate URLs
@@ -11,4 +13,8 @@ extension SupaRoute on String {
       },
     ).toString();
   }
+}
+
+extension NumericIdRouterState on GoRouterState {
+  int get id => int.parse(uri.queryParameters['id']!);
 }
