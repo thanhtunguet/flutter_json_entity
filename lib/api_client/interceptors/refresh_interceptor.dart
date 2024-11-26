@@ -3,8 +3,10 @@ import "dart:async";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
+import "package:supa_architecture/blocs/blocs.dart";
+import "package:supa_architecture/core/cookie_manager/cookie_manager.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 /// An interceptor for handling HTTP errors and refreshing tokens.
 ///
@@ -34,13 +36,14 @@ class RefreshInterceptor extends InterceptorsWrapper {
         await _refreshCompleter?.future;
         final dio = Dio();
         if (!kIsWeb) {
-          dio.interceptors.add(cookieStorageService.getCookieManager());
+          dio.interceptors
+              .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
         }
         final response = await dio.fetch(err.requestOptions);
         return handler.resolve(response);
       } catch (refreshError) {
         GetIt.instance.get<AuthenticationBloc>().add(UserLogoutEvent());
-        await cookieStorageService.deleteCookies();
+        GetIt.instance.get<CookieManager>().deleteAllCookies();
         return handler.next(err);
       }
     } else {
@@ -56,7 +59,6 @@ class RefreshInterceptor extends InterceptorsWrapper {
   /// **Returns:**
   /// - A [Future] that completes when the token refresh operation is finished.
   static Future<void> refreshToken() async {
-    cookieStorageService.deleteAccessTokenOnly();
-    return PortalAuthenticationRepository().refreshToken();
+    GetIt.instance.get<PortalAuthenticationRepository>().refreshToken();
   }
 }

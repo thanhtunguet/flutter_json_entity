@@ -1,5 +1,5 @@
 import "package:dio/dio.dart";
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 /// An interceptor for adding device information headers to outgoing requests.
 ///
@@ -15,7 +15,7 @@ import "package:supa_architecture/supa_architecture.dart";
 class DeviceInfoInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final deviceInfo = SupaApplication.instance.deviceInfo;
+    final deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
 
     options.headers["X-Device-Model"] = deviceInfo.deviceModel;
     options.headers["X-Device-Name"] =

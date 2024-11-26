@@ -26,6 +26,12 @@ abstract class JsonField<T> {
   /// Checks if the field has informational message.
   bool get hasInformation => information != null;
 
+  /// Checks if the field is null.
+  bool get isNull => rawValue == null;
+
+  /// Checks if the field is not null.
+  bool get isNotNull => rawValue != null;
+
   /// The raw value of the field.
   T? rawValue;
 
@@ -72,7 +78,7 @@ abstract class JsonField<T> {
   ///
   /// **Returns:**
   /// - The raw value of the field in JSON format.
-  dynamic toJSON() {
+  dynamic toJson() {
     return rawValue;
   }
 }

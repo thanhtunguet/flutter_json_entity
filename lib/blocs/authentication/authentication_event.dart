@@ -31,12 +31,12 @@ final class LoginWithPasswordEvent extends AuthenticationEvent {
 
 final class LoginWithSavedLoginEvent extends AuthenticationEvent {}
 
-final class InitializeWithSavedAuthenticationEvent extends AuthenticationEvent {
+final class UsingSavedAuthenticationEvent extends AuthenticationEvent {
   final Tenant tenant;
 
   final AppUser user;
 
-  const InitializeWithSavedAuthenticationEvent({
+  const UsingSavedAuthenticationEvent({
     required this.tenant,
     required this.user,
   });

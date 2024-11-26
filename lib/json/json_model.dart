@@ -53,7 +53,7 @@ abstract class JsonModel with JsonSerializable {
   /// **Parameters:**
   /// - `json`: The JSON data to deserialize.
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is Map<dynamic, dynamic>) {
       if (json.containsKey("generalErrors") && json["generalErrors"] is List) {
         generalErrors = (json["generalErrors"] as List<dynamic>)
@@ -136,10 +136,10 @@ abstract class JsonModel with JsonSerializable {
   /// **Returns:**
   /// - A map representing the model in JSON format.
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     for (final field in fields) {
-      final fieldValue = field.toJSON();
+      final fieldValue = field.toJson();
       if (fieldValue != null) {
         json[field.fieldName] = fieldValue;
       }
@@ -153,7 +153,7 @@ abstract class JsonModel with JsonSerializable {
   /// - A JSON string representation of the model.
   @override
   String toString() {
-    return jsonEncode(toJSON());
+    return jsonEncode(toJson());
   }
 
   /// Gets the value of a field by name.

@@ -96,7 +96,7 @@ abstract class DataFilter implements JsonSerializable {
 
   /// Converts this filter to a JSON-compatible map.
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = {};
     json["skip"] = skip;
     json["take"] = take;
@@ -113,7 +113,7 @@ abstract class DataFilter implements JsonSerializable {
       json["viewCode"] = viewCode;
     }
     for (final field in fields) {
-      json[field.name] = field.toJSON();
+      json[field.name] = field.toJson();
     }
     return json;
   }
@@ -123,7 +123,7 @@ abstract class DataFilter implements JsonSerializable {
   /// **Parameters:**
   /// - `json`: The JSON-compatible map to populate from.
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
       if (json.containsKey("skip") && json["skip"] is int?) {
         skip = json["skip"];
@@ -146,7 +146,7 @@ abstract class DataFilter implements JsonSerializable {
 
       for (final field in fields) {
         if (json.containsKey(field.name) && json[field.name] != null) {
-          field.fromJSON(json[field.name]);
+          field.fromJson(json[field.name]);
         }
       }
     }
@@ -155,7 +155,7 @@ abstract class DataFilter implements JsonSerializable {
   /// Converts this filter to a JSON string.
   @override
   String toString() {
-    return jsonEncode(toJSON());
+    return jsonEncode(toJson());
   }
 
   /// Calculates the next page to be fetched based on the current `skip` and `take` values.

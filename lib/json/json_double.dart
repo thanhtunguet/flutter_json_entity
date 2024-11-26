@@ -77,10 +77,10 @@ class JsonDouble extends JsonField<double> {
   /// JsonDouble priceField = JsonDouble("price");
   /// priceField.value = 19.99;
   ///
-  /// Map<String, dynamic> json = {"price": priceField.toJSON()}; // {"price": 19.99}
+  /// Map<String, dynamic> json = {"price": priceField.toJson()}; // {"price": 19.99}
   /// ```
   @override
-  double? toJSON() {
+  double? toJson() {
     return rawValue;
   }
 }

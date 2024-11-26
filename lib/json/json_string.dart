@@ -16,7 +16,7 @@ class JsonString extends JsonField<String> {
   /// **Returns:**
   /// - The string value in JSON format.
   @override
-  String? toJSON() {
+  String? toJson() {
     return rawValue;
   }
 

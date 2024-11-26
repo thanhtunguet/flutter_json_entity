@@ -11,7 +11,12 @@ import "package:supa_architecture/api_client/interceptors/device_info_intercepto
 import "package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/refresh_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/timezone_interceptor.dart";
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/core/cookie_manager/cookie_manager.dart";
+import "package:supa_architecture/core/persistent_storage/persistent_storage.dart";
+import "package:supa_architecture/core/secure_storage/secure_storage.dart";
+import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/models.dart";
+import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 part "http_response.dart";
 
@@ -33,6 +38,13 @@ part "http_response.dart";
 /// }
 /// ```
 abstract class ApiClient {
+  CookieManager get cookieStorage => GetIt.instance.get<CookieManager>();
+
+  PersistentStorage get persistentStorage =>
+      GetIt.instance.get<PersistentStorage>();
+
+  SecureStorage get secureStorage => GetIt.instance.get<SecureStorage>();
+
   /// The [Dio] instance used for making HTTP requests.
   final Dio dio;
 
@@ -42,7 +54,8 @@ abstract class ApiClient {
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
     if (!kIsWeb) {
-      dio.interceptors.add(cookieStorageService.getCookieManager());
+      dio.interceptors
+          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
     }
     dio.interceptors.add(DeviceInfoInterceptor());
     dio.interceptors.add(TimezoneInterceptor());

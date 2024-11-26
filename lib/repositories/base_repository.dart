@@ -22,7 +22,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/list",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => response.bodyAsList<T>(),
@@ -40,7 +40,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/count",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => (response.data as num).toInt(),
@@ -76,7 +76,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/create",
-          data: entity.toJSON(),
+          data: entity.toJson(),
         )
         .then(
           (response) => response.body<T>(),
@@ -94,7 +94,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/update",
-          data: entity.toJSON(),
+          data: entity.toJson(),
         )
         .then(
           (response) => response.body<T>(),
@@ -112,7 +112,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/delete",
-          data: entity.toJSON(),
+          data: entity.toJson(),
         )
         .then(
           (response) => response.body<T>(),
@@ -148,7 +148,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/approve",
-          data: entity.toJSON(),
+          data: entity.toJson(),
         )
         .then(
           (response) => response.body<T>(),
@@ -166,7 +166,7 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     return dio
         .post(
           "/reject",
-          data: entity.toJSON(),
+          data: entity.toJson(),
         )
         .then(
           (response) => response.body<T>(),

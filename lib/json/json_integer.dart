@@ -77,10 +77,10 @@ class JsonInteger extends JsonField<int> {
   /// JsonInteger ageField = JsonInteger("age");
   /// ageField.value = 25;
   ///
-  /// Map<String, dynamic> json = {"age": ageField.toJSON()}; // {"age": 25}
+  /// Map<String, dynamic> json = {"age": ageField.toJson()}; // {"age": 25}
   /// ```
   @override
-  int? toJSON() {
+  int? toJson() {
     return rawValue;
   }
 }

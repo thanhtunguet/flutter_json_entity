@@ -90,7 +90,7 @@ class JsonDate extends JsonField<DateTime> {
   /// **Returns:**
   /// - The date value in ISO 8601 string format.
   @override
-  String? toJSON() {
+  String? toJson() {
     return rawValue?.toUtc().toIso8601String();
   }
 }

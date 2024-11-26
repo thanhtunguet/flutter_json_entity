@@ -31,7 +31,7 @@ class StringFilter extends FilterField {
 
   /// Convert this filter from JSON
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is! Map<String, dynamic>) {
       return;
     }
@@ -60,7 +60,7 @@ class StringFilter extends FilterField {
 
   /// Convert this filter to JSON
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     Map<String, String?> json = {};
     if (equal != null) {
       json[FilterField.equal] = equal;

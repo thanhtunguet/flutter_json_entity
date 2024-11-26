@@ -19,7 +19,7 @@ class AbstractIdFilter<T> extends FilterField {
   AbstractIdFilter(super.fieldName);
 
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is! Map<String, dynamic>) {
       return;
     }
@@ -38,7 +38,7 @@ class AbstractIdFilter<T> extends FilterField {
   }
 
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     if (equal != null) {
       json[FilterField.equal] = equal;

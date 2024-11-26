@@ -25,7 +25,7 @@ class JsonBoolean extends JsonField<bool> {
   /// **Returns:**
   /// - The boolean value in JSON format.
   @override
-  bool? toJSON() {
+  bool? toJson() {
     return rawValue;
   }
 }

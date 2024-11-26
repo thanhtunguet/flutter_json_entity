@@ -48,7 +48,8 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
     required this.fallbackAssetPath,
   }) {
     if (!kIsWeb) {
-      dio.interceptors.add(cookieStorageService.getCookieManager());
+      dio.interceptors
+          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
     }
   }
 

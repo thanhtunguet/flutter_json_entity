@@ -10,7 +10,7 @@ class DateFilter extends AbstractNumberFilter<DateTime> {
 
   /// Convert this DateFilter to JSON
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     if (equal != null) {
       json[FilterField.equal] = equal!.toIso8601String();
@@ -35,7 +35,7 @@ class DateFilter extends AbstractNumberFilter<DateTime> {
 
   /// Deserialize data from JSON
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is! Map<String, dynamic>) {
       return;
     }

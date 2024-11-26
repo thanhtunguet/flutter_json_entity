@@ -28,7 +28,7 @@ class AbstractNumberFilter<T> extends FilterField {
 
   /// Deserialize a JSON object to map values to this NumberFilter
   @override
-  void fromJSON(dynamic json) {
+  void fromJson(dynamic json) {
     if (json is! Map<String, dynamic>) {
       return;
     }
@@ -55,7 +55,7 @@ class AbstractNumberFilter<T> extends FilterField {
 
   /// Convert this NumberFilter to JSON
   @override
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     Map<String, T?> json = {};
     if (equal != null) {
       json[FilterField.equal] = equal;

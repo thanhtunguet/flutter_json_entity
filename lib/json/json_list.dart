@@ -39,7 +39,7 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
     if (value is List) {
       rawValue = value.map((element) {
         final model = GetIt.instance.get<T>();
-        model.fromJSON(element);
+        model.fromJson(element);
         return model;
       }).toList();
     }
@@ -50,8 +50,8 @@ class JsonList<T extends JsonModel> extends JsonField<List<T>> {
   /// **Returns:**
   /// - A list of JSON maps representing the [T] objects.
   @override
-  List<Map<String, dynamic>>? toJSON() {
-    return rawValue?.map((element) => element.toJSON()).toList();
+  List<Map<String, dynamic>>? toJson() {
+    return rawValue?.map((element) => element.toJson()).toList();
   }
 
   /// Gets the element at the specified index.

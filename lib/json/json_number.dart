@@ -39,7 +39,7 @@ class JsonNumber extends JsonField<num> {
   /// **Returns:**
   /// - The numeric value in JSON format.
   @override
-  num? toJSON() {
+  num? toJson() {
     return rawValue;
   }
 }

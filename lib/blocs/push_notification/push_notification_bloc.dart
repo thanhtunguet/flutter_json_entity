@@ -8,8 +8,10 @@ import "package:equatable/equatable.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:get_it/get_it.dart";
+import "package:supa_architecture/core/device_info.dart";
+import "package:supa_architecture/core/device_notification_token.dart";
 import "package:supa_architecture/repositories/utils_notification_repository.dart";
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 part "push_notification_event.dart";
 part "push_notification_payload.dart";
@@ -193,7 +195,7 @@ class PushNotificationBloc
     if (!hasPermission) return;
 
     String? token = await _firebaseMessaging.getToken();
-    final DeviceInfo deviceInfo = SupaApplication.instance.deviceInfo;
+    final DeviceInfo deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
 
     if (token != null) {
       try {
@@ -215,7 +217,7 @@ class PushNotificationBloc
     final bool hasPermission = await hasNotificationPermission();
     if (!hasPermission) return;
     String? token = await _firebaseMessaging.getToken();
-    final DeviceInfo deviceInfo = SupaApplication.instance.deviceInfo;
+    final DeviceInfo deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
     if (token != null) {
       try {
         await UtilsNotificationRepository().deleteToken(

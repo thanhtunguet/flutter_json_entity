@@ -16,8 +16,8 @@ class UserNotificationFilter extends DataFilter {
   bool? unread;
 
   @override
-  Map<String, dynamic> toJSON() {
-    Map<String, dynamic> json = super.toJSON();
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = super.toJson();
     json["unread"] = unread;
     return json;
   }

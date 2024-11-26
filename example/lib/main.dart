@@ -1,73 +1,63 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get_it/get_it.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'dart:async';
+
+import 'package:flutter/services.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  runApp(const MyApp());
+}
 
-  await dotenv.load();
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
-  await SupaApplication.initialize();
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  SupaApplication.initCaptcha(
-    captchaConfig: RecaptchaConfig(
-      siteKey: Platform.isAndroid
-          ? dotenv.env['GOOGLE_RECAPTCHA_ANDROID_KEY']!
-          : dotenv.env['GOOGLE_RECAPTCHA_IOS_KEY']!,
-    ),
-  );
+class _MyAppState extends State<MyApp> {
+  String _platformVersion = 'Unknown';
+  final _supaArchitecturePlugin = SupaArchitecture();
 
-  WidgetsFlutterBinding.ensureInitialized();
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = dotenv.env['SENTRY_DSN'];
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-      // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
-      // The sampling rate for profiling is relative to tracesSampleRate
-      // Setting to 1.0 will profile 100% of sampled transactions:
-      options.profilesSampleRate = 1.0;
-    },
-    appRunner: () => runApp(
-      MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthenticationBloc>(
-            create: (_) => GetIt.instance.get<AuthenticationBloc>(),
-          ),
-          BlocProvider<TenantBloc>(
-            create: (_) => GetIt.instance.get<TenantBloc>(),
-          ),
-        ],
-        child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-          listener: (_, state) {
-            ///
-          },
-          builder: (_, state) {
-            return MaterialApp(
-              theme: ThemeData(),
-              debugShowCheckedModeBanner: false,
-              home: Scaffold(
-                appBar: AppBar(
-                  title: const Text('Example for supa_architecture'),
-                ),
-                body: Center(
-                  child: Text(
-                    state.isAuthenticated
-                        ? 'User is authenticated'
-                        : 'User is not authenticated',
-                  ),
-                ),
-              ),
-            );
-          },
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      platformVersion =
+          await _supaArchitecturePlugin.getPlatformVersion() ?? 'Unknown platform version';
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Text('Running on: $_platformVersion\n'),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

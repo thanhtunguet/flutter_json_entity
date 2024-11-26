@@ -15,7 +15,7 @@ extension HttpResponse on Response {
   /// - The [JsonModel] instance populated with the response data.
   T body<T extends JsonModel>() {
     final T model = GetIt.instance.get<T>();
-    model.fromJSON(data);
+    model.fromJson(data);
     return model;
   }
 
@@ -29,7 +29,7 @@ extension HttpResponse on Response {
   List<T> bodyAsList<T extends JsonModel>() {
     return (data as List).map((element) {
       final T model = GetIt.instance.get<T>();
-      model.fromJSON(element);
+      model.fromJson(element);
       return model;
     }).toList();
   }

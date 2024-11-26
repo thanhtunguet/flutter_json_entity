@@ -6,11 +6,11 @@ mixin JsonSerializable {
   ///
   /// **Parameters:**
   /// - `json`: The JSON data to deserialize.
-  void fromJSON(dynamic json);
+  void fromJson(dynamic json);
 
   /// Serializes the model to JSON.
   ///
   /// **Returns:**
   /// - A map representing the model in JSON format.
-  dynamic toJSON();
+  dynamic toJson();
 }

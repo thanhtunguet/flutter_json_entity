@@ -1,5 +1,6 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:supa_architecture/supa_architecture.dart';
+
+import "../filters/filters.dart";
 
 extension AppendPagingController<T> on PagingController<int, T> {
   set newItemList(List<T> list) {

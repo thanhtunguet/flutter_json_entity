@@ -1,4 +1,7 @@
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/api_client/api_client.dart";
+import "package:supa_architecture/core/device_notification_token.dart";
+import "package:supa_architecture/models/models.dart";
+import "package:supa_architecture/repositories/base_repository.dart";
 
 /// A repository class for managing user notifications.
 ///
@@ -9,7 +12,7 @@ import "package:supa_architecture/supa_architecture.dart";
 class UtilsNotificationRepository
     extends BaseRepository<UserNotification, UserNotificationFilter> {
   @override
-  String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
+  String get baseUrl => Uri.parse(persistentStorage.baseApiUrl)
       .replace(
         path: "/rpc/utils-notification/notification",
       )
@@ -28,7 +31,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/create-token",
-          data: deviceNotificationToken.toJSON(),
+          data: deviceNotificationToken.toJson(),
         )
         .then(
           (response) => response.data,
@@ -48,7 +51,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/delete-token",
-          data: deviceNotificationToken.toJSON(),
+          data: deviceNotificationToken.toJson(),
         )
         .then(
           (response) => response.data,
@@ -66,7 +69,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/list-read",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => response.bodyAsList<UserNotification>(),
@@ -85,7 +88,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/list-unread",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => response.bodyAsList<UserNotification>(),
@@ -103,7 +106,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/count-read",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => (response.data as num).toInt(),
@@ -121,7 +124,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/count-unread",
-          data: filter.toJSON(),
+          data: filter.toJson(),
         )
         .then(
           (response) => (response.data as num).toInt(),
@@ -139,7 +142,7 @@ class UtilsNotificationRepository
     return dio
         .post(
           "/read",
-          data: userNotification.toJSON(),
+          data: userNotification.toJson(),
         )
         .then(
           (response) => response.data,

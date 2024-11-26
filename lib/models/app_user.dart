@@ -1,4 +1,5 @@
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/enum_model.dart";
 
 /// A class representing an application user.
 ///

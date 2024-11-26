@@ -41,7 +41,7 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
     }
     if (value is Map<String, dynamic>) {
       final model = GetIt.instance.get<T>();
-      model.fromJSON(value);
+      model.fromJson(value);
       rawValue = model;
     }
   }
@@ -51,8 +51,8 @@ class JsonObject<T extends JsonModel> extends JsonField<T> {
   /// **Returns:**
   /// - A map representing the object in JSON format.
   @override
-  Map<String, dynamic>? toJSON() {
-    return rawValue?.toJSON();
+  Map<String, dynamic>? toJson() {
+    return rawValue?.toJson();
   }
 
   /// Gets the value of a nested field by name.

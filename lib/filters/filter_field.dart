@@ -66,6 +66,6 @@ abstract interface class FilterField implements JsonSerializable {
   /// Converts this filter directly to a JSON string.
   @override
   String toString() {
-    return jsonEncode(toJSON());
+    return jsonEncode(toJson());
   }
 }

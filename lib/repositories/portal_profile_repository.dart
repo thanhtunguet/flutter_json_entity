@@ -1,4 +1,5 @@
-import "package:supa_architecture/supa_architecture.dart";
+import "package:supa_architecture/api_client/api_client.dart";
+import "package:supa_architecture/models/app_user.dart";
 
 /// A repository class for managing user profiles.
 ///
@@ -7,7 +8,7 @@ import "package:supa_architecture/supa_architecture.dart";
 /// settings, obtaining OTP, and changing passwords.
 class PortalProfileRepository extends ApiClient {
   @override
-  String get baseUrl => Uri.parse(persistentStorageService.baseApiUrl)
+  String get baseUrl => Uri.parse(persistentStorage.baseApiUrl)
       .replace(
         path: "/rpc/portal/profile",
       )
@@ -25,7 +26,7 @@ class PortalProfileRepository extends ApiClient {
     return dio
         .post(
           "/switch-email",
-          data: user.toJSON(),
+          data: user.toJson(),
         )
         .then(
           (response) => response.body<AppUser>(),
@@ -45,7 +46,7 @@ class PortalProfileRepository extends ApiClient {
     return dio
         .post(
           "/switch-notification",
-          data: user.toJSON(),
+          data: user.toJson(),
         )
         .then(
           (response) => response.body<AppUser>(),

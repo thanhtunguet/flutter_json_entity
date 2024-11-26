@@ -1,12 +1,10 @@
 import "package:bloc/bloc.dart";
 import "package:flutter/foundation.dart";
 import "package:google_sign_in/google_sign_in.dart";
-import "package:recaptcha_enterprise_flutter/recaptcha.dart";
-import "package:recaptcha_enterprise_flutter/recaptcha_action.dart";
 import "package:sign_in_with_apple/sign_in_with_apple.dart";
+import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/repositories/portal_profile_repository.dart";
-import "package:supa_architecture/supa_architecture.dart";
 
 part "authentication_action.dart";
 part "authentication_event.dart";
@@ -24,15 +22,13 @@ class AuthenticationBloc
     on<AuthenticationProcessingEvent>(_onAuthenticationProcessingEvent);
     on<LoginWithGoogleEvent>(_onLoginWithGoogleEvent);
     on<LoginWithAppleEvent>(_onLoginWithAppleEvent);
-    on<LoginWithMicrosoftEvent>(_onLoginWithMicrosoftEvent);
     on<LoginWithPasswordEvent>(_onLoginWithPasswordEvent);
     on<LoginWithSavedLoginEvent>(_onLoginWithSavedLogin);
     on<UserLogoutEvent>(_onUserLogoutEvent);
     on<LoginWithSelectedTenantEvent>(_onLoginWithSelectedTenantEvent);
     on<LoginWithMultipleTenantsEvent>(_onLoginWithMultipleTenantsEvent);
     on<AuthenticationErrorEvent>(_onAuthenticationErrorEvent);
-    on<InitializeWithSavedAuthenticationEvent>(
-        _onInitializeWithSavedAuthenticationEvent);
+    on<UsingSavedAuthenticationEvent>(_onUsingSavedAuthentication);
     on<UpdateAppUserProfileEvent>(_onUpdateAppUserProfileEvent);
     on<AppUserSwitchEmailEvent>(_onAppUserSwitchEmailEvent);
     on<AppUserSwitchNotificationEvent>(_onAppUserSwitchNotificationEvent);
@@ -60,8 +56,8 @@ class AuthenticationBloc
     emit(AuthenticationInitialState());
   }
 
-  Future<void> _onInitializeWithSavedAuthenticationEvent(
-    InitializeWithSavedAuthenticationEvent event,
+  Future<void> _onUsingSavedAuthentication(
+    UsingSavedAuthenticationEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
     emit(UserAuthenticatedWithSelectedTenantState(
@@ -85,7 +81,7 @@ class AuthenticationBloc
     add(const AuthenticationProcessingEvent(AuthenticationAction.initialize));
     final authentication = authRepo.loadAuthentication();
     if (authentication != null) {
-      add(InitializeWithSavedAuthenticationEvent(
+      add(UsingSavedAuthenticationEvent(
         tenant: authentication.tenant,
         user: authentication.appUser,
       ));
@@ -101,7 +97,7 @@ class AuthenticationBloc
     emit(AuthenticationProcessingState(event.action));
   }
 
-  handleLoginWithTenants(List<Tenant> tenants) async {
+  Future<void> handleLoginWithTenants(List<Tenant> tenants) async {
     if (tenants.isNotEmpty) {
       if (tenants.length == 1) {
         add(LoginWithSelectedTenantEvent(
@@ -179,35 +175,6 @@ class AuthenticationBloc
     }
   }
 
-  Future<void> _onLoginWithMicrosoftEvent(
-    LoginWithMicrosoftEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
-    try {
-      add(const AuthenticationProcessingEvent(
-          AuthenticationAction.loginWithMicrosoft));
-      await SupaApplication.instance.azureAuth.login();
-      final String? accessToken =
-          await SupaApplication.instance.azureAuth.getAccessToken();
-      if (accessToken != null) {
-        final tenants = await authRepo.loginWithMicrosoft(accessToken);
-        handleLoginWithTenants(tenants);
-        return;
-      }
-      add(const AuthenticationErrorEvent(
-        title: "Đăng nhập Microsoft lỗi",
-        message: "Đã xảy ra lỗi khi đăng nhập với Microsoft",
-        error: null,
-      ));
-    } catch (error) {
-      add(AuthenticationErrorEvent(
-        title: "Đăng nhập Microsoft lỗi",
-        message: "Đã xảy ra lỗi khi đăng nhập với Microsoft",
-        error: error,
-      ));
-    }
-  }
-
   Future<void> _onLoginWithPasswordEvent(
     LoginWithPasswordEvent event,
     Emitter<AuthenticationState> emit,
@@ -219,17 +186,7 @@ class AuthenticationBloc
       final username = event.email;
       final password = event.password;
 
-      String captcha;
-
-      if (SupaApplication.instance.useCaptcha) {
-        final client = await Recaptcha.fetchClient(
-            SupaApplication.instance.captchaConfig.siteKey);
-        captcha = await client.execute(RecaptchaAction.LOGIN());
-      } else {
-        captcha = "";
-      }
-
-      final tenants = await authRepo.login(username, password, captcha);
+      final tenants = await authRepo.login(username, password);
       handleLoginWithTenants(tenants);
     } catch (error) {
       add(AuthenticationErrorEvent(
@@ -237,6 +194,7 @@ class AuthenticationBloc
         message: "Đã xảy ra lỗi khi đăng nhập",
         error: error,
       ));
+      rethrow;
     }
   }
 
