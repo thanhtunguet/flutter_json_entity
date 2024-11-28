@@ -123,26 +123,18 @@ class PortalAuthenticationRepository extends ApiClient {
       return TenantAuthentication(tenant!, appUser!);
     }
 
-    final refreshToken = cookieStorage.getSingleCookie(
-        authenticationUri, AppToken.accessTokenKey);
-    if (refreshToken.value.isNotEmpty) {
-      try {
-        await GetIt.instance
-            .get<PortalAuthenticationRepository>()
-            .refreshToken();
-        final AppUser appUser = await GetIt.instance
-            .get<PortalAuthenticationRepository>()
-            .getProfileInfo();
-        final Tenant tenant =
-            appUser.tenants.value.firstWhere((t) => t.isCurrentTenant.value);
+    try {
+      await GetIt.instance.get<PortalAuthenticationRepository>().refreshToken();
+      final AppUser appUser = await GetIt.instance
+          .get<PortalAuthenticationRepository>()
+          .getProfileInfo();
+      final Tenant tenant =
+          appUser.tenants.value.firstWhere((t) => t.isCurrentTenant.value);
 
-        return TenantAuthentication(tenant, appUser);
-      } catch (error) {
-        return null;
-      }
+      return TenantAuthentication(tenant, appUser);
+    } catch (error) {
+      return null;
     }
-
-    return null;
   }
 
   /// Logs in the user using username and password.
