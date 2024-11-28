@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:supa_architecture/core/app_token.dart';
 import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
@@ -8,7 +9,9 @@ import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 class HiveCookieManager implements CookieManager {
   static Future<HiveCookieManager> create() async {
     final box = await Hive.openBox<Map<dynamic, dynamic>>('supa_cookies');
-    return HiveCookieManager(box);
+    final hiveCookieManager = HiveCookieManager(box);
+    GetIt.instance.registerSingleton<CookieManager>(hiveCookieManager);
+    return hiveCookieManager;
   }
 
   final Box<Map<dynamic, dynamic>> _cookieBox;

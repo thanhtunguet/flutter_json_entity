@@ -2,8 +2,10 @@ import "dart:io";
 
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
+import "package:get_it/get_it.dart";
 import "package:supa_architecture/api_client/api_client.dart";
 import "package:supa_architecture/core/app_token.dart";
+import "package:supa_architecture/core/persistent_storage/persistent_storage.dart";
 import "package:supa_architecture/core/secure_authentication_info.dart";
 import "package:supa_architecture/core/tenant_authentication.dart";
 import "package:supa_architecture/models/models.dart";
@@ -15,10 +17,16 @@ import "package:supa_architecture/utils/platform_utils.dart";
 /// This class extends [ApiClient] and provides methods for user login,
 /// logout, token management, profile retrieval, and more.
 class PortalAuthenticationRepository extends ApiClient {
+  Uri get authenticationUri => Uri.parse(persistentStorage.baseApiUrl)
+      .replace(path: "/rpc/portal/mobile/authentication");
+
+  @override
+  PersistentStorage get persistentStorage =>
+      GetIt.instance.get<PersistentStorage>();
+
   /// The base URL for the API.
   @override
-  String get baseUrl =>
-      Uri.parse(persistentStorage.baseApiUrl).replace(path: "/rpc/portal/mobile/authentication").toString();
+  String get baseUrl => authenticationUri.toString();
 
   /// Changes the saved tenant in persistent storage.
   ///
@@ -107,12 +115,31 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Returns:**
   /// - A [TenantAuthentication] object if authentication details are found, otherwise `null`.
-  TenantAuthentication? loadAuthentication() {
+  Future<TenantAuthentication?> loadAuthentication() async {
     final tenant = persistentStorage.tenant;
     final appUser = persistentStorage.appUser;
 
     if (tenant?.id.rawValue != null && appUser?.email.rawValue != null) {
       return TenantAuthentication(tenant!, appUser!);
+    }
+
+    final refreshToken = cookieStorage.getSingleCookie(
+        authenticationUri, AppToken.accessTokenKey);
+    if (refreshToken.value.isNotEmpty) {
+      try {
+        await GetIt.instance
+            .get<PortalAuthenticationRepository>()
+            .refreshToken();
+        final AppUser appUser = await GetIt.instance
+            .get<PortalAuthenticationRepository>()
+            .getProfileInfo();
+        final Tenant tenant =
+            appUser.tenants.value.firstWhere((t) => t.isCurrentTenant.value);
+
+        return TenantAuthentication(tenant, appUser);
+      } catch (error) {
+        return null;
+      }
     }
 
     return null;
@@ -229,19 +256,23 @@ class PortalAuthenticationRepository extends ApiClient {
   Future<void> refreshToken({String? refreshToken}) async {
     final dio = Dio();
     if (!kIsWeb) {
-      dio.interceptors.add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
+      dio.interceptors
+          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
     }
     dio.options.baseUrl = persistentStorage.baseApiUrl;
 
-    final refreshTokenUrl =
-        Uri.parse(persistentStorage.baseApiUrl).replace(path: "/rpc/portal/authentication/refresh-token").toString();
+    final refreshTokenUrl = Uri.parse(persistentStorage.baseApiUrl)
+        .replace(path: "/rpc/portal/authentication/refresh-token")
+        .toString();
 
     return dio
         .post(
           refreshTokenUrl,
           data: {},
           options: Options(
-            headers: refreshToken != null ? {"cookie": "RefreshToken=$refreshToken"} : null,
+            headers: refreshToken != null
+                ? {"cookie": "RefreshToken=$refreshToken"}
+                : null,
           ),
         )
         .then((response) => response.data);
@@ -256,8 +287,7 @@ class PortalAuthenticationRepository extends ApiClient {
     if (!kIsWeb) {
       persistentStorage.tenant = tenant;
       persistentStorage.appUser = appUser;
-      final cookies =
-          cookieStorage.loadCookies(Uri.parse('${persistentStorage.baseApiUrl}/rpc/portal/authentication/'));
+      final cookies = cookieStorage.loadCookies(authenticationUri);
       final accessToken = cookies.firstWhere(
         (cookie) => cookie.name == AppToken.accessTokenKey,
         orElse: () => Cookie(AppToken.accessTokenKey, ''),

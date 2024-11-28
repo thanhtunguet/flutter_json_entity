@@ -45,8 +45,14 @@ class AuthenticationBloc
         user: user,
         tenant: tenant,
       ));
-      await authRepo.saveAuthentication(user, tenant);
+      await _saveAuthentication(user, tenant);
     }
+  }
+
+  Future<void> _saveAuthentication(AppUser user, Tenant tenant) async {
+    await authRepo.saveAuthentication(user, tenant).catchError((error) {
+      debugPrint('Saving authentication failed');
+    });
   }
 
   Future<void> _onAuthenticationInitializeEvent(
@@ -79,7 +85,8 @@ class AuthenticationBloc
 
   Future<void> handleInitialize() async {
     add(const AuthenticationProcessingEvent(AuthenticationAction.initialize));
-    final authentication = authRepo.loadAuthentication();
+    final authentication = await authRepo.loadAuthentication();
+
     if (authentication != null) {
       add(UsingSavedAuthenticationEvent(
         tenant: authentication.tenant,
@@ -87,6 +94,7 @@ class AuthenticationBloc
       ));
       return;
     }
+
     add(AuthenticationInitializeEvent());
   }
 
@@ -234,9 +242,7 @@ class AuthenticationBloc
       user: user,
       tenant: event.tenant,
     ));
-    await authRepo.saveAuthentication(user, event.tenant).catchError((error) {
-      debugPrint('Saving authentication failed');
-    });
+    await _saveAuthentication(user, event.tenant);
   }
 
   Future<void> _onLoginWithMultipleTenantsEvent(

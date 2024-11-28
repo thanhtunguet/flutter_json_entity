@@ -19,6 +19,9 @@ class DeviceInfo {
   /// The UUID of the device (if available).
   final String deviceUuid;
 
+  /// Whether the device is a physical device.
+  final bool isPhysicalDevice;
+
   /// Constructs an instance of [DeviceInfo].
   DeviceInfo({
     required this.deviceName,
@@ -26,6 +29,7 @@ class DeviceInfo {
     required this.operatingSystem,
     required this.systemVersion,
     required this.deviceUuid,
+    required this.isPhysicalDevice,
   });
 
   /// Static method to gather device information for all supported platforms.
@@ -40,6 +44,7 @@ class DeviceInfo {
         operatingSystem: "Web",
         systemVersion: webInfo.userAgent ?? "Unknown UserAgent",
         deviceUuid: "Unavailable on Web",
+        isPhysicalDevice: false,
       );
     } else if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -49,6 +54,7 @@ class DeviceInfo {
         operatingSystem: "Android",
         systemVersion: androidInfo.version.release,
         deviceUuid: androidInfo.id,
+        isPhysicalDevice: androidInfo.isPhysicalDevice,
       );
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
@@ -58,6 +64,7 @@ class DeviceInfo {
         operatingSystem: "iOS",
         systemVersion: iosInfo.systemVersion,
         deviceUuid: iosInfo.identifierForVendor ?? "Unknown UUID",
+        isPhysicalDevice: iosInfo.isPhysicalDevice,
       );
     } else if (Platform.isMacOS) {
       final macInfo = await deviceInfoPlugin.macOsInfo;
@@ -67,6 +74,7 @@ class DeviceInfo {
         operatingSystem: "macOS",
         systemVersion: macInfo.osRelease,
         deviceUuid: "Unavailable on macOS",
+        isPhysicalDevice: true,
       );
     } else if (Platform.isWindows) {
       final windowsInfo = await deviceInfoPlugin.windowsInfo;
@@ -77,6 +85,7 @@ class DeviceInfo {
         operatingSystem: "Windows",
         systemVersion: windowsInfo.productName,
         deviceUuid: "Unavailable on Windows",
+        isPhysicalDevice: true,
       );
     } else if (Platform.isLinux) {
       final linuxInfo = await deviceInfoPlugin.linuxInfo;
@@ -86,6 +95,7 @@ class DeviceInfo {
         operatingSystem: "Linux",
         systemVersion: linuxInfo.version ?? "Unknown Version",
         deviceUuid: "Unavailable on Linux",
+        isPhysicalDevice: true,
       );
     } else {
       throw UnsupportedError("Unsupported platform");

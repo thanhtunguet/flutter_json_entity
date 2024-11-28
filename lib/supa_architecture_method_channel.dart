@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get_it/get_it.dart';
-import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 import 'package:supa_architecture/core/cookie_manager/hive_cookie_manager.dart';
 import 'package:supa_architecture/core/persistent_storage/hive_persistent_storage.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
@@ -38,6 +36,7 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
   @override
   Future<void> initialize() async {
     cookieStorage = await HiveCookieManager.create();
-    GetIt.instance.registerSingleton<CookieManager>(cookieStorage);
+    await persistentStorage.initialize();
+    secureStorage.initialize();
   }
 }

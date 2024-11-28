@@ -2,6 +2,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 import 'package:supa_architecture/core/device_info.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
+import 'package:supa_architecture/core/secure_storage/secure_storage.dart';
 
 import 'supa_architecture_method_channel.dart';
 
@@ -10,6 +11,8 @@ abstract class SupaArchitecturePlatform extends PlatformInterface {
   PersistentStorage get persistentStorage;
 
   late final CookieManager cookieStorage;
+
+  final SecureStorage secureStorage = SecureStorage();
 
   late final DeviceInfo deviceInfo;
 

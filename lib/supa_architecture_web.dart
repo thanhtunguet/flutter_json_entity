@@ -4,8 +4,6 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:get_it/get_it.dart';
-import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 import 'package:supa_architecture/core/cookie_manager/web_cookie_manager.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
 import 'package:supa_architecture/core/persistent_storage/web_persistent_storage.dart';
@@ -43,6 +41,7 @@ class SupaArchitectureWeb extends SupaArchitecturePlatform {
   @override
   Future<void> initialize() async {
     cookieStorage = WebCookieManager();
-    GetIt.instance.registerSingleton<CookieManager>(cookieStorage);
+    await persistentStorage.initialize();
+    secureStorage.initialize();
   }
 }

@@ -20,6 +20,7 @@ class Tenant extends JsonModel {
         tenantStatusId,
         tenantStatus,
         requestProperty,
+        isCurrentTenant,
       ];
 
   /// The ID of the tenant.
@@ -51,4 +52,6 @@ class Tenant extends JsonModel {
 
   /// The request property of the tenant.
   JsonString requestProperty = JsonString("requestProperty");
+
+  JsonBoolean isCurrentTenant = JsonBoolean("isCurrentTenant");
 }

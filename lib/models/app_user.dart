@@ -1,5 +1,6 @@
 import "package:supa_architecture/json/json.dart";
 import "package:supa_architecture/models/enum_model.dart";
+import "package:supa_architecture/models/tenant.dart";
 
 /// A class representing an application user.
 ///
@@ -38,6 +39,7 @@ class AppUser extends JsonModel {
         timezone,
         timezoneId,
         identityCode,
+        tenants,
       ];
 
   /// The user ID.
@@ -115,4 +117,6 @@ class AppUser extends JsonModel {
 
   /// The user"s identity code.
   JsonString identityCode = JsonString("identityCode");
+
+  JsonList<Tenant> tenants = JsonList<Tenant>("tenants");
 }
