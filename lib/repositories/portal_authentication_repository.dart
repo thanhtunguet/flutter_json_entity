@@ -231,7 +231,13 @@ class PortalAuthenticationRepository extends ApiClient {
   /// **Returns:**
   /// - A [Future] that resolves to a boolean indicating whether the logout was successful.
   Future<dynamic> logout() async {
-    await _removeAuthentication();
+    try {
+      await _removeAuthentication();
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }
     return dio.post(
       "/logout",
       data: {},

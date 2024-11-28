@@ -228,8 +228,14 @@ class AuthenticationBloc
     UserLogoutEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    await authRepo.logout();
     emit(AuthenticationInitialState());
+    try {
+      await authRepo.logout();
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }
   }
 
   Future<void> _onLoginWithSelectedTenantEvent(

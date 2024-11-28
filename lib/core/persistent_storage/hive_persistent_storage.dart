@@ -22,21 +22,25 @@ class HivePersistentStorage extends PersistentStorage {
   @override
   Future<void> initialize() async {
     await Hive.initFlutter();
-    _defaultBox = await Hive.openBox<dynamic>(_boxName).then((box) => box).catchError((error) {
-      throw HiveInitializationException(
-        "Failed to initialize Hive box: $error",
-        error: error,
-      );
-    });
-
-    _authBox = await Hive.openBox(_authBoxName).then((box) => box).catchError((error) {
-      throw HiveInitializationException(
-        "Failed to initialize Hive box: $error",
-        error: error,
-      );
-    });
 
     GetIt.instance.registerSingleton<PersistentStorage>(this);
+
+    _defaultBox = await Hive.openBox<dynamic>(_boxName)
+        .then((box) => box)
+        .catchError((error) {
+      throw HiveInitializationException(
+        "Failed to initialize Hive box: $error",
+        error: error,
+      );
+    });
+
+    _authBox =
+        await Hive.openBox(_authBoxName).then((box) => box).catchError((error) {
+      throw HiveInitializationException(
+        "Failed to initialize Hive box: $error",
+        error: error,
+      );
+    });
   }
 
   @override
