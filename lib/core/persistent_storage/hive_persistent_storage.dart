@@ -60,16 +60,17 @@ class HivePersistentStorage extends PersistentStorage {
 
   @override
   void clear() {
-    _defaultBox.clear();
+    _authBox.clear();
   }
 
   @override
   String get baseApiUrl {
-    String? baseApiUrl = _defaultBox.get(_baseApiUrlKey);
-    if (baseApiUrl == null || baseApiUrl.isEmpty == true) {
-      baseApiUrl = SupaArchitecturePlatform.instance.getBaseUrl();
+    String? url = _defaultBox.get(_baseApiUrlKey);
+    if (url == null || url.isEmpty == true) {
+      url = SupaArchitecturePlatform.instance.getBaseUrl();
+      baseApiUrl = url;
     }
-    return baseApiUrl;
+    return url;
   }
 
   @override

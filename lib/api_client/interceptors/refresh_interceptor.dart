@@ -5,6 +5,7 @@ import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
 import "package:supa_architecture/blocs/blocs.dart";
 import "package:supa_architecture/core/cookie_manager/cookie_manager.dart";
+import "package:supa_architecture/core/persistent_storage/persistent_storage.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
@@ -44,6 +45,7 @@ class RefreshInterceptor extends InterceptorsWrapper {
       } catch (refreshError) {
         GetIt.instance.get<AuthenticationBloc>().add(UserLogoutEvent());
         GetIt.instance.get<CookieManager>().deleteAllCookies();
+        GetIt.instance.get<PersistentStorage>().clear();
         return handler.next(err);
       }
     } else {
