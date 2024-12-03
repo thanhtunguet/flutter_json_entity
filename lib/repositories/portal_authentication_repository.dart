@@ -85,6 +85,20 @@ class PortalAuthenticationRepository extends ApiClient {
     );
   }
 
+  Future<AppUser> updateProfileInfo(AppUser appUser) async {
+    final url = Uri.parse(baseUrl)
+        .replace(
+          path: "/rpc/portal/profile/update-info",
+        )
+        .toString();
+    return dio.post(url, data: appUser.toJson()).then(
+      (response) {
+        response.data["id"] = response.data["userId"];
+        return response.body<AppUser>();
+      },
+    );
+  }
+
   /// Lists the tenants associated with the authenticated user.
   ///
   /// **Returns:**

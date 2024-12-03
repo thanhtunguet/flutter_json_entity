@@ -23,7 +23,7 @@ class AppUser extends JsonModel {
         phone,
         address,
         dateOfBirth,
-        avatar,
+        avatarUrl,
         adminType,
         adminTypeId,
         gender,
@@ -48,40 +48,40 @@ class AppUser extends JsonModel {
   /// The global user ID.
   JsonInteger globalUserId = JsonInteger("globalUserId");
 
-  /// The user"s email address.
+  /// The user's email address.
   JsonString email = JsonString("email");
 
-  /// The user"s username.
+  /// The user's username.
   JsonString username = JsonString("username");
 
-  /// The user"s password.
+  /// The user's password.
   JsonString password = JsonString("password");
 
-  /// The user"s display name.
+  /// The user's display name.
   JsonString displayName = JsonString("displayName");
 
-  /// The user"s phone number.
+  /// The user's phone number.
   JsonString phone = JsonString("phone");
 
-  /// The user"s address.
+  /// The user's address.
   JsonString address = JsonString("address");
 
-  /// The user"s date of birth.
+  /// The user's date of birth.
   JsonDate dateOfBirth = JsonDate("dateOfBirth");
 
-  /// The user"s avatar URL.
-  JsonString avatar = JsonString("avatar");
+  /// The user's avatar URL.
+  JsonString avatarUrl = JsonString("avatarUrl");
 
-  /// The user"s admin type as an [EnumModel].
+  /// The user's admin type as an [EnumModel].
   JsonObject<EnumModel> adminType = JsonObject<EnumModel>("adminType");
 
-  /// The ID of the user"s admin type.
+  /// The ID of the user's admin type.
   JsonInteger adminTypeId = JsonInteger("adminTypeId");
 
-  /// The user"s gender as an [EnumModel].
+  /// The user's gender as an [EnumModel].
   JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender");
 
-  /// The ID of the user"s gender.
+  /// The ID of the user's gender.
   JsonInteger genderId = JsonInteger("genderId");
 
   /// Indicates if the user has already gotten started.
@@ -90,10 +90,10 @@ class AppUser extends JsonModel {
   /// The OTP code for the user.
   JsonString otpCode = JsonString("otpCode");
 
-  /// The user"s language as an [EnumModel].
+  /// The user's language as an [EnumModel].
   JsonObject<EnumModel> language = JsonObject<EnumModel>("language");
 
-  /// The ID of the user"s language.
+  /// The ID of the user's language.
   JsonInteger languageId = JsonInteger("languageId");
 
   /// Indicates if the user is receiving system emails.
@@ -103,10 +103,10 @@ class AppUser extends JsonModel {
   JsonBoolean receivingSystemNotification =
       JsonBoolean("receivingSystemNotification");
 
-  /// The user"s timezone as an [EnumModel].
+  /// The user's timezone as an [EnumModel].
   JsonObject<EnumModel> timezone = JsonObject<EnumModel>("timezone");
 
-  /// The ID of the user"s timezone.
+  /// The ID of the user's timezone.
   JsonInteger timezoneId = JsonInteger("timezoneId");
 
   /// The date the user was created.
@@ -115,7 +115,7 @@ class AppUser extends JsonModel {
   /// The date the user was last updated.
   JsonDate updatedAt = JsonDate("updatedAt");
 
-  /// The user"s identity code.
+  /// The user's identity code.
   JsonString identityCode = JsonString("identityCode");
 
   JsonList<Tenant> tenants = JsonList<Tenant>("tenants");
