@@ -144,9 +144,18 @@ abstract class JsonModel with JsonSerializable {
   Map<String, dynamic> toJson() {
     final json = _json;
     for (final field in fields) {
-      final fieldValue = field.toJson();
-      if (fieldValue != null) {
-        json[field.fieldName] = fieldValue;
+      if (field.fieldName.toLowerCase().endsWith('id') &&
+          field.fieldName != 'statusId') {
+        if (field.value == 0) {
+          json.remove(field.fieldName);
+          continue;
+        }
+      }
+      if (field.rawValue != null) {
+        final fieldValue = field.toJson();
+        if (fieldValue != null) {
+          json[field.fieldName] = fieldValue;
+        }
       }
     }
     return json;
