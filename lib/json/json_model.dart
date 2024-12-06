@@ -142,7 +142,7 @@ abstract class JsonModel with JsonSerializable {
   /// - A map representing the model in JSON format.
   @override
   Map<String, dynamic> toJson() {
-    final json = _json;
+    final Map<String, dynamic> json = <String, dynamic>{..._json};
     for (final field in fields) {
       if (field.fieldName.toLowerCase().endsWith('id') &&
           field.fieldName != 'statusId') {
