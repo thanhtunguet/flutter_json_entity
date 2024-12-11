@@ -40,3 +40,27 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
     secureStorage.initialize();
   }
 }
+
+class MacOSNotificationManager {
+  static const MethodChannel _channel = MethodChannel('supa_architecture');
+
+  Future<bool> requestNotificationPermission() async {
+    try {
+      final bool granted =
+          await _channel.invokeMethod('requestNotificationPermission');
+      return granted;
+    } on PlatformException catch (e) {
+      debugPrint("Failed to request notification permissions: ${e.message}");
+      return false;
+    }
+  }
+
+  Future<void> sendNotification(String title, String body) async {
+    try {
+      await _channel
+          .invokeMethod('sendNotification', {'title': title, 'body': body});
+    } on PlatformException catch (e) {
+      debugPrint("Failed to send notification: ${e.message}");
+    }
+  }
+}
