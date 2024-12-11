@@ -45,4 +45,6 @@ abstract class SupaArchitecturePlatform extends PlatformInterface {
   bool get useFirebase;
 
   Future<void> initialize();
+
+  Future<void> requestNotificationPermission();
 }

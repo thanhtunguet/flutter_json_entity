@@ -44,4 +44,9 @@ class SupaArchitectureWeb extends SupaArchitecturePlatform {
     await persistentStorage.initialize();
     secureStorage.initialize();
   }
+
+  @override
+  Future<void> requestNotificationPermission() async {
+    /// Do something here
+  }
 }
