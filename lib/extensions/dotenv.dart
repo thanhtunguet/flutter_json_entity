@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:flutter_dotenv/flutter_dotenv.dart";
 
 /// Extension on [DotEnv] to provide convenient access to environment variables.
@@ -12,7 +13,12 @@ extension SupaEnvironment on DotEnv {
   ///
   /// **Returns:**
   /// - The Sentry DSN as a string.
-  String get sentryDsn => env["SENTRY_DSN"]!;
+  String get sentryDsn {
+    if (kDebugMode) {
+      return env["SENTRY_DSN_DEV"]!;
+    }
+    return env["SENTRY_DSN"]!;
+  }
 
   /// Gets the Azure AD tenant ID from the environment variables.
   ///
