@@ -78,7 +78,6 @@ The `supa_architecture` package is designed to support multiple platforms. Howev
 | **Biometric Authentication** (`local_auth`)                                                          | ✅            | ✅       | ❌          | ❌           | ✅                 | ❌         |
 | **Device Information** (`device_info_plus`)                                                          | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
 | **Internationalization** (`intl`)                                                                    | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
-| **ReCAPTCHA** (`recaptcha_enterprise_flutter`)                                                       | ✅            | ✅       | ✅          | ✅           | ✅                 | ✅         |
 
 ### Key:
 - ✅ = Supported

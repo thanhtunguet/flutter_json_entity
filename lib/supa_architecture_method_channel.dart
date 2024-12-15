@@ -39,16 +39,4 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
     await persistentStorage.initialize();
     secureStorage.initialize();
   }
-
-  @override
-  Future<bool> requestNotificationPermission() async {
-    try {
-      final bool granted =
-          await methodChannel.invokeMethod('requestNotificationPermission');
-      return granted;
-    } on PlatformException catch (e) {
-      debugPrint("Failed to request notification permissions: ${e.message}");
-      return false;
-    }
-  }
 }
