@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:html' as html;
 
 import 'package:get_it/get_it.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
 import 'package:supa_architecture/models/models.dart';
 import 'package:supa_architecture/supa_architecture_platform_interface.dart';
+import 'package:web/web.dart' as html;
 
 class WebPersistentStorage extends PersistentStorage {
   @override
@@ -35,7 +35,7 @@ class WebPersistentStorage extends PersistentStorage {
 
   @override
   void removeValue(String key) {
-    html.window.localStorage.remove(key);
+    html.window.localStorage.removeItem(key);
   }
 
   @override
@@ -45,12 +45,12 @@ class WebPersistentStorage extends PersistentStorage {
 
   @override
   void removeTenant() {
-    html.window.localStorage.remove('tenant');
+    html.window.localStorage.removeItem('tenant');
   }
 
   @override
   void removeAppUser() {
-    html.window.localStorage.remove('appUser');
+    html.window.localStorage.removeItem('appUser');
   }
 
   @override
