@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- TextStatusBadge widget
+- EnumStatusBadge widget
+- DateTime extensions
+
 ## 1.0.0
 
 ### Breaking changes
