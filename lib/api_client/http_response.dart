@@ -1,32 +1,34 @@
 part of "api_client.dart";
 
-/// Extension methods for handling HTTP responses from the [Dio] package.
+/// Extension methods for parsing HTTP responses from the [Dio] package.
 ///
-/// Provides convenience methods for parsing the response data into various
-/// data types, including JSON models, integers, doubles, numbers, strings,
-/// booleans, and date-times.
+/// This extension provides methods for converting response data into various
+/// data types, including custom JSON models, lists, primitives, and `DateTime`.
 extension HttpResponse on Response {
-  /// Converts the response data to a [JsonModel] object.
+  /// Converts the response data to a [JsonModel] instance.
   ///
   /// **Type Parameter:**
-  /// - `T`: The type of [JsonModel] to convert the data into.
+  /// - `T`: The type of the [JsonModel].
   ///
   /// **Returns:**
-  /// - The [JsonModel] instance populated with the response data.
+  /// - A [T] instance populated with the response data.
   T body<T extends JsonModel>() {
     final T model = GetIt.instance.get<T>();
     model.fromJson(data);
     return model;
   }
 
-  /// Converts the response data to a list of [JsonModel] objects.
+  /// Converts the response data to a list of [JsonModel] instances.
   ///
   /// **Type Parameter:**
-  /// - `T`: The type of [JsonModel] to convert each item in the list into.
+  /// - `T`: The type of each item in the list, extending [JsonModel].
   ///
   /// **Returns:**
-  /// - A list of [JsonModel] instances populated with the response data.
+  /// - A list of [T] instances populated with the response data.
   List<T> bodyAsList<T extends JsonModel>() {
+    if (data is! List) {
+      throw const FormatException("Response data is not a list.");
+    }
     return (data as List).map((element) {
       final T model = GetIt.instance.get<T>();
       model.fromJson(element);
@@ -37,31 +39,46 @@ extension HttpResponse on Response {
   /// Converts the response data to an integer.
   ///
   /// **Returns:**
-  /// - The response data as an integer.
+  /// - An integer value parsed from the response data.
   int bodyAsInteger() {
     if (data is String) {
-      return int.parse(data);
+      return int.tryParse(data) ??
+          (throw FormatException("Invalid integer: $data"));
     }
     if (data is num) {
       return data.toInt();
     }
-    return data;
+    throw FormatException("Cannot convert ${data.runtimeType} to int.");
   }
 
   /// Converts the response data to a double.
   ///
   /// **Returns:**
-  /// - The response data as a double.
+  /// - A double value parsed from the response data.
   double bodyAsDouble() {
-    return (data as num).toDouble();
+    if (data is num) {
+      return data.toDouble();
+    }
+    if (data is String) {
+      return double.tryParse(data) ??
+          (throw FormatException("Invalid double: $data"));
+    }
+    throw FormatException("Cannot convert ${data.runtimeType} to double.");
   }
 
   /// Converts the response data to a number.
   ///
   /// **Returns:**
-  /// - The response data as a number.
+  /// - A number parsed from the response data.
   num bodyAsNumber() {
-    return num.parse(data);
+    if (data is num) {
+      return data;
+    }
+    if (data is String) {
+      return num.tryParse(data) ??
+          (throw FormatException("Invalid number: $data"));
+    }
+    throw FormatException("Cannot convert ${data.runtimeType} to num.");
   }
 
   /// Converts the response data to a string.
@@ -69,22 +86,38 @@ extension HttpResponse on Response {
   /// **Returns:**
   /// - The response data as a string.
   String bodyAsString() {
-    return data.toString();
+    return data?.toString() ?? "";
   }
 
   /// Converts the response data to a boolean.
   ///
   /// **Returns:**
-  /// - The response data as a boolean.
+  /// - A boolean value parsed from the response data.
   bool bodyAsBoolean() {
-    return bool.parse(data);
+    if (data is bool) {
+      return data;
+    }
+    if (data is String) {
+      final lowerData = data.toLowerCase();
+      if (lowerData == "true" || lowerData == "1") {
+        return true;
+      }
+      if (lowerData == "false" || lowerData == "0") {
+        return false;
+      }
+    }
+    throw FormatException("Invalid boolean: $data");
   }
 
-  /// Converts the response data to a [DateTime] object.
+  /// Converts the response data to a [DateTime].
   ///
   /// **Returns:**
-  /// - The response data as a [DateTime] object.
+  /// - A [DateTime] object parsed from the response data.
   DateTime bodyAsDateTime() {
-    return DateTime.parse(data);
+    if (data is String) {
+      return DateTime.tryParse(data) ??
+          (throw FormatException("Invalid DateTime: $data"));
+    }
+    throw FormatException("Cannot convert ${data.runtimeType} to DateTime.");
   }
 }

@@ -1,26 +1,36 @@
 import "package:dio/dio.dart";
 import "package:supa_architecture/json/json.dart";
 
-/// A custom interceptor to add the `X-Timezone` header to every request.
-/// The header value is the current timezone offset in decimal format.
-class TimezoneInterceptor extends InterceptorsWrapper {
+/// An interceptor to add timezone and request timestamp headers to every request.
+///
+/// Headers added:
+/// - `X-Timezone`: Current timezone offset in decimal format (e.g., "+5.50").
+/// - `X-Requested-At`: ISO 8601 formatted timestamp with timezone offset.
+class TimezoneInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Get the current timezone offset
-    DateTime now = DateTime.now();
-    Duration offset = now.timeZoneOffset;
-    String sign = offset.isNegative ? "-" : "+";
+    // Add the timezone and request timestamp headers
+    options.headers["X-Timezone"] = _getTimezoneOffset();
+    options.headers["X-Requested-At"] =
+        DateTime.now().toIso8601StringWithOffset();
 
-    // Calculate the decimal value of the timezone offset
-    double offsetDecimal =
-        offset.inHours + (offset.inMinutes.remainder(60) / 60.0);
-    String offsetString = "$sign${offsetDecimal.toStringAsFixed(2)}";
+    // Continue the request chain
+    handler.next(options);
+  }
 
-    // Add the `X-Timezone` header to the request
-    options.headers["X-Timezone"] = offsetString;
-    options.headers["X-Requested-At"] = now.toIso8601StringWithOffset();
+  /// Calculates the current timezone offset in decimal format (e.g., "+5.50").
+  String _getTimezoneOffset() {
+    final now = DateTime.now();
+    final offset = now.timeZoneOffset;
 
-    // Continue with the request
-    super.onRequest(options, handler);
+    // Determine the sign of the offset
+    final sign = offset.isNegative ? "-" : "+";
+
+    // Calculate the offset in hours and minutes as a decimal
+    final offsetDecimal =
+        offset.inHours.abs() + (offset.inMinutes.abs().remainder(60) / 60.0);
+
+    // Format the offset string with the appropriate sign
+    return "$sign${offsetDecimal.toStringAsFixed(2)}";
   }
 }

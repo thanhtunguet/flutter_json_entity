@@ -1,47 +1,43 @@
 import "package:dio/dio.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
-/// An interceptor for adding device information headers to outgoing requests.
+/// An interceptor that adds device information headers to outgoing requests.
 ///
-/// This interceptor adds the following headers to outgoing requests:
-///
-/// - `X-Device-Model`: The device model.
-/// - `X-Device-Name`: The device name.
-/// - `X-Operating-System`: The operating system.
-/// - `X-System-Version`: The system version.
-///
-/// This interceptor is used to identify the device making the request in the
-/// backend.
-class DeviceInfoInterceptor extends InterceptorsWrapper {
+/// This interceptor is used to provide device-specific details for API calls,
+/// helping the backend identify the source device.
+class DeviceInfoInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // Fetch device information from the platform interface.
     final deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
 
-    options.headers["X-Device-Model"] = deviceInfo.deviceModel;
-    options.headers["X-Device-Name"] =
-        _sanitizeDeviceName(deviceInfo.deviceName);
-    options.headers["X-Operating-System"] = deviceInfo.operatingSystem;
-    options.headers["X-System-Version"] = deviceInfo.systemVersion;
-    options.headers["X-Device-UUID"] = deviceInfo.deviceUuid;
+    // Add device-specific headers to the request.
+    options.headers.addAll({
+      "X-Device-Model": deviceInfo.deviceModel,
+      "X-Device-Name": _sanitizeDeviceName(deviceInfo.deviceName),
+      "X-Operating-System": deviceInfo.operatingSystem,
+      "X-System-Version": deviceInfo.systemVersion,
+      "X-Device-UUID": deviceInfo.deviceUuid,
+    });
 
-    super.onRequest(options, handler);
+    // Pass the modified request to the next handler.
+    handler.next(options);
   }
 
+  /// Sanitizes the device name to ensure it adheres to API requirements.
+  ///
+  /// Removes special characters, trims unnecessary spaces, and limits the length.
   String _sanitizeDeviceName(String deviceName) {
-    // Remove leading and trailing whitespaces
-    String sanitized = deviceName.trim();
-
-    // Replace special characters with an empty string (keep letters, numbers, and spaces)
-    sanitized = sanitized.replaceAll(RegExp(r"[^\w\s-]"), "");
-
-    // Replace multiple spaces with a single space
-    sanitized = sanitized.replaceAll(RegExp(r"\s+"), " ");
-
-    // Limit the length to 50 characters (adjust the limit as necessary)
-    if (sanitized.length > 50) {
-      sanitized = sanitized.substring(0, 50);
-    }
-
-    return sanitized;
+    // Step-by-step sanitization process:
+    return deviceName
+        .trim() // Remove leading and trailing whitespace.
+        .replaceAll(RegExp(r"[^\w\s-]"), "") // Remove special characters.
+        .replaceAll(
+            RegExp(r"\s+"), " ") // Consolidate multiple spaces into one.
+        .substring(
+            0,
+            deviceName.length > 50
+                ? 50
+                : deviceName.length); // Limit length to 50 characters.
   }
 }

@@ -9,58 +9,70 @@ import "package:supa_architecture/core/persistent_storage/persistent_storage.dar
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
-/// An interceptor for handling HTTP errors and refreshing tokens.
+/// An interceptor for handling HTTP 401 errors and refreshing tokens.
 ///
-/// If a 401 Unauthorized error occurs, this interceptor will attempt to
-/// refresh the token and retry the original request. It manages the token
-/// refresh operation to ensure that concurrent requests do not trigger
-/// multiple refresh operations.
-class RefreshInterceptor extends InterceptorsWrapper {
+/// When a 401 Unauthorized response is received, this interceptor attempts to:
+/// - Refresh the authentication token.
+/// - Retry the original request.
+/// If the token refresh fails, the user is logged out, and cookies and storage are cleared.
+class RefreshInterceptor extends Interceptor {
+  /// A completer to ensure token refresh is handled only once at a time.
   static Completer<void>? _refreshCompleter;
 
   @override
-  onError(DioException err, ErrorInterceptorHandler handler) async {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
+      // If no ongoing refresh operation, start one.
       if (_refreshCompleter == null) {
         _refreshCompleter = Completer<void>();
         try {
-          await refreshToken();
+          await _refreshToken(); // Refresh token
           _refreshCompleter?.complete();
-        } catch (refreshError) {
-          _refreshCompleter?.completeError(refreshError);
+        } catch (e) {
+          _refreshCompleter?.completeError(e);
         } finally {
           _refreshCompleter = null;
         }
       }
 
+      // Wait for the refresh operation to complete
       try {
         await _refreshCompleter?.future;
+
+        // Retry the failed request
         final dio = Dio();
         if (!kIsWeb) {
           dio.interceptors
               .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
         }
+
+        // Clone and retry the request
         final response = await dio.fetch(err.requestOptions);
         return handler.resolve(response);
-      } catch (refreshError) {
-        GetIt.instance.get<AuthenticationBloc>().add(UserLogoutEvent());
-        GetIt.instance.get<CookieManager>().deleteAllCookies();
-        GetIt.instance.get<PersistentStorage>().clear();
+      } catch (_) {
+        // If token refresh failed, log out the user and clean up
+        _handleLogout();
         return handler.next(err);
       }
     } else {
+      // Pass all other errors to the next handler
       return handler.next(err);
     }
   }
 
-  /// Refreshes the authentication token.
+  /// Handles the token refresh operation.
   ///
-  /// This method is used by the refresh interceptor to obtain a new token
-  /// when the current token has expired.
-  ///
-  /// **Returns:**
-  /// - A [Future] that completes when the token refresh operation is finished.
-  static Future<void> refreshToken() async {
-    GetIt.instance.get<PortalAuthenticationRepository>().refreshToken();
+  /// Retrieves a new authentication token from the repository.
+  static Future<void> _refreshToken() async {
+    final repository = GetIt.instance.get<PortalAuthenticationRepository>();
+    await repository.refreshToken();
+  }
+
+  /// Handles user logout and cleanup when token refresh fails.
+  void _handleLogout() {
+    final getIt = GetIt.instance;
+    getIt.get<AuthenticationBloc>().add(UserLogoutEvent());
+    getIt.get<CookieManager>().deleteAllCookies();
+    getIt.get<PersistentStorage>().clear();
   }
 }
