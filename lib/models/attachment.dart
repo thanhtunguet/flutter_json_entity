@@ -1,6 +1,7 @@
 import "package:supa_architecture/json/json.dart";
 import "package:supa_architecture/models/app_user.dart";
 import "package:supa_architecture/models/file.dart";
+import "package:supa_architecture/models/image.dart";
 
 /// An abstract class representing an attachment model.
 ///
@@ -51,6 +52,11 @@ abstract class Attachment extends JsonModel {
   ///
   /// This is a nested JSON object representing the `File` linked to the attachment.
   JsonObject<File> file = JsonObject<File>("file");
+
+  /// The image associated with the attachment.
+  ///
+  /// This is a nested JSON object representing the `Image` linked to the attachment.
+  JsonObject<Image> image = JsonObject<Image>("image");
 
   /// The timestamp indicating when the attachment was created.
   JsonDate createdAt = JsonDate("createdAt");
