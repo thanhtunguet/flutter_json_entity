@@ -6,80 +6,103 @@ import 'package:supa_architecture/models/models.dart';
 import 'package:supa_architecture/supa_architecture_platform_interface.dart';
 import 'package:web/web.dart' as html;
 
+/// Persistent storage implementation for web using localStorage.
 class WebPersistentStorage extends PersistentStorage {
+  /// Gets the base API URL from the platform.
   @override
-  String get baseApiUrl {
-    return SupaArchitecturePlatform.instance.getBaseUrl();
-  }
+  String get baseApiUrl => SupaArchitecturePlatform.instance.getBaseUrl();
 
+  /// No-op setter for `baseApiUrl` since it is managed by the platform.
   @override
   set baseApiUrl(String baseApiUrl) {
-    /// do nothing
+    // No operation needed
   }
 
+  /// Initializes the web storage and registers this instance in GetIt.
   @override
   Future<void> initialize() async {
-    // No initialization needed for localStorage
     GetIt.instance.registerSingleton<PersistentStorage>(this);
   }
 
+  /// Sets a key-value pair in localStorage.
   @override
   void setValue(String key, String value) {
     html.window.localStorage[key] = value;
   }
 
+  /// Retrieves the value for the given key from localStorage.
   @override
-  String? getValue(String key) {
-    return html.window.localStorage[key];
-  }
+  String? getValue(String key) => html.window.localStorage[key];
 
+  /// Removes the value for the given key from localStorage.
   @override
-  void removeValue(String key) {
-    html.window.localStorage.removeItem(key);
-  }
+  void removeValue(String key) => html.window.localStorage.removeItem(key);
 
+  /// Clears all values from localStorage.
   @override
-  void clear() {
-    html.window.localStorage.clear();
-  }
+  void clear() => html.window.localStorage.clear();
 
+  /// Removes the tenant information from localStorage.
   @override
-  void removeTenant() {
-    html.window.localStorage.removeItem('tenant');
-  }
+  void removeTenant() => html.window.localStorage.removeItem('tenant');
 
+  /// Removes the app user information from localStorage.
   @override
-  void removeAppUser() {
-    html.window.localStorage.removeItem('appUser');
-  }
+  void removeAppUser() => html.window.localStorage.removeItem('appUser');
 
+  /// Stores tenant information as a JSON string in localStorage.
   @override
   set tenant(Tenant? tenant) {
-    html.window.localStorage['tenant'] = jsonEncode(tenant?.toJson());
-  }
-
-  @override
-  Tenant get tenant {
-    final tenantJson = html.window.localStorage['tenant'];
-    Tenant tenant = Tenant();
-    if (tenantJson != null) {
-      tenant.fromJson(jsonDecode(tenantJson));
+    if (tenant != null) {
+      html.window.localStorage['tenant'] = jsonEncode(tenant.toJson());
+    } else {
+      removeTenant();
     }
-    return tenant;
   }
 
+  /// Retrieves tenant information from localStorage.
+  @override
+  Tenant? get tenant {
+    final tenantJson = html.window.localStorage['tenant'];
+    if (tenantJson != null) {
+      try {
+        final tenantData = jsonDecode(tenantJson) as Map<String, dynamic>;
+        final tenant = Tenant();
+        tenant.fromJson(tenantData);
+        return tenant;
+      } catch (e) {
+        // Handle potential JSON decoding errors
+        removeTenant(); // Clear corrupted data
+      }
+    }
+    return null;
+  }
+
+  /// Stores app user information as a JSON string in localStorage.
   @override
   set appUser(AppUser? appUser) {
-    html.window.localStorage['appUser'] = jsonEncode(appUser?.toJson());
+    if (appUser != null) {
+      html.window.localStorage['appUser'] = jsonEncode(appUser.toJson());
+    } else {
+      removeAppUser();
+    }
   }
 
+  /// Retrieves app user information from localStorage.
   @override
-  AppUser get appUser {
+  AppUser? get appUser {
     final appUserJson = html.window.localStorage['appUser'];
-    AppUser appUser = AppUser();
     if (appUserJson != null) {
-      appUser.fromJson(jsonDecode(appUserJson));
+      try {
+        final appUserData = jsonDecode(appUserJson) as Map<String, dynamic>;
+        final appUser = AppUser();
+        appUser.fromJson(appUserData);
+        return appUser;
+      } catch (e) {
+        // Handle potential JSON decoding errors
+        removeAppUser(); // Clear corrupted data
+      }
     }
-    return appUser;
+    return null;
   }
 }

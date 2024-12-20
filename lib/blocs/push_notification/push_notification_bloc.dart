@@ -22,7 +22,6 @@ class PushNotificationBloc
     extends Bloc<PushNotificationEvent, PushNotificationState> with Disposable {
   /// Foreground message handler
   StreamSubscription? _foregroundNotificationSubscription;
-
   StreamSubscription? _notificationOpenSubscription;
 
   /// Push notification BLoC for handling push notifications.
@@ -34,15 +33,8 @@ class PushNotificationBloc
 
   @override
   FutureOr onDispose() {
-    if (_foregroundNotificationSubscription != null) {
-      _foregroundNotificationSubscription!.cancel();
-      _foregroundNotificationSubscription = null;
-    }
-
-    if (_notificationOpenSubscription != null) {
-      _notificationOpenSubscription!.cancel();
-      _notificationOpenSubscription = null;
-    }
+    _foregroundNotificationSubscription?.cancel();
+    _notificationOpenSubscription?.cancel();
   }
 
   /// Dispose push notification BLoC
@@ -85,24 +77,17 @@ class PushNotificationBloc
   FirebaseMessaging get _firebaseMessaging => FirebaseMessaging.instance;
 
   /// Initialize push notifications (with default channel for Android).
-  /// - Uses app id as the channel id.
   Future<void> initializeNotifications({
     required String appId,
     String? channelName,
   }) async {
-    // Check if the app requires notification permission (Android 13+ or iOS).
     await requestNotificationPermission();
 
-    // Initialize Firebase Messaging
     await _initializeFirebaseMessaging();
 
-    /// Register device token for notifications.
     await registerDeviceToken();
 
-    /// Set foreground message handler
     setForegroundMessageHandler();
-
-    /// Set notification open app handler
     setNotificationOpenAppHandler();
   }
 
@@ -161,8 +146,7 @@ class PushNotificationBloc
   }
 
   /// Handle foreground notifications by showing a local notification
-  /// and passing it to the specified message handler.
-  void _handleForegroundNotification(RemoteMessage message) async {
+  void _handleForegroundNotification(RemoteMessage message) {
     add(
       DidReceivedNotificationEvent(
         title: message.notification?.title ?? "",
@@ -195,20 +179,19 @@ class PushNotificationBloc
     if (!hasPermission) return;
 
     String? token = await _firebaseMessaging.getToken();
-    final DeviceInfo deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
+    if (token == null) return;
 
-    if (token != null) {
-      try {
-        await UtilsNotificationRepository().createToken(
-          DeviceNotificationToken(
-            osVersion: deviceInfo.systemVersion,
-            deviceModel: deviceInfo.deviceModel,
-            token: token,
-          ),
-        );
-      } catch (error) {
-        debugPrint(error.toString());
-      }
+    final DeviceInfo deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
+    try {
+      await UtilsNotificationRepository().createToken(
+        DeviceNotificationToken(
+          osVersion: deviceInfo.systemVersion,
+          deviceModel: deviceInfo.deviceModel,
+          token: token,
+        ),
+      );
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 
@@ -216,20 +199,21 @@ class PushNotificationBloc
   Future<void> unregisterDeviceToken() async {
     final bool hasPermission = await hasNotificationPermission();
     if (!hasPermission) return;
+
     String? token = await _firebaseMessaging.getToken();
+    if (token == null) return;
+
     final DeviceInfo deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
-    if (token != null) {
-      try {
-        await UtilsNotificationRepository().deleteToken(
-          DeviceNotificationToken(
-            osVersion: deviceInfo.systemVersion,
-            deviceModel: deviceInfo.deviceModel,
-            token: token,
-          ),
-        );
-      } catch (error) {
-        debugPrint(error.toString());
-      }
+    try {
+      await UtilsNotificationRepository().deleteToken(
+        DeviceNotificationToken(
+          osVersion: deviceInfo.systemVersion,
+          deviceModel: deviceInfo.deviceModel,
+          token: token,
+        ),
+      );
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 }

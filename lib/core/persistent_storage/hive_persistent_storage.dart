@@ -4,132 +4,126 @@ import 'package:supa_architecture/core/persistent_storage/persistent_storage.dar
 import 'package:supa_architecture/models/models.dart';
 import 'package:supa_architecture/supa_architecture_platform_interface.dart';
 
+/// Persistent storage implementation using Hive for local storage.
 class HivePersistentStorage extends PersistentStorage {
   static const String _boxName = 'supa_architecture';
-
   static const String _authBoxName = 'supa_auth';
-
   static const String _tenantKey = 'tenant';
-
   static const String _appUserKey = 'appUser';
-
   static const String _baseApiUrlKey = 'baseApiUrl';
 
   late final Box<dynamic> _defaultBox;
+  late final Box<dynamic> _authBox;
 
-  late final Box _authBox;
+  bool _isInitialized = false;
 
+  /// Initializes Hive and opens necessary boxes.
   @override
   Future<void> initialize() async {
-    await Hive.initFlutter();
+    if (_isInitialized) return;
 
-    GetIt.instance.registerSingleton<PersistentStorage>(this);
+    try {
+      await Hive.initFlutter();
+      _defaultBox = await Hive.openBox<dynamic>(_boxName);
+      _authBox = await Hive.openBox<dynamic>(_authBoxName);
 
-    _defaultBox = await Hive.openBox<dynamic>(_boxName)
-        .then((box) => box)
-        .catchError((error) {
+      // Register this instance in GetIt.
+      GetIt.instance.registerSingleton<PersistentStorage>(this);
+      _isInitialized = true;
+    } catch (e) {
       throw HiveInitializationException(
-        "Failed to initialize Hive box: $error",
-        error: error,
+        'Failed to initialize Hive boxes.',
+        error: e is Exception ? e : Exception(e.toString()),
       );
-    });
-
-    _authBox =
-        await Hive.openBox(_authBoxName).then((box) => box).catchError((error) {
-      throw HiveInitializationException(
-        "Failed to initialize Hive box: $error",
-        error: error,
-      );
-    });
+    }
   }
 
+  /// Sets a key-value pair in the default box.
   @override
   void setValue(String key, String value) {
     _defaultBox.put(key, value);
   }
 
+  /// Retrieves a value for the given key from the default box.
   @override
-  String? getValue(String key) {
-    return _defaultBox.get(key);
-  }
+  String? getValue(String key) => _defaultBox.get(key);
 
+  /// Removes a key-value pair from the default box.
   @override
-  void removeValue(String key) {
-    _defaultBox.delete(key);
-  }
+  void removeValue(String key) => _defaultBox.delete(key);
 
+  /// Clears all data from the authentication box.
   @override
-  void clear() {
-    _authBox.clear();
-  }
+  void clear() => _authBox.clear();
 
+  /// Gets the base API URL. If not set, retrieves it from the platform.
   @override
   String get baseApiUrl {
-    String? url = _defaultBox.get(_baseApiUrlKey);
-    if (url == null || url.isEmpty == true) {
-      url = SupaArchitecturePlatform.instance.getBaseUrl();
-      baseApiUrl = url;
-    }
-    return url;
+    return _defaultBox.get(_baseApiUrlKey) ??
+        SupaArchitecturePlatform.instance.getBaseUrl();
   }
 
+  /// Sets the base API URL.
   @override
-  set baseApiUrl(String baseApiUrl) {
-    _defaultBox.put(_baseApiUrlKey, baseApiUrl);
+  set baseApiUrl(String url) {
+    _defaultBox.put(_baseApiUrlKey, url);
   }
 
+  /// Gets the currently stored tenant object.
   @override
   Tenant? get tenant {
     final tenantJson = _authBox.get(_tenantKey);
-
-    if (tenantJson != null && tenantJson is Map) {
-      Tenant tenant = Tenant();
+    if (tenantJson != null && tenantJson is Map<String, dynamic>) {
+      final tenant = Tenant();
       tenant.fromJson(tenantJson);
       return tenant;
     }
     return null;
   }
 
+  /// Stores a tenant object in the authentication box.
   @override
   set tenant(Tenant? tenant) {
     _authBox.put(_tenantKey, tenant?.toJson());
   }
 
+  /// Removes the tenant object from the authentication box.
   @override
-  void removeTenant() {
-    _authBox.delete(_tenantKey);
-  }
+  void removeTenant() => _authBox.delete(_tenantKey);
 
+  /// Gets the currently stored app user object.
   @override
   AppUser? get appUser {
     final appUserJson = _authBox.get(_appUserKey);
-
-    if (appUserJson != null && appUserJson is Map) {
-      AppUser appUser = AppUser();
+    if (appUserJson != null && appUserJson is Map<String, dynamic>) {
+      final appUser = AppUser();
       appUser.fromJson(appUserJson);
       return appUser;
     }
     return null;
   }
 
+  /// Stores an app user object in the authentication box.
   @override
   set appUser(AppUser? appUser) {
     _authBox.put(_appUserKey, appUser?.toJson());
   }
 
+  /// Removes the app user object from the authentication box.
   @override
-  void removeAppUser() {
-    _authBox.delete(_appUserKey);
-  }
+  void removeAppUser() => _authBox.delete(_appUserKey);
 }
 
+/// Exception for Hive initialization failures.
 class HiveInitializationException implements Exception {
   final String message;
-
   final Exception? error;
 
-  HiveInitializationException(
-    this.message, {
-    this.error,
-  });
+  HiveInitializationException(this.message, {this.error});
+
+  @override
+  String toString() {
+    return 'HiveInitializationException: $message'
+        '${error != null ? '\nCaused by: ${error.toString()}' : ''}';
+  }
 }

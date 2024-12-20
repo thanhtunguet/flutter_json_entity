@@ -50,11 +50,15 @@ class ErrorHandlingBloc extends Cubit<void> {
       }
       // Log to Sentry for web and all other platforms
       Sentry.captureException(error);
-      return;
-    }
-    if (error is DioException) {
+    } else if (error is DioException) {
+      // Handle DioException separately
+      if (!kIsWeb && SupaArchitecturePlatform.instance.useFirebase) {
+        FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
+      }
       Sentry.captureException(error);
-      return;
+    } else {
+      // Log other types of errors or exceptions here
+      Sentry.captureException(error);
     }
   }
 }

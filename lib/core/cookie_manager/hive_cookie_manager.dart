@@ -7,6 +7,7 @@ import 'package:supa_architecture/core/app_token.dart';
 import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 
 class HiveCookieManager implements CookieManager {
+  /// Factory method to create and register a [HiveCookieManager] instance.
   static Future<HiveCookieManager> create() async {
     final box = await Hive.openBox<Map<dynamic, dynamic>>('supa_cookies');
     final hiveCookieManager = HiveCookieManager(box);
@@ -16,18 +17,22 @@ class HiveCookieManager implements CookieManager {
 
   final Box<Map<dynamic, dynamic>> _cookieBox;
 
+  /// Constructs a [HiveCookieManager] with the given Hive box.
   HiveCookieManager(this._cookieBox);
 
+  /// Returns the first interceptor from the list of interceptors.
   @override
   Interceptor get interceptor => _interceptors.first;
 
+  /// List of interceptors for handling cookie injection and extraction.
   List<Interceptor> get _interceptors => [
         InterceptorsWrapper(
           onRequest: (options, handler) {
             final uri = options.uri;
             final cookies = loadCookies(uri);
-            final cookieHeader =
-                cookies.map((e) => "${e.name}=${e.value}").join('; ');
+            final cookieHeader = cookies
+                .map((cookie) => '${cookie.name}=${cookie.value}')
+                .join('; ');
             if (cookieHeader.isNotEmpty) {
               options.headers['Cookie'] = cookieHeader;
             }
@@ -45,60 +50,66 @@ class HiveCookieManager implements CookieManager {
         ),
       ];
 
+  /// Loads cookies for a specific URI.
   @override
   List<Cookie> loadCookies(Uri uri) {
     final hostKey = uri.host;
-    final cookies = (_cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{})
-            as Map<dynamic, dynamic>)
-        .entries
-        .map((entry) => Cookie(entry.key, entry.value))
-        .toList();
-    return cookies;
+    final storedCookies =
+        _cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{});
+    if (storedCookies is Map) {
+      return storedCookies.entries
+          .map((entry) => Cookie(entry.key as String, entry.value as String))
+          .toList();
+    }
+    return [];
   }
 
+  /// Saves cookies for a specific URI.
   @override
   void saveCookies(Uri uri, List<Cookie> cookies) {
     final hostKey = uri.host;
-    final Map<dynamic, dynamic> existingCookies =
-        _cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{})
-            as Map<dynamic, dynamic>;
-    final updatedCookies = Map<dynamic, dynamic>.from(existingCookies);
+    final existingCookies =
+        _cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{});
+    final updatedCookies = Map<String, String>.from(existingCookies ?? {});
 
-    for (var cookie in cookies) {
+    for (final cookie in cookies) {
       updatedCookies[cookie.name] = cookie.value;
     }
 
     _cookieBox.put(hostKey, updatedCookies);
   }
 
+  /// Retrieves a single cookie by its name for a specific URI.
   @override
   Cookie getSingleCookie(Uri uri, String name) {
     final hostKey = uri.host;
-    final Map<dynamic, dynamic> cookies =
-        _cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{}) ??
-            <dynamic, dynamic>{};
-    return Cookie(name, cookies[name] ?? '');
+    final cookies = _cookieBox.get(hostKey, defaultValue: <dynamic, dynamic>{});
+    final value = cookies?[name] as String? ?? '';
+    return Cookie(name, value);
   }
 
+  /// Deletes all cookies for a specific URI.
   @override
   void deleteCookies(Uri uri) {
     final hostKey = uri.host;
     _cookieBox.delete(hostKey);
   }
 
+  /// Deletes all cookies stored in the Hive box.
   @override
   void deleteAllCookies() {
     _cookieBox.clear();
   }
 
+  /// Constructs a URL with an appended access token query parameter.
   @override
   String buildUrlWithToken(String url) {
-    final cookie = getSingleCookie(Uri.parse(url), AppToken.accessTokenKey);
-    final parsedUri = Uri.parse(url);
-    return parsedUri.replace(
+    final uri = Uri.parse(url);
+    final tokenCookie = getSingleCookie(uri, AppToken.accessTokenKey);
+    return uri.replace(
       queryParameters: {
-        ...parsedUri.queryParameters,
-        AppToken.accessTokenKey.toLowerCase(): cookie.value,
+        ...uri.queryParameters,
+        AppToken.accessTokenKey.toLowerCase(): tokenCookie.value,
       },
     ).toString();
   }

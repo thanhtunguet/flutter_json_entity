@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add optimization
+
 ### Added
 
 - TextStatusBadge widget

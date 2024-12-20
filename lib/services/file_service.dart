@@ -8,86 +8,44 @@ import "package:url_launcher/url_launcher_string.dart";
 /// viewer URLs for office and Google Docs, and retrieving appropriate icons
 /// for different file types.
 class FileService {
+  // Utility method to check if a file has a specific extension
+  static bool _hasExtension(String filename, List<String> extensions) {
+    final extension = filename.split(".").last.toLowerCase();
+    return extensions.contains(extension);
+  }
+
   /// Checks if the given filename corresponds to an office file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is an office file.
   static bool isOfficeFile(String filename) {
-    return filename.endsWith(".doc") ||
-        filename.endsWith(".docx") ||
-        filename.endsWith(".xls") ||
-        filename.endsWith(".xlsx") ||
-        filename.endsWith(".ppt") ||
-        filename.endsWith(".pptx");
+    return _hasExtension(
+        filename, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
   }
 
   /// Checks if the given filename corresponds to a document file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is a document file.
   static bool isDocFile(String filename) {
-    return filename.endsWith(".doc") || filename.endsWith(".docx");
+    return _hasExtension(filename, ['doc', 'docx']);
   }
 
   /// Checks if the given filename corresponds to a spreadsheet file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is a spreadsheet file.
   static bool isSpreadSheetFile(String filename) {
-    return filename.endsWith(".xls") || filename.endsWith(".xlsx");
+    return _hasExtension(filename, ['xls', 'xlsx']);
   }
 
   /// Checks if the given filename corresponds to a presentation file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is a presentation file.
   static bool isPresentationFile(String filename) {
-    return filename.endsWith(".ppt") || filename.endsWith(".pptx");
+    return _hasExtension(filename, ['ppt', 'pptx']);
   }
 
   /// Checks if the given filename corresponds to an image file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is an image file.
   static bool isImageFile(String filename) {
-    return filename.endsWith(".jpg") ||
-        filename.endsWith(".jpeg") ||
-        filename.endsWith(".png");
+    return _hasExtension(filename, ['jpg', 'jpeg', 'png']);
   }
 
   /// Checks if the given filename corresponds to a PDF file.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is a PDF file.
   static bool isPDFFile(String filename) {
-    return filename.endsWith(".pdf");
+    return _hasExtension(filename, ['pdf']);
   }
 
   /// Launches the specified URL using the default web browser.
-  ///
-  /// **Parameters:**
-  /// - `url`: The URL to be launched.
-  ///
-  /// **Returns:**
-  /// - A [Future] that completes when the URL has been launched.
   static Future<void> launchUrl(String url) async {
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
@@ -95,85 +53,50 @@ class FileService {
   }
 
   /// Creates a URL for viewing an office file using the Microsoft Office web viewer.
-  ///
-  /// **Parameters:**
-  /// - `fileUrl`: The URL of the office file to be viewed.
-  ///
-  /// **Returns:**
-  /// - A string representing the viewer URL.
   static String createOfficeViewerUrl(String fileUrl) {
-    fileUrl = Uri.encodeComponent(fileUrl);
-    return "https://view.officeapps.live.com/op/view.aspx?src=$fileUrl";
+    return "https://view.officeapps.live.com/op/view.aspx?src=${Uri.encodeComponent(fileUrl)}";
   }
 
   /// Creates a URL for viewing a file using the Google Docs web viewer.
-  ///
-  /// **Parameters:**
-  /// - `fileUrl`: The URL of the file to be viewed.
-  ///
-  /// **Returns:**
-  /// - A string representing the viewer URL.
   static String createGoogleDocsViewerUrl(String fileUrl) {
-    fileUrl = Uri.encodeComponent(fileUrl);
-    return "https://docs.google.com/gview?embedded=true&url=$fileUrl";
+    return "https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(fileUrl)}";
   }
 
   /// Retrieves the appropriate icon for the given filename.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file for which the icon is to be retrieved.
-  ///
-  /// **Returns:**
-  /// - The [IconData] representing the icon for the file.
   static IconData iconData(String filename) {
-    if (filename.endsWith(".pdf")) {
+    if (_hasExtension(filename, ['pdf'])) {
       return CarbonIcons.pdf;
     }
-    if (filename.endsWith("doc") || filename.endsWith("docx")) {
+    if (_hasExtension(filename, ['doc', 'docx'])) {
       return CarbonIcons.doc;
     }
-    if (filename.endsWith("ppt") || filename.endsWith("pptx")) {
+    if (_hasExtension(filename, ['ppt', 'pptx'])) {
       return CarbonIcons.ppt;
     }
-    if (filename.endsWith("xls") || filename.endsWith("xlsx")) {
+    if (_hasExtension(filename, ['xls', 'xlsx'])) {
       return CarbonIcons.xls;
     }
-    if (filename.endsWith("zip")) {
+    if (_hasExtension(filename, ['zip'])) {
       return CarbonIcons.zip;
     }
-    if (filename.endsWith("txt")) {
+    if (_hasExtension(filename, ['txt'])) {
       return CarbonIcons.txt;
     }
-    if (filename.endsWith("jpg") ||
-        filename.endsWith("jpeg") ||
-        filename.endsWith("png") ||
-        filename.endsWith("gif") ||
-        filename.endsWith("bmp") ||
-        filename.endsWith("webp")) {
+    if (_hasExtension(filename, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
       return CarbonIcons.image;
     }
     return Icons.attachment;
   }
 
   /// Checks if the given filename corresponds to a supported file type.
-  ///
-  /// **Parameters:**
-  /// - `filename`: The name of the file to check.
-  ///
-  /// **Returns:**
-  /// - A boolean indicating whether the file is a supported file type.
   static bool isSupportedFile(String filename) {
-    // Define supported file extensions
     const supportedExtensions = [
-      "jpg", "jpeg", "png", "gif", "bmp", "webp", // Image files
-      "doc", "docx", "xls", "xlsx", "ppt", "pptx", // Office files
-      "pdf", // PDF files
-      "zip", // Zip files
-      "txt" // Text files
+      'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', // Image files
+      'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Office files
+      'pdf', // PDF files
+      'zip', // Zip files
+      'txt' // Text files
     ];
-    // Get the file extension
-    final fileExtension = filename.split(".").last.toLowerCase();
-    // Check if the file extension is in the list of supported extensions
-    return supportedExtensions.contains(fileExtension);
+    return _hasExtension(filename, supportedExtensions);
   }
 }

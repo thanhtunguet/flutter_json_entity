@@ -12,10 +12,9 @@ part "authentication_state.dart";
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  PortalAuthenticationRepository get authRepo =>
+  final PortalAuthenticationRepository authRepo =
       PortalAuthenticationRepository();
-
-  PortalProfileRepository get profileRepo => PortalProfileRepository();
+  final PortalProfileRepository profileRepo = PortalProfileRepository();
 
   AuthenticationBloc() : super(AuthenticationInitialState()) {
     on<AuthenticationInitializeEvent>(_onAuthenticationInitializeEvent);
@@ -50,9 +49,11 @@ class AuthenticationBloc
   }
 
   Future<void> _saveAuthentication(AppUser user, Tenant tenant) async {
-    await authRepo.saveAuthentication(user, tenant).catchError((error) {
-      debugPrint('Saving authentication failed');
-    });
+    try {
+      await authRepo.saveAuthentication(user, tenant);
+    } catch (error) {
+      debugPrint('Saving authentication failed: $error');
+    }
   }
 
   Future<void> _onAuthenticationInitializeEvent(
@@ -108,9 +109,7 @@ class AuthenticationBloc
   Future<void> handleLoginWithTenants(List<Tenant> tenants) async {
     if (tenants.isNotEmpty) {
       if (tenants.length == 1) {
-        add(LoginWithSelectedTenantEvent(
-          tenant: tenants.first,
-        ));
+        add(LoginWithSelectedTenantEvent(tenant: tenants.first));
         return;
       }
 
@@ -168,10 +167,12 @@ class AuthenticationBloc
     try {
       add(const AuthenticationProcessingEvent(
           AuthenticationAction.loginWithApple));
+
       final credential = await SignInWithApple.getAppleIDCredential(scopes: [
         AppleIDAuthorizationScopes.email,
         AppleIDAuthorizationScopes.fullName,
       ]);
+
       final tenants = await authRepo.loginWithApple(credential.identityToken!);
       handleLoginWithTenants(tenants);
     } catch (error) {
@@ -191,10 +192,7 @@ class AuthenticationBloc
       add(const AuthenticationProcessingEvent(
           AuthenticationAction.loginWithPassword));
 
-      final username = event.email;
-      final password = event.password;
-
-      final tenants = await authRepo.login(username, password);
+      final tenants = await authRepo.login(event.email, event.password);
       handleLoginWithTenants(tenants);
     } catch (error) {
       add(AuthenticationErrorEvent(
@@ -202,7 +200,6 @@ class AuthenticationBloc
         message: "Đã xảy ra lỗi khi đăng nhập",
         error: error,
       ));
-      rethrow;
     }
   }
 
@@ -213,6 +210,7 @@ class AuthenticationBloc
     try {
       add(const AuthenticationProcessingEvent(
           AuthenticationAction.loginWithBiometrics));
+
       final tenants = await authRepo.loginWithBiometric();
       handleLoginWithTenants(tenants);
     } catch (error) {
@@ -273,7 +271,14 @@ class AuthenticationBloc
           user: updatedUser,
           tenant: tenant,
         ));
-      }).catchError((error) {});
+      }).catchError((error) {
+        add(AuthenticationErrorEvent(
+          title: "Cập nhật không thành công",
+          message:
+              "Cập nhật trạng thái nhận thông báo qua email không thành công",
+          error: error,
+        ));
+      });
     }
   }
 
@@ -290,7 +295,14 @@ class AuthenticationBloc
           user: updatedUser,
           tenant: tenant,
         ));
-      }).catchError((error) {});
+      }).catchError((error) {
+        add(AuthenticationErrorEvent(
+          title: "Cập nhật không thành công",
+          message:
+              "Cập nhật trạng thái nhận thông báo qua ứng dụng không thành công",
+          error: error,
+        ));
+      });
     }
   }
 }
