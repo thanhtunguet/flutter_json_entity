@@ -58,6 +58,11 @@ abstract class Attachment extends JsonModel {
   /// This is a nested JSON object representing the `Image` linked to the attachment.
   JsonObject<Image> image = JsonObject<Image>("image");
 
+  /// The unique identifier of the image associated with the attachment, if any.
+  ///
+  /// This field is used when the attachment is linked to an image stored in the system.
+  JsonInteger imageId = JsonInteger("imageId");
+
   /// The timestamp indicating when the attachment was created.
   JsonDate createdAt = JsonDate("createdAt");
 
@@ -80,6 +85,8 @@ abstract class Attachment extends JsonModel {
         file,
         link,
         description,
+        image,
+        imageId,
       ];
 
   void setFile(File file) {
