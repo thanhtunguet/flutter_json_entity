@@ -23,7 +23,7 @@ class AppUser extends JsonModel {
         phone,
         address,
         dateOfBirth,
-        avatarUrl,
+        avatar,
         adminType,
         adminTypeId,
         gender,
@@ -70,7 +70,7 @@ class AppUser extends JsonModel {
   JsonDate dateOfBirth = JsonDate("dateOfBirth");
 
   /// The user's avatar URL.
-  JsonString avatarUrl = JsonString("avatarUrl");
+  JsonString avatar = JsonString("avatar");
 
   /// The user's admin type as an [EnumModel].
   JsonObject<EnumModel> adminType = JsonObject<EnumModel>("adminType");
