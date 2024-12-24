@@ -4,6 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:supa_architecture/api_client/interceptors/device_info_interceptor.dart';
+import 'package:supa_architecture/api_client/interceptors/refresh_interceptor.dart';
+import 'package:supa_architecture/api_client/interceptors/timezone_interceptor.dart';
 import 'package:supa_architecture/supa_architecture_platform_interface.dart';
 
 /// A custom [ImageProvider] that uses [Dio] to fetch images from a network URL,
@@ -12,7 +15,6 @@ import 'package:supa_architecture/supa_architecture_platform_interface.dart';
 /// This provider integrates Dio for custom HTTP configurations like interceptors,
 /// headers, and advanced error handling.
 class DioImageProvider extends ImageProvider<DioImageProvider> {
-  /// The [Dio] instance for handling network requests.
   final Dio dio;
 
   /// The URL of the network image.
@@ -27,13 +29,15 @@ class DioImageProvider extends ImageProvider<DioImageProvider> {
   DioImageProvider({
     required this.imageUrl,
     required this.fallbackAssetPath,
-    Dio? dio,
-  }) : dio = dio ?? Dio() {
+  }) : dio = Dio() {
     if (!kIsWeb) {
-      dio?.interceptors.add(
+      dio.interceptors.add(
         SupaArchitecturePlatform.instance.cookieStorage.interceptor,
       );
     }
+    dio.interceptors.add(DeviceInfoInterceptor());
+    dio.interceptors.add(TimezoneInterceptor());
+    dio.interceptors.add(RefreshInterceptor());
   }
 
   @override
