@@ -8,9 +8,6 @@ typedef InstanceConstructor<T extends JsonModel> = T Function();
 /// This class provides methods for handling JSON serialization and deserialization,
 /// managing fields, and handling errors, warnings, and informational messages.
 abstract class JsonModel with JsonSerializable {
-  /// Map of JSON data.
-  Map<String, dynamic> _json = {};
-
   /// List of JSON fields representing the model attributes.
   List<JsonField> get fields;
 
@@ -58,8 +55,6 @@ abstract class JsonModel with JsonSerializable {
   @override
   void fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
-      _json = json;
-
       if (json.containsKey("generalErrors") && json["generalErrors"] is List) {
         generalErrors = (json["generalErrors"] as List<dynamic>)
             .map((dynamic item) => item as String)
@@ -142,7 +137,7 @@ abstract class JsonModel with JsonSerializable {
   /// - A map representing the model in JSON format.
   @override
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{..._json};
+    final Map<String, dynamic> json = <String, dynamic>{};
     for (final field in fields) {
       if (field.fieldName.toLowerCase().endsWith('id') &&
           field.fieldName != 'statusId') {
