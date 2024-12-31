@@ -56,13 +56,27 @@ class JsonDouble extends JsonField<double> {
   /// ```
   @override
   set value(dynamic value) {
-    if (value is double?) {
+    if (value == null) {
+      rawValue = null;
+      return;
+    }
+    if (value is double) {
       rawValue = value;
+      return;
+    }
+    if (value is int) {
+      rawValue = value.toDouble();
       return;
     }
     if (value is String) {
       rawValue = double.tryParse(value);
       return;
+    }
+    // Attempt to handle other data types via conversion
+    try {
+      rawValue = double.tryParse(value.toString());
+    } catch (_) {
+      rawValue = null; // Fallback if conversion fails
     }
   }
 
