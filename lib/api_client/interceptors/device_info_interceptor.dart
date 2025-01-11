@@ -14,7 +14,7 @@ class DeviceInfoInterceptor extends Interceptor {
     // Add device-specific headers to the request.
     options.headers.addAll({
       "X-Device-Model": deviceInfo.deviceModel,
-      "X-Device-Name": _sanitizeDeviceName(deviceInfo.deviceName),
+      "X-Device-Name": deviceInfo.deviceModel,
       "X-Operating-System": deviceInfo.operatingSystem,
       "X-System-Version": deviceInfo.systemVersion,
       "X-Device-UUID": deviceInfo.deviceUuid,
@@ -22,22 +22,5 @@ class DeviceInfoInterceptor extends Interceptor {
 
     // Pass the modified request to the next handler.
     handler.next(options);
-  }
-
-  /// Sanitizes the device name to ensure it adheres to API requirements.
-  ///
-  /// Removes special characters, trims unnecessary spaces, and limits the length.
-  String _sanitizeDeviceName(String deviceName) {
-    // Step-by-step sanitization process:
-    return deviceName
-        .trim() // Remove leading and trailing whitespace.
-        .replaceAll(RegExp(r"[^\w\s-]"), "") // Remove special characters.
-        .replaceAll(
-            RegExp(r"\s+"), " ") // Consolidate multiple spaces into one.
-        .substring(
-            0,
-            deviceName.length > 50
-                ? 50
-                : deviceName.length); // Limit length to 50 characters.
   }
 }
