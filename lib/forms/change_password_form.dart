@@ -35,6 +35,7 @@ class ChangePasswordForm extends FormGroup {
           "otpCode": FormControl<String>(
             value: "",
             validators: [
+              Validators.required,
               Validators.pattern(otpRegex),
             ],
           ),
