@@ -40,6 +40,7 @@ class AppUser extends JsonModel {
         timezoneId,
         identityCode,
         tenants,
+        name,
       ];
 
   /// The user ID.
@@ -119,4 +120,7 @@ class AppUser extends JsonModel {
   JsonString identityCode = JsonString("identityCode");
 
   JsonList<Tenant> tenants = JsonList<Tenant>("tenants");
+
+  /// The user's name.
+  JsonString name = JsonString("name");
 }
