@@ -23,14 +23,17 @@ class TimezoneInterceptor extends Interceptor {
     final now = DateTime.now();
     final offset = now.timeZoneOffset;
 
-    // Determine the sign of the offset
-    final sign = offset.isNegative ? "-" : "+";
+    // Calculate hours and minutes
+    final hours = offset.inHours.abs();
+    final minutes = offset.inMinutes.abs().remainder(60);
 
-    // Calculate the offset in hours and minutes as a decimal
-    final offsetDecimal =
-        offset.inHours.abs() + (offset.inMinutes.abs().remainder(60) / 60.0);
-
-    // Format the offset string with the appropriate sign
-    return "$sign${offsetDecimal.toStringAsFixed(2)}";
+    // Format the offset based on whether minutes are non-zero
+    if (minutes == 0) {
+      return "$hours"; // No sign and no decimal part if the offset is an integer
+    } else {
+      final offsetDecimal = hours + (minutes / 60.0);
+      return offsetDecimal
+          .toStringAsFixed(2); // Decimal part only for non-integer offsets
+    }
   }
 }
