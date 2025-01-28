@@ -4,6 +4,10 @@
 
 - Add optimization
 
+### Fixed
+
+- Timezone: Ignore "+" sign in timezone header
+
 ### Added
 
 - TextStatusBadge widget
