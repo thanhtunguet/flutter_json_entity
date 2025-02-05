@@ -4,7 +4,9 @@ import 'package:supa_architecture/models/enum_model.dart';
 import 'package:supa_architecture/models/file.dart';
 import 'package:supa_architecture/models/forgot_password_dto.dart';
 import 'package:supa_architecture/models/image.dart';
+import 'package:supa_architecture/models/sub_system.dart';
 import 'package:supa_architecture/models/tenant.dart';
+import 'package:supa_architecture/models/tenant_sub_system_mapping.dart';
 import 'package:supa_architecture/models/user_notification.dart';
 
 export 'app_user.dart';
@@ -28,6 +30,9 @@ void registerModels() {
   GetIt.instance.registerFactory<File>(() => File());
   GetIt.instance.registerFactory<ForgotPasswordDto>(() => ForgotPasswordDto());
   GetIt.instance.registerFactory<Image>(() => Image());
+  GetIt.instance.registerFactory<SubSystem>(() => SubSystem());
+  GetIt.instance
+      .registerFactory<TenantSubSystemMapping>(() => TenantSubSystemMapping());
   GetIt.instance.registerFactory<Tenant>(() => Tenant());
   GetIt.instance.registerFactory<UserNotification>(() => UserNotification());
 }
