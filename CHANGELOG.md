@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## v1.2.0
 
 - Add optimization
+- Add tenant subsystem mappings
 
 ### Fixed
 

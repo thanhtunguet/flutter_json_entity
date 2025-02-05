@@ -1,5 +1,6 @@
 import "package:supa_architecture/json/json.dart";
 import "package:supa_architecture/models/enum_model.dart";
+import "package:supa_architecture/models/tenant_sub_system_mapping.dart";
 
 /// A class representing a tenant.
 ///
@@ -21,6 +22,7 @@ class Tenant extends JsonModel {
         tenantStatus,
         requestProperty,
         isCurrentTenant,
+        tenantSubSystemMappings,
       ];
 
   /// The ID of the tenant.
@@ -54,4 +56,7 @@ class Tenant extends JsonModel {
   JsonString requestProperty = JsonString("requestProperty");
 
   JsonBoolean isCurrentTenant = JsonBoolean("isCurrentTenant");
+
+  JsonList<TenantSubSystemMapping> tenantSubSystemMappings =
+      JsonList<TenantSubSystemMapping>("tenantSubSystemMappings");
 }
