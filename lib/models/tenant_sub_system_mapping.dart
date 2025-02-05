@@ -9,7 +9,7 @@ class TenantSubSystemMapping extends JsonModel {
 
   JsonObject<Tenant> tenant = JsonObject('tenant');
 
-  JsonObject<SubSystem> subSystem = JsonObject<SubSystem>('subsystem');
+  JsonObject<SubSystem> subSystem = JsonObject<SubSystem>('subSystem');
 
   @override
   List<JsonField> get fields => [
