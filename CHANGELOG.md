@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.0
+
+### Added 
+
+- Common widgets, shared across projects
+
 ## v1.2.0
 
 - Add optimization
