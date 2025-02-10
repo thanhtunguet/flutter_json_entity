@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1
+
+### Added
+
+- `showPadding` for section title
+
 ## v1.3.0
 
 ### Added 
