@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.0
+
+### Added
+
+- NotificationHandler
+- createdAt property for UserNotification model
+
 ## v1.3.1
 
 ### Added

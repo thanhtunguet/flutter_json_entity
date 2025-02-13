@@ -52,6 +52,12 @@ class UserNotification extends JsonModel {
   /// Indicates if the notification is unread.
   JsonBoolean unread = JsonBoolean("unread");
 
+  JsonDate createdAt = JsonDate("createdAt");
+
+  JsonInteger group = JsonInteger("group");
+
+  JsonInteger isPublic = JsonInteger("isPublic");
+
   /// List of JSON fields representing the notification attributes.
   @override
   List<JsonField> get fields => [
@@ -70,5 +76,8 @@ class UserNotification extends JsonModel {
         recipient,
         recipientId,
         unread,
+        createdAt,
+        group,
+        isPublic,
       ];
 }
