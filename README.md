@@ -418,6 +418,8 @@ See package example here:
 
 [Push Notification Bloc Documentation](docs/bloc_push_notification.md)
 
+[Using ChatGPT to generate entity][docs/chatgpt_entity_generation.md]
+
 ## Contributing
 Instructions for contributing to the library, including guidelines for submitting issues and pull requests.
 

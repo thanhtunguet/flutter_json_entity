@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1
+
+### Added 
+
+- Entity generation documentation
+
 ## v1.4.0
 
 ### Added

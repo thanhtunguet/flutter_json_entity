@@ -143,11 +143,16 @@ class AuthenticationBloc
       }
 
       final GoogleSignInAccount? account = await googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleKey =
-          await account?.authentication;
-      if (googleKey?.idToken != null || googleKey?.accessToken != null) {
+
+      if (account == null) {
+        emit(AuthenticationInitialState());
+        return;
+      }
+
+      final googleKey = await account.authentication;
+      if (googleKey.idToken != null || googleKey.accessToken != null) {
         final List<Tenant> tenants = await authRepo
-            .loginWithGoogle(googleKey!.idToken ?? googleKey.accessToken!);
+            .loginWithGoogle(googleKey.idToken ?? googleKey.accessToken!);
 
         handleLoginWithTenants(tenants);
       }
