@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.2
+
+### Added
+
+- EntityDetailNavigator
+
 ## v1.4.1
 
 ### Added 

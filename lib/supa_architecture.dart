@@ -18,6 +18,7 @@ export 'providers/providers.dart';
 export 'repositories/repositories.dart';
 export 'services/file_service.dart';
 export 'widgets/widgets.dart';
+export 'services/services.dart';
 
 class SupaArchitecture {
   Future<String?> getPlatformVersion() {
