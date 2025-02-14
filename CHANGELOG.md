@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.3
+
+### Added
+
+- Entities
+
 ## v1.4.2
 
 ### Added

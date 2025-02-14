@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
 
-abstract class EntityDetailNavigator {
+abstract class EntityDetailNavigator<T> {
   Future<void> navigate(
     BuildContext context,
-    String entityId, {
+    int entityId, {
     dynamic extra,
     bool useNavigator = false,
   });
 
-  handle403(BuildContext context);
+  dynamic handle403(BuildContext context);
 
-  handle404(BuildContext context);
+  dynamic handle404(BuildContext context);
+
+  Future<T> getEntity();
 }

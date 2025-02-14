@@ -1,4 +1,6 @@
 import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/app_user_sub_system_mapping.dart";
+import "package:supa_architecture/models/current_tenant.dart";
 import "package:supa_architecture/models/enum_model.dart";
 import "package:supa_architecture/models/tenant.dart";
 
@@ -41,6 +43,8 @@ class AppUser extends JsonModel {
         identityCode,
         tenants,
         name,
+        appUserSubSystemMappings,
+        currentTenant,
       ];
 
   /// The user ID.
@@ -123,4 +127,10 @@ class AppUser extends JsonModel {
 
   /// The user's name.
   JsonString name = JsonString("name");
+
+  JsonList<AppUserSubSystemMapping> appUserSubSystemMappings =
+      JsonList<AppUserSubSystemMapping>("appUserSubSystemMappings");
+
+  JsonObject<CurrentTenant> currentTenant =
+      JsonObject<CurrentTenant>("currentTenant");
 }
