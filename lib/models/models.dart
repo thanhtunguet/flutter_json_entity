@@ -1,18 +1,11 @@
 import 'package:get_it/get_it.dart';
-import 'package:supa_architecture/models/app_user.dart';
-import 'package:supa_architecture/models/enum_model.dart';
-import 'package:supa_architecture/models/file.dart';
-import 'package:supa_architecture/models/forgot_password_dto.dart';
-import 'package:supa_architecture/models/image.dart';
 import 'package:supa_architecture/models/sub_system.dart';
-import 'package:supa_architecture/models/tenant.dart';
 import 'package:supa_architecture/models/tenant_sub_system_mapping.dart';
-import 'package:supa_architecture/models/user_notification.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 export 'app_user.dart';
-export 'app_user_sub_system_mapping.dart';
 export 'app_user_filter.dart';
+export 'app_user_sub_system_mapping.dart';
 export 'attachment.dart';
 export 'current_tenant.dart';
 export 'enum_model.dart';
