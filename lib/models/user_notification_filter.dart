@@ -10,10 +10,14 @@ class UserNotificationFilter extends DataFilter {
   /// Currently, this list is empty, but it can be extended to include
   /// specific filter criteria for user notifications.
   @override
-  List<FilterField> get fields => [];
+  List<FilterField> get fields => [
+        subSystemId,
+      ];
 
   /// Whether the notification is unread.
   bool? unread;
+
+  IdFilter subSystemId = IdFilter("subSystemId");
 
   @override
   Map<String, dynamic> toJson() {

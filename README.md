@@ -416,9 +416,9 @@ See package example here:
 
 [example/example.md](example/example.md)
 
-[Push Notification Bloc Documentation](docs/bloc_push_notification.md)
+[Push Notification Bloc Documentation](doc/bloc_push_notification.md)
 
-[Using ChatGPT to generate entity][docs/chatgpt_entity_generation.md]
+[Using ChatGPT to generate entity][doc/chatgpt_entity_generation.md]
 
 ## Contributing
 Instructions for contributing to the library, including guidelines for submitting issues and pull requests.
