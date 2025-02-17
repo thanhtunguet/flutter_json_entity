@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.4
+
+### Fixed
+
+- GoBackButton
+
 ## v1.4.3
 
 ### Added

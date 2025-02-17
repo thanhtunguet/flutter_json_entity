@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
 
 class GoBackButton extends StatelessWidget {
@@ -14,7 +15,10 @@ class GoBackButton extends StatelessWidget {
         if (onPressed != null) {
           onPressed!.call();
         }
-        return Navigator.of(context).pop();
+        if (Navigator.of(context).canPop()) {
+          return Navigator.of(context).pop();
+        }
+        return GoRouter.of(context).go("/");
       },
     );
   }
