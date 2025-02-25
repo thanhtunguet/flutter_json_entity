@@ -1,7 +1,7 @@
 import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/app_user_preferences.dart";
 import "package:supa_architecture/models/app_user_sub_system_mapping.dart";
 import "package:supa_architecture/models/current_tenant.dart";
-import "package:supa_architecture/models/enum_model.dart";
 import "package:supa_architecture/models/tenant.dart";
 
 /// A class representing an application user.
@@ -9,7 +9,7 @@ import "package:supa_architecture/models/tenant.dart";
 /// This class extends [JsonModel] and provides various fields representing
 /// user attributes such as ID, email, username, and more. It also provides
 /// a static instance of an empty [AppUser].
-class AppUser extends JsonModel {
+class AppUser extends JsonModel with AppUserPreferences {
   /// A static instance of an empty [AppUser].
   static final AppUser empty = AppUser();
 
@@ -20,7 +20,6 @@ class AppUser extends JsonModel {
         globalUserId,
         email,
         username,
-        password,
         displayName,
         phone,
         address,
@@ -31,11 +30,8 @@ class AppUser extends JsonModel {
         gender,
         genderId,
         isAlreadyGettingStarted,
-        otpCode,
         language,
         languageId,
-        createdAt,
-        updatedAt,
         receivingSystemEmail,
         receivingSystemNotification,
         timezone,
@@ -59,8 +55,8 @@ class AppUser extends JsonModel {
   /// The user's username.
   JsonString username = JsonString("username");
 
-  /// The user's password.
-  JsonString password = JsonString("password");
+  /// The user's name.
+  JsonString name = JsonString("name");
 
   /// The user's display name.
   JsonString displayName = JsonString("displayName");
@@ -74,63 +70,23 @@ class AppUser extends JsonModel {
   /// The user's date of birth.
   JsonDate dateOfBirth = JsonDate("dateOfBirth");
 
+  /// The user's identity code.
+  JsonString identityCode = JsonString("identityCode");
+
   /// The user's avatar URL.
   JsonString avatar = JsonString("avatar");
-
-  /// The user's admin type as an [EnumModel].
-  JsonObject<EnumModel> adminType = JsonObject<EnumModel>("adminType");
-
-  /// The ID of the user's admin type.
-  JsonInteger adminTypeId = JsonInteger("adminTypeId");
-
-  /// The user's gender as an [EnumModel].
-  JsonObject<EnumModel> gender = JsonObject<EnumModel>("gender");
-
-  /// The ID of the user's gender.
-  JsonInteger genderId = JsonInteger("genderId");
 
   /// Indicates if the user has already gotten started.
   JsonBoolean isAlreadyGettingStarted = JsonBoolean("isAlreadyGettingStarted");
 
-  /// The OTP code for the user.
-  JsonString otpCode = JsonString("otpCode");
-
-  /// The user's language as an [EnumModel].
-  JsonObject<EnumModel> language = JsonObject<EnumModel>("language");
-
-  /// The ID of the user's language.
-  JsonInteger languageId = JsonInteger("languageId");
-
-  /// Indicates if the user is receiving system emails.
-  JsonBoolean receivingSystemEmail = JsonBoolean("receivingSystemEmail");
-
-  /// Indicates if the user is receiving system notifications.
-  JsonBoolean receivingSystemNotification =
-      JsonBoolean("receivingSystemNotification");
-
-  /// The user's timezone as an [EnumModel].
-  JsonObject<EnumModel> timezone = JsonObject<EnumModel>("timezone");
-
-  /// The ID of the user's timezone.
-  JsonInteger timezoneId = JsonInteger("timezoneId");
-
-  /// The date the user was created.
-  JsonDate createdAt = JsonDate("createdAt");
-
-  /// The date the user was last updated.
-  JsonDate updatedAt = JsonDate("updatedAt");
-
-  /// The user's identity code.
-  JsonString identityCode = JsonString("identityCode");
-
+  /// List of tenants the user belongs to.
   JsonList<Tenant> tenants = JsonList<Tenant>("tenants");
 
-  /// The user's name.
-  JsonString name = JsonString("name");
-
-  JsonList<AppUserSubSystemMapping> appUserSubSystemMappings =
-      JsonList<AppUserSubSystemMapping>("appUserSubSystemMappings");
-
+  /// The current tenant that this user is using.
   JsonObject<CurrentTenant> currentTenant =
       JsonObject<CurrentTenant>("currentTenant");
+
+  /// List of mappings between the user and subsystems.
+  JsonList<AppUserSubSystemMapping> appUserSubSystemMappings =
+      JsonList<AppUserSubSystemMapping>("appUserSubSystemMappings");
 }

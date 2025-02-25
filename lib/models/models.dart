@@ -4,6 +4,7 @@ import 'package:supa_architecture/models/tenant_sub_system_mapping.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 
 export 'app_user.dart';
+export 'app_user_info.dart';
 export 'app_user_filter.dart';
 export 'app_user_sub_system_mapping.dart';
 export 'attachment.dart';
@@ -22,6 +23,7 @@ export 'user_notification_filter.dart';
 
 void registerModels() {
   GetIt.instance.registerFactory<AppUser>(() => AppUser());
+  GetIt.instance.registerFactory<AppUserInfo>(() => AppUserInfo());
   GetIt.instance.registerFactory<EnumModel>(() => EnumModel());
   GetIt.instance.registerFactory<File>(() => File());
   GetIt.instance.registerFactory<ForgotPasswordDto>(() => ForgotPasswordDto());

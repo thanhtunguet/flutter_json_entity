@@ -2,6 +2,7 @@ library supa_architecture;
 
 import 'package:supa_architecture/core/cookie_manager/cookie_manager.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
+import 'package:supa_architecture/core/secure_storage/secure_storage.dart';
 
 import 'supa_architecture_platform_interface.dart';
 
@@ -30,3 +31,6 @@ PersistentStorage get persistentStorage =>
 
 CookieManager get cookieManager =>
     SupaArchitecturePlatform.instance.cookieStorage;
+
+SecureStorage get secureStorage =>
+    SupaArchitecturePlatform.instance.secureStorage;

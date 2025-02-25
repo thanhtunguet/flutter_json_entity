@@ -79,8 +79,8 @@ class PortalAuthenticationRepository extends ApiClient {
         .toString();
     return dio.post(url, data: {}).then(
       (response) {
-        response.data["id"] = response.data["userId"];
-        return response.body<AppUser>();
+        final appUserInfo = response.body<AppUserInfo>();
+        return appUserInfo.toAppUser();
       },
     );
   }
@@ -138,12 +138,9 @@ class PortalAuthenticationRepository extends ApiClient {
     }
 
     try {
-      await GetIt.instance.get<PortalAuthenticationRepository>().refreshToken();
-      final AppUser appUser = await GetIt.instance
-          .get<PortalAuthenticationRepository>()
-          .getProfileInfo();
-      final Tenant tenant =
-          appUser.tenants.value.firstWhere((t) => t.isCurrentTenant.value);
+      await refreshToken();
+      final AppUser appUser = await getProfileInfo();
+      final CurrentTenant tenant = appUser.currentTenant.value;
 
       return TenantAuthentication(tenant, appUser);
     } catch (error) {

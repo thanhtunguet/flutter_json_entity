@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.0
+
+### Added
+
+- AppUserInfo class
+
 ## v1.4.4
 
 ### Fixed
