@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.1
+
+### Added
+
+- imageUrl for empty state
+
 ## v1.5.0
 
 ### Added

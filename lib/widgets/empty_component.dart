@@ -5,10 +5,13 @@ class EmptyComponent extends StatelessWidget {
 
   final String? subtitle;
 
+  final String imageUrl;
+
   const EmptyComponent({
     super.key,
     this.title = 'Chưa có dữ liệu',
     this.subtitle = 'Keep up the good work!',
+    this.imageUrl = 'packages/supa_architecture/assets/images/empty_state.png',
   });
 
   @override
@@ -18,9 +21,9 @@ class EmptyComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Image(
+          Image(
             image: AssetImage(
-              'packages/supa_architecture/assets/images/empty_state.png',
+              imageUrl,
             ),
           ),
           Text(
