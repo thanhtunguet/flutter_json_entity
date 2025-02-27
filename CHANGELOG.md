@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.2
+
+### Fixed
+- Empty state default image
+- Notification duplication
+
+
 ## v1.5.1
 
 ### Added

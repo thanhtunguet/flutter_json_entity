@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 
 class EmptyComponent extends StatelessWidget {
+  static String _emptyStateImage =
+      'packages/supa_architecture/assets/images/empty_state.png';
+
+  static void setDefaultImage(String defaultImage) {
+    _emptyStateImage = defaultImage;
+  }
+
   final String title;
 
   final String? subtitle;
 
-  final String imageUrl;
+  final String? imageUrl;
 
   const EmptyComponent({
     super.key,
     this.title = 'Chưa có dữ liệu',
     this.subtitle = 'Keep up the good work!',
-    this.imageUrl = 'packages/supa_architecture/assets/images/empty_state.png',
+    this.imageUrl,
   });
 
   @override
@@ -23,7 +30,7 @@ class EmptyComponent extends StatelessWidget {
         children: [
           Image(
             image: AssetImage(
-              imageUrl,
+              imageUrl ?? _emptyStateImage,
             ),
           ),
           Text(

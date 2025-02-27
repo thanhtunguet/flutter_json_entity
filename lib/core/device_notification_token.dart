@@ -15,6 +15,8 @@ class DeviceNotificationToken extends Equatable {
   /// The notification token.
   final String? token;
 
+  final int? subSystemId;
+
   /// Constructs an instance of [DeviceNotificationToken].
   ///
   /// **Parameters:**
@@ -25,6 +27,7 @@ class DeviceNotificationToken extends Equatable {
     required this.osVersion,
     required this.deviceModel,
     this.token,
+    this.subSystemId,
   });
 
   /// Constructs an instance of [DeviceNotificationToken] from a JSON map.
@@ -34,7 +37,8 @@ class DeviceNotificationToken extends Equatable {
   DeviceNotificationToken.fromJson(Map<String, dynamic> json)
       : osVersion = json["osVersion"],
         deviceModel = json["deviceModel"],
-        token = json["token"];
+        token = json["token"],
+        subSystemId = int.tryParse(json["subSystemId"]);
 
   /// Converts the [DeviceNotificationToken] instance to a JSON map.
   ///
@@ -53,5 +57,6 @@ class DeviceNotificationToken extends Equatable {
         osVersion,
         deviceModel,
         token,
+        subSystemId,
       ];
 }
