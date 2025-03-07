@@ -1,6 +1,6 @@
 name: supa_architecture
 description: "Architecture library for Supa Flutter applications"
-version: 1.5.2
+version: 1.5.3
 homepage: https://github.supa.vn
 
 environment:
@@ -16,7 +16,7 @@ dependencies:
   aad_oauth: "^1.0.0"
   bloc: "^9.0.0"
   cookie_jar: "^4.0.0"
-  device_info_plus: "^9.0.0"
+  device_info_plus: "^11.0.0"
   dio: "^5.7.0"
   dio_cookie_manager: "^3.1.0"
   equatable: "^2.0.0"

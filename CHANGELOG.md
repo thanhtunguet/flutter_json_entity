@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.3
+
+### Fixed
+- Switch receive email and receive notification lost the subsystem list in profile info
+- Centering the empty state component
+
 ## v1.5.2
 
 ### Fixed

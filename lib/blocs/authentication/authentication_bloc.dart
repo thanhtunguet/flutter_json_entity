@@ -273,7 +273,9 @@ class AuthenticationBloc
 
       await profileRepo.switchEmail(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(
-          user: updatedUser,
+          user: user
+            ..receivingSystemEmail.value =
+                updatedUser.receivingSystemEmail.value,
           tenant: tenant,
         ));
       }).catchError((error) {
@@ -297,7 +299,9 @@ class AuthenticationBloc
 
       await profileRepo.switchNotification(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(
-          user: updatedUser,
+          user: user
+            ..receivingSystemNotification.value =
+                updatedUser.receivingSystemNotification.value,
           tenant: tenant,
         ));
       }).catchError((error) {

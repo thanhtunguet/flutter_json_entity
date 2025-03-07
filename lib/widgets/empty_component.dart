@@ -35,12 +35,14 @@ class EmptyComponent extends StatelessWidget {
           ),
           Text(
             title,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 8),
           if (subtitle != null)
             Text(
               subtitle!,
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
