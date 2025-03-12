@@ -1,5 +1,12 @@
 # Changelog
 
+
+## v1.5.4
+
+### Added
+
+- Profile repository methods to change language
+
 ## v1.5.3
 
 ### Fixed

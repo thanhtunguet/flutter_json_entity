@@ -27,12 +27,12 @@ class WebPersistentStorage extends PersistentStorage {
   /// Sets a key-value pair in localStorage.
   @override
   void setValue(String key, String value) {
-    html.window.localStorage[key] = value;
+    html.window.localStorage.setItem(key, value);
   }
 
   /// Retrieves the value for the given key from localStorage.
   @override
-  String? getValue(String key) => html.window.localStorage[key];
+  String? getValue(String key) => html.window.localStorage.getItem(key);
 
   /// Removes the value for the given key from localStorage.
   @override
@@ -54,7 +54,7 @@ class WebPersistentStorage extends PersistentStorage {
   @override
   set tenant(Tenant? tenant) {
     if (tenant != null) {
-      html.window.localStorage['tenant'] = jsonEncode(tenant.toJson());
+      html.window.localStorage.setItem('tenant', jsonEncode(tenant.toJson()));
     } else {
       removeTenant();
     }
@@ -63,7 +63,7 @@ class WebPersistentStorage extends PersistentStorage {
   /// Retrieves tenant information from localStorage.
   @override
   Tenant? get tenant {
-    final tenantJson = html.window.localStorage['tenant'];
+    final tenantJson = html.window.localStorage.getItem('tenant');
     if (tenantJson != null) {
       try {
         final tenantData = jsonDecode(tenantJson) as Map<String, dynamic>;
@@ -82,7 +82,7 @@ class WebPersistentStorage extends PersistentStorage {
   @override
   set appUser(AppUser? appUser) {
     if (appUser != null) {
-      html.window.localStorage['appUser'] = jsonEncode(appUser.toJson());
+      html.window.localStorage.setItem('appUser', jsonEncode(appUser.toJson()));
     } else {
       removeAppUser();
     }
@@ -91,7 +91,7 @@ class WebPersistentStorage extends PersistentStorage {
   /// Retrieves app user information from localStorage.
   @override
   AppUser? get appUser {
-    final appUserJson = html.window.localStorage['appUser'];
+    final appUserJson = html.window.localStorage.getItem('appUser');
     if (appUserJson != null) {
       try {
         final appUserData = jsonDecode(appUserJson) as Map<String, dynamic>;

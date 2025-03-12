@@ -1,6 +1,5 @@
 import "dart:async";
 import "dart:convert";
-import "dart:io";
 
 import "package:bloc/bloc.dart";
 import "package:equatable/equatable.dart";
@@ -62,7 +61,7 @@ class PushNotificationBloc
 
   /// Request notification permissions.
   Future<bool> requestNotificationPermission() async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+    if (kIsWeb) return false;
     final settings = await _firebaseMessaging.requestPermission();
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }

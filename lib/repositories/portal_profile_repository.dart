@@ -1,5 +1,7 @@
 import "package:supa_architecture/api_client/api_client.dart";
 import "package:supa_architecture/models/app_user.dart";
+import "package:supa_architecture/models/enum_model.dart";
+import "package:supa_architecture/models/enum_model_filter.dart";
 
 /// A repository class for managing user profiles.
 ///
@@ -93,5 +95,27 @@ class PortalProfileRepository extends ApiClient {
     ).then(
       (response) => response.data,
     );
+  }
+
+  Future<List<EnumModel>> singleListLanguage(EnumModelFilter filter) async {
+    return dio
+        .post(
+          "/single-list-language",
+          data: filter.toJson(),
+        )
+        .then(
+          (response) => response.bodyAsList<EnumModel>(),
+        );
+  }
+
+  Future<AppUser> updateLanguage(AppUser user) async {
+    return dio
+        .post(
+          "/update-language",
+          data: user.toJson(),
+        )
+        .then(
+          (response) => response.body<AppUser>(),
+        );
   }
 }
