@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.5
+
+### Added
+
+- Default translations for confirmation box
 
 ## v1.5.4
 

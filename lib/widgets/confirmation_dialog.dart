@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supa_architecture/widgets/carbon_button.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
+import 'package:supa_l10n_manager/translator.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -8,8 +9,8 @@ class ConfirmationDialog extends StatelessWidget {
   final Widget?
       child; // Custom widget content that can be embedded in the dialog.
 
-  final String okText; // Text for the confirmation button.
-  final String cancelText; // Text for the cancel button.
+  final String? okText; // Text for the confirmation button.
+  final String? cancelText; // Text for the cancel button.
 
   final IconData? icon; // Optional icon displayed at the top of the dialog.
 
@@ -25,8 +26,8 @@ class ConfirmationDialog extends StatelessWidget {
     this.child,
     required this.onConfirm,
     this.onCancel,
-    this.okText = 'Tiếp tục',
-    this.cancelText = 'Hủy',
+    this.okText,
+    this.cancelText,
     this.icon,
   });
 
@@ -78,7 +79,7 @@ class ConfirmationDialog extends StatelessWidget {
                 }
                 _closeDialog(context); // Closes the dialog.
               },
-              label: cancelText,
+              label: cancelText ?? translate('general.action.cancel'),
               color: Theme.of(context).colorScheme.secondary,
               icon: CarbonIcons.close,
               isExpanded: true, // Expands button to fit available space.
@@ -89,7 +90,7 @@ class ConfirmationDialog extends StatelessWidget {
                 onConfirm(); // Triggers the confirmation callback.
                 _closeDialog(context); // Closes the dialog.
               },
-              label: okText,
+              label: translate('general.action.continue'),
               color: Theme.of(context).colorScheme.primary,
               icon: CarbonIcons.checkmark,
               isExpanded: true, // Expands button to fit available space.
