@@ -25,16 +25,4 @@ class EnumModel extends JsonModel {
 
   /// The color associated with the enumeration.
   JsonString color = JsonString("color");
-
-  /// Translate the name of the enumeration to English.
-  JsonString en = JsonString("en");
-
-  /// Translate the name of the enumeration to Vietnamese.
-  JsonString vi = JsonString("vi");
-
-  /// Translate the name of the enumeration to Chinese.
-  JsonString zh = JsonString('zh');
-
-  /// Translate the name of the enumeration to Japanese.
-  JsonString ja = JsonString('ja');
 }
