@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:supa_architecture/widgets/carbon_button.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
-import 'package:supa_l10n_manager/translator.dart';
 
 class ConfirmationDialog extends StatelessWidget {
+  static String Function() defaultOkText = () => 'Tiếp tục';
+
+  static String Function() defaultCancelText = () => 'Huỷ';
+
   final String title;
   final String? content; // Optional descriptive content shown in the dialog.
   final Widget?
@@ -79,7 +82,7 @@ class ConfirmationDialog extends StatelessWidget {
                 }
                 _closeDialog(context); // Closes the dialog.
               },
-              label: cancelText ?? translate('general.action.cancel'),
+              label: cancelText ?? defaultCancelText(),
               color: Theme.of(context).colorScheme.secondary,
               icon: CarbonIcons.close,
               isExpanded: true, // Expands button to fit available space.
@@ -90,7 +93,7 @@ class ConfirmationDialog extends StatelessWidget {
                 onConfirm(); // Triggers the confirmation callback.
                 _closeDialog(context); // Closes the dialog.
               },
-              label: translate('general.action.continue'),
+              label: okText ?? defaultOkText(),
               color: Theme.of(context).colorScheme.primary,
               icon: CarbonIcons.checkmark,
               isExpanded: true, // Expands button to fit available space.

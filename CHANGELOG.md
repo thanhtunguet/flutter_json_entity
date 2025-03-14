@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+### Added
+
+- Enum: Language, AdminType, Timezone, Gender
+- Default labels for ConfirmationDialog
+
 ## 1.5.5
 
 ### Added
