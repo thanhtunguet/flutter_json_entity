@@ -1,5 +1,4 @@
 import 'package:supa_architecture/json/json.dart';
-import 'package:supa_architecture/models/enum_model.dart';
 import 'package:supa_architecture/models/models.dart';
 
 mixin AppUserPreferences {
