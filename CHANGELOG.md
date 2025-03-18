@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.1
+
+### Fixed
+
+- Mobile notification via Firebase
+
 ## 1.6.0
 
 ### Added
