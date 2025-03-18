@@ -47,6 +47,9 @@ class CarbonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final iconTheme = IconTheme.of(context);
+
     final bottomInset = MediaQuery.of(context).padding.bottom;
     final padding = isBottomButton
         ? EdgeInsets.only(top: 16, bottom: bottomInset == 0 ? 16 : bottomInset)
@@ -58,10 +61,10 @@ class CarbonButton extends StatelessWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
         ),
-        backgroundColor: color ?? Theme.of(context).colorScheme.primary,
-        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+        backgroundColor: color ?? theme.colorScheme.primary,
+        textStyle: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onPrimary,
+        ),
       ),
       child: Container(
         width: double.infinity,
@@ -73,17 +76,17 @@ class CarbonButton extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: theme.colorScheme.onPrimary,
               ),
             ),
             if (isLoading)
               SizedBox(
-                width: IconTheme.of(context).size,
-                height: IconTheme.of(context).size,
+                width: iconTheme.size,
+                height: iconTheme.size,
                 child: Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).colorScheme.onPrimary,
+                      theme.colorScheme.onPrimary,
                     ),
                   ),
                 ),

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2
+
+### Fixed
+
+- Optimize theme of context call
+
 ## 1.6.1
 
 ### Fixed

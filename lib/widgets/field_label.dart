@@ -29,7 +29,8 @@ class FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelStyle = style ?? Theme.of(context).textTheme.bodyMedium;
+    final theme = Theme.of(context);
+    final labelStyle = style ?? theme.textTheme.bodyMedium;
 
     return RichText(
       text: TextSpan(
@@ -42,7 +43,7 @@ class FieldLabel extends StatelessWidget {
             TextSpan(
               text: " *",
               style: labelStyle?.copyWith(
-                color: Theme.of(context).colorScheme.error,
+                color: theme.colorScheme.error,
               ),
             ),
         ],

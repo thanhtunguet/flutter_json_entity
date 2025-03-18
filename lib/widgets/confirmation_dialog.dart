@@ -41,6 +41,7 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0), // No rounded corners.
@@ -51,7 +52,7 @@ class ConfirmationDialog extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium,
+        style: theme.textTheme.titleMedium,
       ),
       contentPadding: EdgeInsets.zero, // Removes default padding.
       content: Container(
@@ -64,7 +65,7 @@ class ConfirmationDialog extends StatelessWidget {
             if (content != null)
               Text(
                 content!,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium,
               ),
             if (child != null) child!, // Embeds custom content if provided.
           ],
@@ -83,7 +84,7 @@ class ConfirmationDialog extends StatelessWidget {
                 _closeDialog(context); // Closes the dialog.
               },
               label: cancelText ?? defaultCancelText(),
-              color: Theme.of(context).colorScheme.secondary,
+              color: theme.colorScheme.secondary,
               icon: CarbonIcons.close,
               isExpanded: true, // Expands button to fit available space.
             ),
@@ -94,7 +95,7 @@ class ConfirmationDialog extends StatelessWidget {
                 _closeDialog(context); // Closes the dialog.
               },
               label: okText ?? defaultOkText(),
-              color: Theme.of(context).colorScheme.primary,
+              color: theme.colorScheme.primary,
               icon: CarbonIcons.checkmark,
               isExpanded: true, // Expands button to fit available space.
             ),

@@ -147,6 +147,7 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (isForbidden) {
       return const PageForbidden();
     }
@@ -175,7 +176,7 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: theme.colorScheme.surface,
         leading: backButton,
         title: searchTitle,
         actions: [
@@ -224,8 +225,8 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
       floatingActionButton: shouldShowCreateButton
           ? FloatingActionButton(
               onPressed: onCreate,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
               child: const Icon(CarbonIcons.add),
             )
           : null,
