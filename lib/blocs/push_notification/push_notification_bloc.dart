@@ -47,7 +47,7 @@ class PushNotificationBloc
     }
 
     await _initializeFirebaseMessaging();
-    await registerDeviceToken();
+    await registerDeviceToken(appId);
 
     _setForegroundMessageHandler();
     _setNotificationOpenAppHandler();
@@ -112,14 +112,16 @@ class PushNotificationBloc
   }
 
   /// Register device token for push notifications.
-  Future<void> registerDeviceToken() async {
+  Future<void> registerDeviceToken(String appCode) async {
     if (!await hasNotificationPermission() || _deviceToken == null) return;
 
     final deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
     final deviceToken = DeviceNotificationToken(
       osVersion: deviceInfo.systemVersion,
+      deviceId: deviceInfo.deviceUuid,
       deviceModel: deviceInfo.deviceModel,
       token: _deviceToken!,
+      appCode: appCode,
     );
 
     try {
@@ -130,15 +132,20 @@ class PushNotificationBloc
   }
 
   /// Unregister device token for push notifications.
-  Future<void> unregisterDeviceToken({int? subSystemId}) async {
+  Future<void> unregisterDeviceToken({
+    int? subSystemId,
+    required String appCode,
+  }) async {
     if (!await hasNotificationPermission() || _deviceToken == null) return;
 
     final deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
     final deviceToken = DeviceNotificationToken(
       osVersion: deviceInfo.systemVersion,
+      deviceId: deviceInfo.deviceUuid,
       deviceModel: deviceInfo.deviceModel,
       token: _deviceToken!,
       subSystemId: subSystemId,
+      appCode: appCode,
     );
 
     try {

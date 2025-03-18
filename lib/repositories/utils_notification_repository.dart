@@ -1,3 +1,4 @@
+import "package:dio/dio.dart";
 import "package:supa_architecture/api_client/api_client.dart";
 import "package:supa_architecture/core/device_notification_token.dart";
 import "package:supa_architecture/models/models.dart";
@@ -18,6 +19,14 @@ class UtilsNotificationRepository
       )
       .toString();
 
+  Options _getTokenHeaders(DeviceNotificationToken deviceNotificationToken) {
+    return Options(
+      headers: {
+        'X-Device-UUID': deviceNotificationToken.deviceId,
+      },
+    );
+  }
+
   /// Creates a notification token for the device.
   ///
   /// **Parameters:**
@@ -32,6 +41,7 @@ class UtilsNotificationRepository
         .post(
           "/create-token",
           data: deviceNotificationToken.toJson(),
+          options: _getTokenHeaders(deviceNotificationToken),
         )
         .then(
           (response) => response.data,
@@ -52,6 +62,7 @@ class UtilsNotificationRepository
         .post(
           "/delete-token",
           data: deviceNotificationToken.toJson(),
+          options: _getTokenHeaders(deviceNotificationToken),
         )
         .then(
           (response) => response.data,

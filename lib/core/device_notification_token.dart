@@ -12,10 +12,17 @@ class DeviceNotificationToken extends Equatable {
   /// The model of the device.
   final String deviceModel;
 
+  /// The device ID.
+  final String deviceId;
+
   /// The notification token.
   final String? token;
 
+  /// The subsystem ID.
   final int? subSystemId;
+
+  /// The app code.
+  final String appCode;
 
   /// Constructs an instance of [DeviceNotificationToken].
   ///
@@ -25,7 +32,9 @@ class DeviceNotificationToken extends Equatable {
   /// - `token`: The notification token (optional).
   const DeviceNotificationToken({
     required this.osVersion,
+    required this.deviceId,
     required this.deviceModel,
+    required this.appCode,
     this.token,
     this.subSystemId,
   });
@@ -36,8 +45,10 @@ class DeviceNotificationToken extends Equatable {
   /// - `json`: The JSON map containing the token data.
   DeviceNotificationToken.fromJson(Map<String, dynamic> json)
       : osVersion = json["osVersion"],
+        deviceId = json["deviceId"],
         deviceModel = json["deviceModel"],
         token = json["token"],
+        appCode = json["appCode"],
         subSystemId = int.tryParse(json["subSystemId"]);
 
   /// Converts the [DeviceNotificationToken] instance to a JSON map.
@@ -47,16 +58,21 @@ class DeviceNotificationToken extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       "osVersion": osVersion,
+      "deviceId": deviceId,
       "deviceModel": deviceModel,
       "token": token,
+      "appCode": appCode,
+      "subSystemId": subSystemId,
     };
   }
 
   @override
   List<Object?> get props => [
         osVersion,
+        deviceId,
         deviceModel,
         token,
         subSystemId,
+        appCode,
       ];
 }
