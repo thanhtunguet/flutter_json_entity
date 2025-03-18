@@ -4,7 +4,7 @@ version: 1.6.1
 homepage: https://github.supa.vn
 
 environment:
-  sdk: ^3.2.0
+  sdk: ^3.3.0
   flutter: ">=3.3.0"
 
 dependencies:
