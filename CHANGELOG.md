@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.3
+
+### Updated
+
+- New carbon icons
+
 ## 1.6.2
 
 ### Fixed

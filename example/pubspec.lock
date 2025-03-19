@@ -1015,15 +1015,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.6.1"
+    version: "1.6.2"
   supa_carbon_icons:
     dependency: transitive
     description:
       name: supa_carbon_icons
-      sha256: "7b20f28f952b0cccf7204af500ed9c6e0bafd8ca8c36a83f47e86580f3af6d87"
+      sha256: ffc427738abd6d14493316ef821c4638a30b03f4905a8f4a7d67622fb5c73bb3
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1+5"
+    version: "0.0.1+6"
   sync_http:
     dependency: transitive
     description:
