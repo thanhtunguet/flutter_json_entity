@@ -8,6 +8,7 @@ import "package:equatable/equatable.dart";
 /// constructor for creating instances from a list of [Cookie]s.
 class AppToken extends Equatable {
   static const String accessTokenKey = "Token";
+
   static const String refreshTokenKey = "RefreshToken";
 
   static const String tenantIdKey = "tenantId";

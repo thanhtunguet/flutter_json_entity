@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supa_architecture/extensions/extensions.dart';
 import 'package:supa_architecture/models/models.dart';
-import 'package:supa_architecture/widgets/text_status_badge.dart';
+import 'package:supa_architecture/widgets/atoms/text_status_badge.dart';
 
 class EnumStatusBadge extends StatelessWidget {
   final EnumModel status;

@@ -8,12 +8,12 @@ export 'portal_tenant_repository.dart';
 export 'utils_notification_repository.dart';
 
 void registerRepositories() {
-  GetIt.instance.registerSingleton<PortalAuthenticationRepository>(
+  final getIt = GetIt.instance;
+
+  getIt.registerSingleton<PortalAuthenticationRepository>(
       PortalAuthenticationRepository());
-  GetIt.instance
-      .registerSingleton<PortalProfileRepository>(PortalProfileRepository());
-  GetIt.instance
-      .registerSingleton<PortalTenantRepository>(PortalTenantRepository());
-  GetIt.instance.registerSingleton<UtilsNotificationRepository>(
+  getIt.registerSingleton<PortalProfileRepository>(PortalProfileRepository());
+  getIt.registerSingleton<PortalTenantRepository>(PortalTenantRepository());
+  getIt.registerSingleton<UtilsNotificationRepository>(
       UtilsNotificationRepository());
 }

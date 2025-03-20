@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supa_architecture/widgets/forbidden_component.dart';
-import 'package:supa_architecture/widgets/go_back_button.dart';
+import 'package:supa_architecture/widgets/organisms/forbidden_component.dart';
+import 'package:supa_architecture/widgets/atoms/go_back_button.dart';
 
 class PageForbidden extends StatelessWidget {
   const PageForbidden({super.key});

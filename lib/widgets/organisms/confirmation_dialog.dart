@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:supa_architecture/widgets/carbon_button.dart';
+import 'package:supa_architecture/widgets/atoms/carbon_button.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
 
 class ConfirmationDialog extends StatelessWidget {

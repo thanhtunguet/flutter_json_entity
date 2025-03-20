@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.0
+
+### Updated
+
+- Refactor code structure
+
+### Added
+
+- Dio exception getter check
+
 ## 1.6.3
 
 ### Updated

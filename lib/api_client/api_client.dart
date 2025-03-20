@@ -19,6 +19,7 @@ import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 part "http_response.dart";
+part "dio_exception.dart";
 
 /// Unified API Client class for handling HTTP requests and file uploads.
 abstract class ApiClient {

@@ -38,8 +38,9 @@ final class BiometricLoginButton extends StatefulWidget {
 class _BiometricLoginButtonState extends State<BiometricLoginButton> {
   static final LocalAuthentication auth = LocalAuthentication();
 
-  bool _canCheckBiometrics = false;
-  BiometricType? _biometricType;
+  bool canCheckBiometrics = false;
+
+  BiometricType? biometricType;
 
   @override
   void initState() {
@@ -50,33 +51,33 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
   /// Checks if the device supports biometric authentication and identifies the available biometric type.
   Future<void> _checkBiometricSupport() async {
     try {
-      _canCheckBiometrics =
+      canCheckBiometrics =
           await auth.canCheckBiometrics || await auth.isDeviceSupported();
       List<BiometricType> availableBiometrics =
           await auth.getAvailableBiometrics();
 
       if (availableBiometrics.contains(BiometricType.face)) {
         setState(() {
-          _biometricType = BiometricType.face;
+          biometricType = BiometricType.face;
         });
       } else if (availableBiometrics.contains(BiometricType.strong) ||
           availableBiometrics.contains(BiometricType.weak)) {
         setState(() {
-          _biometricType = BiometricType.strong;
+          biometricType = BiometricType.strong;
         });
       } else if (availableBiometrics.contains(BiometricType.fingerprint)) {
         setState(() {
-          _biometricType = BiometricType.fingerprint;
+          biometricType = BiometricType.fingerprint;
         });
       } else {
         setState(() {
-          _biometricType = null;
+          biometricType = null;
         });
       }
     } catch (e) {
       setState(() {
-        _canCheckBiometrics = false;
-        _biometricType = null;
+        canCheckBiometrics = false;
+        biometricType = null;
       });
     }
   }
@@ -94,7 +95,7 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_canCheckBiometrics) {
+    if (!canCheckBiometrics) {
       return Container();
     }
     return GestureDetector(
@@ -102,7 +103,7 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton> {
         final bool authenticated = await _authenticated(widget.reason);
         return widget.onAuthenticated(authenticated);
       },
-      child: widget.childRender(_biometricType),
+      child: widget.childRender(biometricType),
     );
   }
 }
