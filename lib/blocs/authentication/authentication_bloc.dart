@@ -315,12 +315,6 @@ class AuthenticationBloc
     }
   }
 
-  _logoutThirdParty() async {
-    final googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
-    await oauth.logout();
-  }
-
   Future<void> _onUserLogoutEvent(
     UserLogoutEvent event,
     Emitter<AuthenticationState> emit,
