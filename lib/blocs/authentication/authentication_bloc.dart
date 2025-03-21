@@ -1,10 +1,15 @@
+import "package:aad_oauth/model/config.dart";
 import "package:bloc/bloc.dart";
 import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:sign_in_with_apple/sign_in_with_apple.dart";
+import "package:supa_architecture/extensions/dotenv.dart";
 import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/repositories/portal_profile_repository.dart";
+import "package:aad_oauth/aad_oauth.dart";
 
 part "authentication_action.dart";
 part "authentication_event.dart";
@@ -12,15 +17,45 @@ part "authentication_state.dart";
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final PortalAuthenticationRepository authRepo =
-      PortalAuthenticationRepository();
-  final PortalProfileRepository profileRepo = PortalProfileRepository();
+  final authRepo = PortalAuthenticationRepository();
+
+  final profileRepo = PortalProfileRepository();
+
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: <String>["email"],
+    signInOption: SignInOption.standard,
+  );
+
+  late final AadOAuth oauth;
+
+  AadOAuth configureAzureAD(
+      GlobalKey<NavigatorState> navigatorKey, String redirectUri) {
+    Config config = Config(
+      tenant: dotenv.azureTenantId!,
+      clientId: dotenv.azureClientId!,
+      scope: "openid profile offline_access",
+      // redirectUri is Optional as a default is calculated based on app type/web location
+      redirectUri: redirectUri,
+      navigatorKey: navigatorKey,
+      webUseRedirect:
+          true, // default is false - on web only, forces a redirect flow instead of popup auth
+      //Optional parameter: Centered CircularProgressIndicator while rendering web page in WebView
+      loader: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    oauth = AadOAuth(config);
+
+    return oauth;
+  }
 
   AuthenticationBloc() : super(AuthenticationInitialState()) {
     on<AuthenticationInitializeEvent>(_onAuthenticationInitializeEvent);
     on<AuthenticationProcessingEvent>(_onAuthenticationProcessingEvent);
     on<LoginWithGoogleEvent>(_onLoginWithGoogleEvent);
     on<LoginWithAppleEvent>(_onLoginWithAppleEvent);
+    on<LoginWithMicrosoftEvent>(_onLoginWithMicrosoftEvent);
     on<LoginWithPasswordEvent>(_onLoginWithPasswordEvent);
     on<LoginWithSavedLoginEvent>(_onLoginWithSavedLogin);
     on<UserLogoutEvent>(_onUserLogoutEvent);
@@ -132,11 +167,6 @@ class AuthenticationBloc
       add(const AuthenticationProcessingEvent(
           AuthenticationAction.loginWithGoogle));
 
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: <String>["email"],
-        signInOption: SignInOption.standard,
-      );
-
       final bool isSignedIn = await googleSignIn.isSignedIn();
       if (isSignedIn) {
         await googleSignIn.disconnect();
@@ -189,6 +219,64 @@ class AuthenticationBloc
     }
   }
 
+  _tryLogoutMicrosoft() async {
+    try {
+      await oauth.logout();
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }
+  }
+
+  Future<void> _onLoginWithMicrosoftEvent(
+    LoginWithMicrosoftEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    try {
+      add(const AuthenticationProcessingEvent(
+        AuthenticationAction.loginWithMicrosoft,
+      ));
+
+      await _tryLogoutMicrosoft();
+
+      final result = await oauth.login();
+
+      result.fold(
+        (failure) {
+          add(AuthenticationErrorEvent(
+            title: "Đăng nhập Microsoft lỗi",
+            message: "Đã xảy ra lỗi khi đăng nhập với Microsoft",
+            error: failure,
+          ));
+        },
+        (token) {
+          debugPrint('MICROSOFT TOKEN: $token');
+        },
+      );
+
+      final idToken = await oauth.getAccessToken();
+
+      if (idToken == null) {
+        emit(const AuthenticationErrorState(
+          title: 'Không thể đăng nhập',
+          message: 'Không thể lấy thông tin đăng nhập từ Microsoft',
+          error: null,
+        ));
+        return;
+      }
+
+      final List<Tenant> tenants = await authRepo.loginWithMicrosoft(idToken);
+      handleLoginWithTenants(tenants);
+    } catch (error) {
+      add(AuthenticationErrorEvent(
+        title: "Đăng nhập Microsoft lỗi",
+        message: "Đã xảy ra lỗi khi đăng nhập với Microsoft",
+        error: error,
+      ));
+    }
+  }
+
   Future<void> _onLoginWithPasswordEvent(
     LoginWithPasswordEvent event,
     Emitter<AuthenticationState> emit,
@@ -225,6 +313,12 @@ class AuthenticationBloc
         error: error,
       ));
     }
+  }
+
+  _logoutThirdParty() async {
+    final googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    await oauth.logout();
   }
 
   Future<void> _onUserLogoutEvent(
