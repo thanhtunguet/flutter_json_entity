@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.1
+
+### Added
+
+- Microsoft Auth
+
 ## 1.7.0
 
 ### Updated
