@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.2
+
+### Added
+
+- Otp validation optional
+
 ## 1.7.1
 
 ### Added

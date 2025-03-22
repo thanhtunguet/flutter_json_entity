@@ -10,8 +10,9 @@ class ChangePasswordForm extends FormGroup {
       r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$";
 
   /// Change password form
-  ChangePasswordForm()
-      : super({
+  ChangePasswordForm({
+    bool enableOtpValidation = false,
+  }) : super({
           "password": FormControl<String>(
             value: "",
             validators: [
@@ -35,8 +36,10 @@ class ChangePasswordForm extends FormGroup {
           "otpCode": FormControl<String>(
             value: "",
             validators: [
-              Validators.required,
-              Validators.pattern(otpRegex),
+              if (enableOtpValidation) ...[
+                Validators.required,
+                Validators.pattern(otpRegex),
+              ],
             ],
           ),
         }, validators: [
