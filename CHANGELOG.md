@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.3
+
+### Added
+
+- Color prop for LoadingIndicator
+
 ## 1.7.2
 
 ### Added

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 class LoadingIndicator extends StatelessWidget {
   final double? size;
 
+  final Color? color;
+
   const LoadingIndicator({
     super.key,
     this.size = 32,
+    this.color,
   });
 
   @override
@@ -14,7 +17,9 @@ class LoadingIndicator extends StatelessWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: const CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: color,
+        ),
       ),
     );
   }
