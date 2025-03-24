@@ -10,6 +10,7 @@ import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/repositories/portal_profile_repository.dart";
 import "package:aad_oauth/aad_oauth.dart";
+import "package:supa_architecture/widgets/atoms/go_back_button.dart";
 
 part "authentication_action.dart";
 part "authentication_event.dart";
@@ -28,20 +29,27 @@ class AuthenticationBloc
 
   late final AadOAuth oauth;
 
+  late Config config;
+
   AadOAuth configureAzureAD(
-      GlobalKey<NavigatorState> navigatorKey, String redirectUri) {
-    Config config = Config(
+    GlobalKey<NavigatorState> navigatorKey,
+    String redirectUri,
+  ) {
+    config = Config(
       tenant: dotenv.azureTenantId!,
       clientId: dotenv.azureClientId!,
       scope: "openid profile offline_access",
       // redirectUri is Optional as a default is calculated based on app type/web location
       redirectUri: redirectUri,
       navigatorKey: navigatorKey,
-      webUseRedirect:
-          true, // default is false - on web only, forces a redirect flow instead of popup auth
+      webUseRedirect: true,
       //Optional parameter: Centered CircularProgressIndicator while rendering web page in WebView
       loader: const Center(
         child: CircularProgressIndicator(),
+      ),
+      appBar: AppBar(
+        title: const Text("Sign in to your account"),
+        leading: const GoBackButton(),
       ),
     );
 
@@ -219,16 +227,6 @@ class AuthenticationBloc
     }
   }
 
-  _tryLogoutMicrosoft() async {
-    try {
-      await oauth.logout();
-    } catch (error) {
-      if (kDebugMode) {
-        print(error);
-      }
-    }
-  }
-
   Future<void> _onLoginWithMicrosoftEvent(
     LoginWithMicrosoftEvent event,
     Emitter<AuthenticationState> emit,
@@ -237,8 +235,6 @@ class AuthenticationBloc
       add(const AuthenticationProcessingEvent(
         AuthenticationAction.loginWithMicrosoft,
       ));
-
-      await _tryLogoutMicrosoft();
 
       final result = await oauth.login();
 
@@ -258,6 +254,7 @@ class AuthenticationBloc
       final idToken = await oauth.getAccessToken();
 
       if (idToken == null) {
+        Navigator.of(config.navigatorKey.currentContext!).pop();
         emit(const AuthenticationErrorState(
           title: 'Không thể đăng nhập',
           message: 'Không thể lấy thông tin đăng nhập từ Microsoft',
@@ -266,9 +263,11 @@ class AuthenticationBloc
         return;
       }
 
+      Navigator.of(config.navigatorKey.currentContext!).pop();
       final List<Tenant> tenants = await authRepo.loginWithMicrosoft(idToken);
       handleLoginWithTenants(tenants);
     } catch (error) {
+      Navigator.of(config.navigatorKey.currentContext!).pop();
       add(AuthenticationErrorEvent(
         title: "Đăng nhập Microsoft lỗi",
         message: "Đã xảy ra lỗi khi đăng nhập với Microsoft",
