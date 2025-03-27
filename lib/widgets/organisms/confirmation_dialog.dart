@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:supa_architecture/widgets/atoms/carbon_button.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
 
 class ConfirmationDialog extends StatelessWidget {
@@ -7,20 +6,25 @@ class ConfirmationDialog extends StatelessWidget {
 
   static String Function() defaultCancelText = () => 'Huỷ';
 
+  final IconData? icon;
+
   final String title;
-  final String? content; // Optional descriptive content shown in the dialog.
-  final Widget?
-      child; // Custom widget content that can be embedded in the dialog.
 
-  final String? okText; // Text for the confirmation button.
-  final String? cancelText; // Text for the cancel button.
+  final String? content;
 
-  final IconData? icon; // Optional icon displayed at the top of the dialog.
+  final Widget? child;
 
-  final VoidCallback
-      onConfirm; // Callback for when the confirm button is pressed.
-  final VoidCallback?
-      onCancel; // Optional callback for when the cancel button is pressed.
+  final String? okText;
+
+  final Color? okColor;
+
+  final VoidCallback onConfirm;
+
+  final String? cancelText;
+
+  final Color? cancelColor;
+
+  final VoidCallback? onCancel;
 
   const ConfirmationDialog({
     super.key,
@@ -30,7 +34,9 @@ class ConfirmationDialog extends StatelessWidget {
     required this.onConfirm,
     this.onCancel,
     this.okText,
+    this.okColor,
     this.cancelText,
+    this.cancelColor,
     this.icon,
   });
 
@@ -43,9 +49,6 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0), // No rounded corners.
-      ),
       icon: Icon(
         icon ?? Icons.check_circle_outline, // Default icon if none is provided.
         size: 24,
@@ -54,52 +57,46 @@ class ConfirmationDialog extends StatelessWidget {
         title,
         style: theme.textTheme.titleMedium,
       ),
-      contentPadding: EdgeInsets.zero, // Removes default padding.
-      content: Container(
-        padding: const EdgeInsets.all(
-            16.0), // Adds consistent spacing around content.
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (content != null)
-              Text(
-                content!,
-                style: theme.textTheme.bodyMedium,
-              ),
-            if (child != null) child!, // Embeds custom content if provided.
-          ],
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (content != null)
+            Text(
+              content!,
+              style: theme.textTheme.bodyMedium,
+            ),
+          if (child != null) child!, // Embeds custom content if provided.
+        ],
       ),
-      actionsPadding: EdgeInsets.zero, // Removes default padding for actions.
       actions: <Widget>[
-        Row(
-          children: [
-            // Cancel button
-            CarbonButton(
-              onPressed: () {
-                if (onCancel != null) {
-                  onCancel!(); // Triggers the cancel callback if it exists.
-                }
-                _closeDialog(context); // Closes the dialog.
-              },
-              label: cancelText ?? defaultCancelText(),
-              color: theme.colorScheme.secondary,
-              icon: CarbonIcons.close,
-              isExpanded: true, // Expands button to fit available space.
+        TextButton.icon(
+          icon: const Icon(CarbonIcons.close),
+          onPressed: () {
+            if (onCancel != null) {
+              onCancel!(); // Triggers the cancel callback if it exists.
+            }
+            _closeDialog(context); // Closes the dialog.
+          },
+          label: Text(
+            cancelText ?? defaultCancelText(),
+            style: TextStyle(
+              color: cancelColor,
             ),
-            // Confirm button
-            CarbonButton(
-              onPressed: () {
-                onConfirm(); // Triggers the confirmation callback.
-                _closeDialog(context); // Closes the dialog.
-              },
-              label: okText ?? defaultOkText(),
-              color: theme.colorScheme.primary,
-              icon: CarbonIcons.checkmark,
-              isExpanded: true, // Expands button to fit available space.
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            onConfirm(); // Triggers the confirmation callback.
+            _closeDialog(context); // Closes the dialog.
+          },
+          label: Text(
+            okText ?? defaultOkText(),
+            style: TextStyle(
+              color: okColor,
             ),
-          ],
+          ),
+          icon: const Icon(CarbonIcons.checkmark),
         ),
       ],
     );
