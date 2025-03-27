@@ -74,11 +74,13 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
   }
 
   void onSearch(String query) {
-    setState(() {
-      filter.skip = 0;
-      filter.search = query;
-    });
-    pagingController.refresh();
+    if (query != '') {
+      setState(() {
+        filter.skip = 0;
+        filter.search = query;
+      });
+      pagingController.refresh();
+    }
   }
 
   toggleSearch() {
