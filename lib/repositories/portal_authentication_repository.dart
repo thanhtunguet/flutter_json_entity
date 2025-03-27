@@ -103,13 +103,17 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Returns:**
   /// - A [Future] that resolves to a list of [Tenant].
-  Future<List<Tenant>> listTenant() async {
-    return dio.post(
-      "/list-tenant",
-      data: {},
-    ).then(
-      (response) => response.bodyAsList<Tenant>(),
-    );
+  Future<List<Tenant>> listTenant({
+    TenantFilter? filter,
+  }) async {
+    return dio
+        .post(
+          "/list-tenant",
+          data: filter?.toJson() ?? {},
+        )
+        .then(
+          (response) => response.bodyAsList<Tenant>(),
+        );
   }
 
   /// Counts the number of tenants associated with the authenticated user.
