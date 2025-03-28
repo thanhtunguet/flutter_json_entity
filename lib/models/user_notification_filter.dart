@@ -12,12 +12,15 @@ class UserNotificationFilter extends DataFilter {
   @override
   List<FilterField> get fields => [
         subSystemId,
+        createdAt,
       ];
 
   /// Whether the notification is unread.
   bool? unread;
 
   IdFilter subSystemId = IdFilter("subSystemId");
+
+  DateFilter createdAt = DateFilter("createdAt");
 
   @override
   Map<String, dynamic> toJson() {

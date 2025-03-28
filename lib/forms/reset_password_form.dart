@@ -3,8 +3,9 @@ import "package:reactive_forms/reactive_forms.dart";
 /// Form for resetting password
 class ResetPasswordForm extends FormGroup {
   /// Constructor for ResetPasswordForm
-  ResetPasswordForm()
-      : super(
+  ResetPasswordForm({
+    bool enableOtpValidation = false,
+  }) : super(
           {
             "password": FormControl<String>(
               value: "",
@@ -21,7 +22,10 @@ class ResetPasswordForm extends FormGroup {
             "otpCode": FormControl<String>(
               value: "",
               validators: [
-                Validators.required,
+                if (enableOtpValidation) ...[
+                  Validators.required,
+                  Validators.pattern(r"^[0-9]{6}$"),
+                ],
               ],
             ),
           },
