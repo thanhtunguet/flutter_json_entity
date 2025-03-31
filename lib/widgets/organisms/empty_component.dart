@@ -10,6 +10,10 @@ class EmptyComponent extends StatelessWidget {
 
   final String title;
 
+  final double? width;
+
+  final double? height;
+
   final String? subtitle;
 
   final String? imageUrl;
@@ -19,6 +23,8 @@ class EmptyComponent extends StatelessWidget {
     this.title = 'Chưa có dữ liệu',
     this.subtitle = 'Keep up the good work!',
     this.imageUrl,
+    this.width,
+    this.height,
   });
 
   @override
@@ -30,6 +36,8 @@ class EmptyComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image(
+            width: width,
+            height: height,
             image: AssetImage(
               imageUrl ?? _emptyStateImage,
             ),

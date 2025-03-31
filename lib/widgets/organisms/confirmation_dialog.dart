@@ -71,7 +71,10 @@ class ConfirmationDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton.icon(
-          icon: const Icon(CarbonIcons.close),
+          icon: Icon(
+            CarbonIcons.close,
+            color: cancelColor,
+          ),
           onPressed: () {
             if (onCancel != null) {
               onCancel!(); // Triggers the cancel callback if it exists.
@@ -96,7 +99,10 @@ class ConfirmationDialog extends StatelessWidget {
               color: okColor,
             ),
           ),
-          icon: const Icon(CarbonIcons.checkmark),
+          icon: Icon(
+            CarbonIcons.checkmark,
+            color: okColor,
+          ),
         ),
       ],
     );
