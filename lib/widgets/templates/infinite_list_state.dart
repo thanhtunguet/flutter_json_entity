@@ -22,6 +22,7 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
   BaseRepository<T, TF> get repository;
 
+  /// TODO: some thing here
   Future<void> showFilterForm() async {
     throw UnimplementedError();
   }
@@ -34,7 +35,13 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
   Widget itemRender(BuildContext context, T item, int index);
 
-  Widget countRender(num count);
+  Widget filterRender() {
+    return const SizedBox.shrink();
+  }
+
+  Widget countRender(num count) {
+    return const SizedBox.shrink();
+  }
 
   void onIndexChange() {
     throw UnimplementedError();
@@ -196,11 +203,13 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
         child: RefreshIndicator(
           onRefresh: refresh,
           child: Container(
+            color: theme.colorScheme.surface,
             padding: const EdgeInsets.symmetric(
               vertical: 4,
             ),
             child: Column(
               children: [
+                filterRender(),
                 countRender(total),
                 Expanded(
                   child: PagedListView<int, T>(
