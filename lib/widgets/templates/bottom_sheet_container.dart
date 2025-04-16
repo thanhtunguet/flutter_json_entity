@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// This widget is deprecated. It will be removed in a future version.
+@Deprecated(
+    'This widget is deprecated. Use a different approach for bottom sheets.')
 class BottomSheetContainer extends StatelessWidget {
   final Widget child;
 

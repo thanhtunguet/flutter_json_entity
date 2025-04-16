@@ -22,7 +22,6 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
   BaseRepository<T, TF> get repository;
 
-  /// TODO: some thing here
   Future<void> showFilterForm() async {
     throw UnimplementedError();
   }

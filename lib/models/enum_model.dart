@@ -12,6 +12,7 @@ class EnumModel extends JsonModel {
         code,
         name,
         color,
+        backgroundColor,
       ];
 
   /// The ID of the enumeration.
@@ -25,4 +26,6 @@ class EnumModel extends JsonModel {
 
   /// The color associated with the enumeration.
   JsonString color = JsonString("color");
+
+  JsonString backgroundColor = JsonString("backgroundColor");
 }

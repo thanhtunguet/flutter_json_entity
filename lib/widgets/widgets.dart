@@ -1,3 +1,4 @@
+export "../utils/password_field_mixin.dart";
 export "atoms/app_image.dart";
 export "atoms/biometric_login_button.dart";
 export "atoms/carbon_button.dart";
@@ -14,6 +15,5 @@ export "organisms/forbidden_component.dart";
 export "organisms/searchable_appbar_title.dart";
 export "organisms/section_title.dart";
 export "pages/page_forbidden.dart";
-export "../utils/password_field_mixin.dart";
 export "templates/bottom_sheet_container.dart";
 export "templates/infinite_list_state.dart";

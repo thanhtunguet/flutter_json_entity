@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0
+
+### Fixed
+
+- EnumStatusBadge with new background color prop
+
 ## 1.7.4
 
 ### Added

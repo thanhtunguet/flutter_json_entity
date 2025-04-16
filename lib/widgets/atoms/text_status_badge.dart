@@ -12,24 +12,31 @@ class TextStatusBadge extends StatelessWidget {
   }
 
   final String status;
-  final Color color;
+
+  final Color? color;
+
+  final Color backgroundColor;
 
   const TextStatusBadge({
     super.key,
     required this.status,
-    this.color = const Color(0xFFFDDC69), // Default background color
+    this.backgroundColor = const Color(0xFFFDDC69), // Default background color
+    this.color = const Color(0xFF000000), // Default text color
   });
 
   @override
   Widget build(BuildContext context) {
-    final textColor = getTextColorBasedOnBackground(color);
+    final textColor = color ?? getTextColorBasedOnBackground(backgroundColor);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 0,
+      ),
       decoration: ShapeDecoration(
-        color: color,
+        color: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(4),
         ),
       ),
       child: Text(
@@ -37,6 +44,8 @@ class TextStatusBadge extends StatelessWidget {
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: textColor,
+              height: 1.5,
+              fontWeight: FontWeight.w500,
             ),
       ),
     );
