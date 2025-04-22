@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
@@ -71,12 +74,16 @@ class HivePersistentStorage extends PersistentStorage {
 
   /// Gets the currently stored tenant object.
   @override
-  Tenant? get tenant {
-    final tenantJson = _authBox.get(_tenantKey);
-    if (tenantJson != null && tenantJson is Map<String, dynamic>) {
-      final tenant = Tenant();
-      tenant.fromJson(tenantJson);
-      return tenant;
+  CurrentTenant? get tenant {
+    final tenant = _authBox.get(_tenantKey);
+    if (tenant != null && tenant is String) {
+      try {
+        return CurrentTenant()..fromJson(jsonDecode(tenant));
+      } catch (error) {
+        // Handle JSON parsing error
+        debugPrint('Error parsing tenant JSON: $error');
+        return null;
+      }
     }
     return null;
   }
@@ -84,7 +91,7 @@ class HivePersistentStorage extends PersistentStorage {
   /// Stores a tenant object in the authentication box.
   @override
   set tenant(Tenant? tenant) {
-    _authBox.put(_tenantKey, tenant?.toJson());
+    _authBox.put(_tenantKey, tenant?.toString());
   }
 
   /// Removes the tenant object from the authentication box.
@@ -94,11 +101,14 @@ class HivePersistentStorage extends PersistentStorage {
   /// Gets the currently stored app user object.
   @override
   AppUser? get appUser {
-    final appUserJson = _authBox.get(_appUserKey);
-    if (appUserJson != null && appUserJson is Map<String, dynamic>) {
-      final appUser = AppUser();
-      appUser.fromJson(appUserJson);
-      return appUser;
+    final appUser = _authBox.get(_appUserKey);
+    if (appUser != null && appUser is String) {
+      try {
+        return AppUser()..fromJson(jsonDecode(appUser));
+      } catch (error) {
+        debugPrint('Error parsing appUser JSON: $error');
+        return null;
+      }
     }
     return null;
   }
@@ -106,7 +116,7 @@ class HivePersistentStorage extends PersistentStorage {
   /// Stores an app user object in the authentication box.
   @override
   set appUser(AppUser? appUser) {
-    _authBox.put(_appUserKey, appUser?.toJson());
+    _authBox.put(_appUserKey, appUser?.toString());
   }
 
   /// Removes the app user object from the authentication box.

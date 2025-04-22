@@ -1,3 +1,4 @@
+import "package:aad_oauth/aad_oauth.dart";
 import "package:aad_oauth/model/config.dart";
 import "package:bloc/bloc.dart";
 import "package:flutter/foundation.dart";
@@ -9,7 +10,6 @@ import "package:supa_architecture/extensions/dotenv.dart";
 import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/repositories/portal_authentication_repository.dart";
 import "package:supa_architecture/repositories/portal_profile_repository.dart";
-import "package:aad_oauth/aad_oauth.dart";
 import "package:supa_architecture/widgets/atoms/go_back_button.dart";
 
 part "authentication_action.dart";
@@ -54,7 +54,6 @@ class AuthenticationBloc
     );
 
     oauth = AadOAuth(config);
-
     return oauth;
   }
 
@@ -87,13 +86,13 @@ class AuthenticationBloc
         user: user,
         tenant: tenant,
       ));
-      await _saveAuthentication(user, tenant);
+      await _saveAuthentication(user);
     }
   }
 
-  Future<void> _saveAuthentication(AppUser user, Tenant tenant) async {
+  Future<void> _saveAuthentication(AppUser user) async {
     try {
-      await authRepo.saveAuthentication(user, tenant);
+      await authRepo.saveAuthentication(user, user.currentTenant.value);
     } catch (error) {
       debugPrint('Saving authentication failed: $error');
     }
@@ -301,7 +300,8 @@ class AuthenticationBloc
   ) async {
     try {
       add(const AuthenticationProcessingEvent(
-          AuthenticationAction.loginWithBiometrics));
+        AuthenticationAction.loginWithBiometrics,
+      ));
 
       final tenants = await authRepo.loginWithBiometric();
       handleLoginWithTenants(tenants);
@@ -334,11 +334,13 @@ class AuthenticationBloc
   ) async {
     await authRepo.createToken(event.tenant);
     final user = await authRepo.getProfileInfo();
+
     emit(UserAuthenticatedWithSelectedTenantState(
       user: user,
       tenant: event.tenant,
     ));
-    await _saveAuthentication(user, event.tenant);
+
+    await _saveAuthentication(user);
   }
 
   Future<void> _onLoginWithMultipleTenantsEvent(
@@ -355,8 +357,10 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     if (state is UserAuthenticatedWithSelectedTenantState) {
-      final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
-      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+      final authenticatedState =
+          state as UserAuthenticatedWithSelectedTenantState;
+      final tenant = authenticatedState.tenant;
+      final user = authenticatedState.user;
 
       await profileRepo.switchEmail(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(
@@ -381,8 +385,10 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     if (state is UserAuthenticatedWithSelectedTenantState) {
-      final tenant = (state as UserAuthenticatedWithSelectedTenantState).tenant;
-      final user = (state as UserAuthenticatedWithSelectedTenantState).user;
+      final authenticatedState =
+          state as UserAuthenticatedWithSelectedTenantState;
+      final tenant = authenticatedState.tenant;
+      final user = authenticatedState.user;
 
       await profileRepo.switchNotification(user).then((updatedUser) {
         emit(UserAuthenticatedWithSelectedTenantState(

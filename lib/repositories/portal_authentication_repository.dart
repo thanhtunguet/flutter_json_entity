@@ -32,7 +32,7 @@ class PortalAuthenticationRepository extends ApiClient {
   ///
   /// **Parameters:**
   /// - `tenant`: The tenant to be saved.
-  void changeSavedTenant(Tenant tenant) {
+  void changeSavedTenant(CurrentTenant tenant) {
     persistentStorage.tenant = tenant;
   }
 
@@ -137,19 +137,11 @@ class PortalAuthenticationRepository extends ApiClient {
     final tenant = persistentStorage.tenant;
     final appUser = persistentStorage.appUser;
 
-    if (tenant?.id.rawValue != null && appUser?.email.rawValue != null) {
-      return TenantAuthentication(tenant!, appUser!);
-    }
-
-    try {
-      await refreshToken();
-      final AppUser appUser = await getProfileInfo();
-      final CurrentTenant tenant = appUser.currentTenant.value;
-
+    if (tenant != null && appUser != null) {
       return TenantAuthentication(tenant, appUser);
-    } catch (error) {
-      return null;
     }
+
+    return null;
   }
 
   /// Logs in the user using username and password.
@@ -296,11 +288,13 @@ class PortalAuthenticationRepository extends ApiClient {
   /// **Parameters:**
   /// - `appUser`: The authenticated user.
   /// - `tenant`: The authenticated tenant.
-  Future<void> saveAuthentication(AppUser appUser, Tenant tenant) async {
+  Future<void> saveAuthentication(AppUser appUser, CurrentTenant tenant) async {
     if (!kIsWeb) {
       persistentStorage.tenant = tenant;
       persistentStorage.appUser = appUser;
+
       final cookies = cookieStorage.loadCookies(authenticationUri);
+
       final accessToken = cookies.firstWhere(
         (cookie) => cookie.name == AppToken.accessTokenKey,
         orElse: () => Cookie(AppToken.accessTokenKey, ''),

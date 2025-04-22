@@ -21,9 +21,9 @@ abstract class PersistentStorage {
 
   set baseApiUrl(String baseApiUrl);
 
-  Tenant? get tenant;
+  CurrentTenant? get tenant;
 
-  set tenant(Tenant? tenant);
+  set tenant(CurrentTenant? tenant);
 
   void removeTenant();
 

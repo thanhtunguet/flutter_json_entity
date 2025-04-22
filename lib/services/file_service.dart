@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:path_provider/path_provider.dart";
 import "package:supa_carbon_icons/supa_carbon_icons.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
@@ -37,7 +38,14 @@ class FileService {
 
   /// Checks if the given filename corresponds to an image file.
   static bool isImageFile(String filename) {
-    return _hasExtension(filename, ['jpg', 'jpeg', 'png']);
+    return _hasExtension(filename, ['jpg', 'jpeg', 'png', 'webp', 'bmp']);
+  }
+
+  static bool isVideoFile(String filename) {
+    return _hasExtension(
+      filename,
+      ['mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'webm'],
+    );
   }
 
   /// Checks if the given filename corresponds to a PDF file.
@@ -93,10 +101,22 @@ class FileService {
     const supportedExtensions = [
       'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', // Image files
       'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Office files
+      'mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'webm', // Video files
       'pdf', // PDF files
       'zip', // Zip files
       'txt' // Text files
     ];
     return _hasExtension(filename, supportedExtensions);
+  }
+
+  static Future<void> clearTempDir() async {
+    final tempDir = await getTemporaryDirectory();
+    if (tempDir.existsSync()) {
+      for (final file in tempDir.listSync(recursive: true)) {
+        try {
+          file.deleteSync(recursive: true);
+        } catch (_) {}
+      }
+    }
   }
 }

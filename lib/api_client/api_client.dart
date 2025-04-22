@@ -9,6 +9,7 @@ import "package:image_picker/image_picker.dart";
 import "package:path/path.dart";
 import "package:supa_architecture/api_client/interceptors/device_info_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart";
+import "package:supa_architecture/api_client/interceptors/persistent_url_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/refresh_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/timezone_interceptor.dart";
 import "package:supa_architecture/core/cookie_manager/cookie_manager.dart";
@@ -18,8 +19,8 @@ import "package:supa_architecture/json/json.dart";
 import "package:supa_architecture/models/models.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
-part "http_response.dart";
 part "dio_exception.dart";
+part "http_response.dart";
 
 /// Unified API Client class for handling HTTP requests and file uploads.
 abstract class ApiClient {
@@ -33,16 +34,17 @@ abstract class ApiClient {
   ApiClient() : dio = Dio() {
     dio.options.baseUrl = baseUrl;
 
-    if (!kIsWeb) {
-      dio.interceptors
-          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
-    }
-
     dio.interceptors
       ..add(DeviceInfoInterceptor())
       ..add(TimezoneInterceptor())
       ..add(RefreshInterceptor())
       ..add(GeneralErrorLogInterceptor());
+
+    if (!kIsWeb) {
+      dio.interceptors
+        ..add(PersistentUrlInterceptor())
+        ..add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
+    }
   }
 
   /// The base URL for API requests.

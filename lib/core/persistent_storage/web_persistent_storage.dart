@@ -62,12 +62,12 @@ class WebPersistentStorage extends PersistentStorage {
 
   /// Retrieves tenant information from localStorage.
   @override
-  Tenant? get tenant {
+  CurrentTenant? get tenant {
     final tenantJson = html.window.localStorage.getItem('tenant');
     if (tenantJson != null) {
       try {
         final tenantData = jsonDecode(tenantJson) as Map<String, dynamic>;
-        final tenant = Tenant();
+        final tenant = CurrentTenant();
         tenant.fromJson(tenantData);
         return tenant;
       } catch (e) {
