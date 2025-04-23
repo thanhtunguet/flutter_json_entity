@@ -11,6 +11,7 @@ export 'app_user_info.dart';
 export 'app_user_sub_system_mapping.dart';
 export 'attachment.dart';
 export 'current_tenant.dart';
+export 'date_type.dart';
 export 'enum_model.dart';
 export 'enum_model_filter.dart';
 export 'file.dart';
@@ -37,6 +38,7 @@ void registerModels() {
   getIt.registerFactory<AppUserInfo>(AppUserInfo.new);
   getIt.registerFactory<AppUserSubSystemMapping>(AppUserSubSystemMapping.new);
   getIt.registerFactory<CurrentTenant>(CurrentTenant.new);
+  getIt.registerFactory<DateType>(DateType.new);
   getIt.registerFactory<EnumModel>(EnumModel.new);
   getIt.registerFactory<File>(File.new);
   getIt.registerFactory<ForgotPasswordDto>(ForgotPasswordDto.new);

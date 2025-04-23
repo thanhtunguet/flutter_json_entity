@@ -12,6 +12,11 @@ import "package:supa_architecture/repositories/base_repository.dart";
 /// and marking notifications as read.
 class UtilsNotificationRepository
     extends BaseRepository<UserNotification, UserNotificationFilter> {
+  UtilsNotificationRepository({
+    super.shouldUseDeviceInfo = true,
+    super.shouldUsePersistentUrl,
+  });
+
   @override
   String get baseUrl => Uri.parse(persistentStorage.baseApiUrl)
       .replace(

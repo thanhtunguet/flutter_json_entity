@@ -13,22 +13,23 @@ class DateFilter extends AbstractNumberFilter<DateTime> {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     if (equal != null) {
-      json[FilterField.equal] = equal!.toIso8601String();
+      json[FilterField.equal] = equal!.toIso8601StringWithOffset();
     }
     if (notEqual != null) {
-      json[FilterField.notEqual] = notEqual!.toIso8601String();
+      json[FilterField.notEqual] = notEqual!.toIso8601StringWithOffset();
     }
     if (greaterEqual != null) {
-      json[FilterField.greaterEqual] = greaterEqual!.toIso8601String();
+      json[FilterField.greaterEqual] =
+          greaterEqual!.toIso8601StringWithOffset();
     }
     if (greater != null) {
-      json[FilterField.greater] = greater!.toIso8601String();
+      json[FilterField.greater] = greater!.toIso8601StringWithOffset();
     }
     if (lessEqual != null) {
-      json[FilterField.lessEqual] = lessEqual!.toIso8601String();
+      json[FilterField.lessEqual] = lessEqual!.toIso8601StringWithOffset();
     }
     if (less != null) {
-      json[FilterField.less] = less!.toIso8601String();
+      json[FilterField.less] = less!.toIso8601StringWithOffset();
     }
     return json;
   }

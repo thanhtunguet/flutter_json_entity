@@ -1,10 +1,12 @@
 import "dart:convert";
 
 import "package:supa_architecture/json/json.dart";
+import "package:supa_architecture/models/date_type.dart";
 
 part "abstract_id_filter.dart";
 part "abstract_number_filter.dart";
 part "date_filter.dart";
+part "date_filter_mixin.dart";
 part "double_filter.dart";
 part "filter_field.dart";
 part "guid_filter.dart";

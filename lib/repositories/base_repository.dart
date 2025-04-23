@@ -11,6 +11,11 @@ import "package:supa_architecture/json/json.dart";
 /// responses appropriately.
 abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
     extends ApiClient {
+  BaseRepository({
+    super.shouldUseDeviceInfo,
+    super.shouldUsePersistentUrl,
+  });
+
   /// Lists entities based on the provided filter.
   ///
   /// **Parameters:**

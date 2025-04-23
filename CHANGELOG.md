@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.1+rc2
+
+- Optimize authentication
+- Fix filter json serializable
+- Add date type
+
 ## 1.8.1+rc1
 
 - Optimize authentication

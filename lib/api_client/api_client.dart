@@ -31,20 +31,28 @@ abstract class ApiClient {
 
   final Dio dio;
 
-  ApiClient() : dio = Dio() {
+  ApiClient({
+    bool shouldUsePersistentUrl = false,
+    bool shouldUseDeviceInfo = false,
+  }) : dio = Dio() {
     dio.options.baseUrl = baseUrl;
 
-    dio.interceptors
-      ..add(DeviceInfoInterceptor())
-      ..add(TimezoneInterceptor())
-      ..add(RefreshInterceptor())
-      ..add(GeneralErrorLogInterceptor());
+    if (shouldUseDeviceInfo) {
+      dio.interceptors.add(DeviceInfoInterceptor());
+    }
 
     if (!kIsWeb) {
       dio.interceptors
-        ..add(PersistentUrlInterceptor())
-        ..add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
+          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
+      if (shouldUsePersistentUrl) {
+        dio.interceptors.add(PersistentUrlInterceptor());
+      }
     }
+
+    dio.interceptors
+      ..add(TimezoneInterceptor())
+      ..add(GeneralErrorLogInterceptor())
+      ..add(RefreshInterceptor());
   }
 
   /// The base URL for API requests.
