@@ -9,6 +9,7 @@ part "date_filter.dart";
 part "date_filter_mixin.dart";
 part "double_filter.dart";
 part "filter_field.dart";
+part "global_user_filter.dart";
 part "guid_filter.dart";
 part "id_filter.dart";
 part "int_filter.dart";

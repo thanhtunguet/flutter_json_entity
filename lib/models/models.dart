@@ -19,6 +19,7 @@ export 'file_filter.dart';
 export 'forgot_password_dto.dart';
 export 'gender.dart';
 export 'gender_filter.dart';
+export 'global_user.dart';
 export 'image.dart';
 export 'image_filter.dart';
 export 'language.dart';
@@ -43,6 +44,7 @@ void registerModels() {
   getIt.registerFactory<File>(File.new);
   getIt.registerFactory<ForgotPasswordDto>(ForgotPasswordDto.new);
   getIt.registerFactory<Gender>(Gender.new);
+  getIt.registerFactory<GlobalUser>(GlobalUser.new);
   getIt.registerFactory<Image>(Image.new);
   getIt.registerFactory<Language>(Language.new);
   getIt.registerFactory<SubSystem>(SubSystem.new);

@@ -1,10 +1,11 @@
 # Changelog
 
-## 1.8.1+rc2
+## 1.8.1
 
 - Optimize authentication
 - Fix filter json serializable
 - Add date type
+- Add global user class
 
 ## 1.8.1+rc1
 
