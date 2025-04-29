@@ -34,6 +34,7 @@ abstract class ApiClient {
   ApiClient({
     bool shouldUsePersistentUrl = false,
     bool shouldUseDeviceInfo = false,
+    RefreshInterceptor? refreshInterceptor,
   }) : dio = Dio() {
     dio.options.baseUrl = baseUrl;
 
@@ -52,7 +53,7 @@ abstract class ApiClient {
     dio.interceptors
       ..add(TimezoneInterceptor())
       ..add(GeneralErrorLogInterceptor())
-      ..add(RefreshInterceptor());
+      ..add(refreshInterceptor ?? RefreshInterceptor());
   }
 
   /// The base URL for API requests.

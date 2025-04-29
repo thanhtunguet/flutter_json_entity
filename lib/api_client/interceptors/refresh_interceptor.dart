@@ -26,7 +26,7 @@ class RefreshInterceptor extends Interceptor {
       if (_refreshCompleter == null) {
         _refreshCompleter = Completer<void>();
         try {
-          await _refreshToken(); // Refresh token
+          await onRefresh(); // Refresh token
           _refreshCompleter?.complete();
         } catch (e) {
           _refreshCompleter?.completeError(e);
@@ -51,7 +51,7 @@ class RefreshInterceptor extends Interceptor {
         return handler.resolve(response);
       } catch (_) {
         // If token refresh failed, log out the user and clean up
-        _handleLogout();
+        onRefreshFailed();
         return handler.next(err);
       }
     } else {
@@ -63,13 +63,13 @@ class RefreshInterceptor extends Interceptor {
   /// Handles the token refresh operation.
   ///
   /// Retrieves a new authentication token from the repository.
-  static Future<void> _refreshToken() async {
+  Future<void> onRefresh() async {
     final repository = GetIt.instance.get<PortalAuthenticationRepository>();
     await repository.refreshToken();
   }
 
   /// Handles user logout and cleanup when token refresh fails.
-  void _handleLogout() {
+  void onRefreshFailed() {
     final getIt = GetIt.instance;
     getIt.get<AuthenticationBloc>().add(UserLogoutEvent());
     getIt.get<CookieManager>().deleteAllCookies();
