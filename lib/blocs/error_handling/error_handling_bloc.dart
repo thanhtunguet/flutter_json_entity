@@ -1,8 +1,6 @@
 import "package:bloc/bloc.dart";
 import "package:dio/dio.dart";
-import "package:firebase_crashlytics/firebase_crashlytics.dart";
 import "package:flutter/foundation.dart";
-import "package:sentry_flutter/sentry_flutter.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 part "error_handling_event.dart";
@@ -23,14 +21,14 @@ class ErrorHandlingBloc extends Cubit<void> {
     // Pass all uncaught errors to Crashlytics
     FlutterError.onError = (errorDetails) {
       if (SupaArchitecturePlatform.instance.useFirebase) {
-        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+        // FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       }
     };
 
     // Pass all platform dispatcher errors to Crashlytics
     PlatformDispatcher.instance.onError = (error, stack) {
       if (SupaArchitecturePlatform.instance.useFirebase) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        // FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       }
       return true;
     };
@@ -46,19 +44,19 @@ class ErrorHandlingBloc extends Cubit<void> {
     if (error is Error) {
       // Log to Firebase Crashlytics on supported platforms (Android, iOS)
       if (!kIsWeb && SupaArchitecturePlatform.instance.useFirebase) {
-        FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
+        // FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
       }
       // Log to Sentry for web and all other platforms
-      Sentry.captureException(error);
+      // Sentry.captureException(error);
     } else if (error is DioException) {
       // Handle DioException separately
       if (!kIsWeb && SupaArchitecturePlatform.instance.useFirebase) {
-        FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
+        // FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
       }
-      Sentry.captureException(error);
+      // Sentry.captureException(error);
     } else {
       // Log other types of errors or exceptions here
-      Sentry.captureException(error);
+      // Sentry.captureException(error);
     }
   }
 }
