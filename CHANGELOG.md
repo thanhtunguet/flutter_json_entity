@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.2
+
+- Add `useSentry` and `useFirebase` options
+
 ## 1.8.1
 
 - Optimize authentication
