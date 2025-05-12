@@ -10,6 +10,10 @@ part "error_handling_state.dart";
 
 /// Bloc that handles error capturing and reporting to Firebase Crashlytics and Sentry.
 class ErrorHandlingBloc extends Cubit<void> {
+  bool get useFirebase => SupaArchitecturePlatform.instance.useFirebase;
+
+  bool get useSentry => SupaArchitecturePlatform.instance.useSentry;
+
   /// Constructor for the error handling bloc.
   ErrorHandlingBloc() : super(null);
 
@@ -23,6 +27,7 @@ class ErrorHandlingBloc extends Cubit<void> {
     // Pass all uncaught errors to Crashlytics
     FlutterError.onError = (errorDetails) {
       if (SupaArchitecturePlatform.instance.useFirebase) {
+        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       }
     };

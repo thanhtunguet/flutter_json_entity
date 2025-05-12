@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:path_provider/path_provider.dart";
 import "package:supa_carbon_icons/supa_carbon_icons.dart";
@@ -111,12 +113,40 @@ class FileService {
 
   static Future<void> clearTempDir() async {
     final tempDir = await getTemporaryDirectory();
-    if (tempDir.existsSync()) {
-      for (final file in tempDir.listSync(recursive: true)) {
-        try {
-          file.deleteSync(recursive: true);
-        } catch (_) {}
+    final files = tempDir.listSync();
+    int i = 0;
+    for (final file in files) {
+      try {
+        debugPrint("Deleting ${file.path}");
+        if (file is File || file is Directory) {
+          await file.delete(recursive: true);
+        }
+        i++;
+      } catch (_) {
+        ///
       }
     }
+    debugPrint("Deleted $i files");
+  }
+
+  static Future<void> listFilesSync(
+    Directory directory, {
+    String prefix = "File:",
+  }) async {
+    final files = directory.listSync(recursive: true);
+    for (final file in files) {
+      debugPrint("$prefix ${file.path}");
+    }
+  }
+
+  static Future<double> getDirectorySize(Directory directory) async {
+    final files = directory.listSync(recursive: true);
+    double size = 0;
+    for (final file in files) {
+      if (file is File) {
+        size += file.lengthSync();
+      }
+    }
+    return size;
   }
 }

@@ -20,12 +20,6 @@ export 'repositories/repositories.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
 
-class SupaArchitecture {
-  Future<String?> getPlatformVersion() {
-    return SupaArchitecturePlatform.instance.getPlatformVersion();
-  }
-}
-
 PersistentStorage get persistentStorage =>
     SupaArchitecturePlatform.instance.persistentStorage;
 
