@@ -48,7 +48,7 @@ class SupaArchitectureWeb extends SupaArchitecturePlatform {
       useSentry: useSentry,
     );
     cookieStorage = WebCookieManager();
-    await persistentStorage.initialize();
     secureStorage.initialize();
+    await persistentStorage.initialize();
   }
 }

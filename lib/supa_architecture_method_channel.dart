@@ -44,7 +44,7 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
       useSentry: useSentry,
     );
     cookieStorage = await HiveCookieManager.create();
-    await persistentStorage.initialize();
     secureStorage.initialize();
+    await persistentStorage.initialize();
   }
 }

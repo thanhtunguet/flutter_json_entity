@@ -1,6 +1,6 @@
 name: supa_architecture
 description: Architecture library for Supa Flutter applications
-version: 1.8.3
+version: 1.8.4+1
 homepage: https://github.supa.vn
 
 environment:
@@ -45,6 +45,7 @@ dependencies:
   supa_carbon_icons: ^0.0.1+6
   url_launcher: ^6.0.0
   web: ^1.0.0
+  open_file: ^3.5.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0
