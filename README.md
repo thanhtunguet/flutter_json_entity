@@ -23,12 +23,12 @@ flutter pub get
 
 ## ✅ Compatibility
 
-| Feature              | Support        |
-|----------------------|----------------|
-| ✅ Flutter SDK       | 3.10 or higher |
-| ✅ Platforms          | Android, iOS, Web, macOS |
-| ✅ Null safety       | ✔️ Enabled     |
-| ✅ Modular support   | ✔️ Built-in    |
+| Feature           | Support                  |
+|-------------------|--------------------------|
+| ✅ Flutter SDK     | 3.10 or higher           |
+| ✅ Platforms       | Android, iOS, Web, macOS |
+| ✅ Null safety     | ✔️ Enabled                |
+| ✅ Modular support | ✔️ Built-in               |
 
 ---
 
@@ -47,7 +47,7 @@ flutter pub get
 ## 📚 Full Documentation
 
 👉 Visit the full documentation site:  
-🔗 [https://open.supa.vn](https://open.supa.vn)
+🔗 [https://deepwiki.com/supavn/supa_architecture](https://deepwiki.com/supavn/supa_architecture)
 
 There you'll find:
 - Setup guide

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.4+2
+
+- Update README
+- Use DeepWiki: https://deepwiki.com/supavn/supa_architecture
+
 ## 1.8.3
 
 - Enhance notification permission request in PushNotificationBloc to include additional options for better user control
