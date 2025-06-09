@@ -7,7 +7,7 @@ sealed class PushNotificationState {
   /// Converts the PushNotificationOpened state to a JSON map.
   ///
   /// **Returns:**
-  /// - A Map<String, dynamic> representing the state in JSON format.
+  /// - A Map\<String, dynamic\> representing the state in JSON format.
   Map<String, dynamic> toJson();
 }
 

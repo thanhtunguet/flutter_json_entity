@@ -1,7 +1,8 @@
-import 'dart:html' as html;
+import 'package:web/web.dart';
 
 Future<void> downloadAndOpenFile(String url, String filename) async {
-  html.AnchorElement(href: url)
-    ..setAttribute('download', filename)
-    ..click();
+  final anchor = document.createElement('a') as HTMLAnchorElement;
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
 }

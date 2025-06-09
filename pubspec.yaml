@@ -1,6 +1,6 @@
 name: supa_architecture
 description: Architecture library for Supa Flutter applications
-version: 1.8.4+2
+version: 1.8.4+3
 homepage: https://github.supa.vn
 
 environment:
@@ -18,21 +18,21 @@ dependencies:
   device_info_plus: ^11.0.0
   dio: ^5.7.0
   equatable: ^2.0.0
-  file_picker: ^8.1.0
+  file_picker: ^10.0.0
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
   flutter_bloc: ^9.0.0
   flutter_dotenv: ^5.0.0
   flutter_secure_storage: ^9.2.0
-  get_it: ^7.7.0
+  get_it: ^8.0.0
   go_router: ^14.0.0
   google_sign_in: ^6.0.0
   hive: ^2.2.0
   hive_flutter: ^1.1.0
   image_picker: ^1.1.0
   infinite_scroll_pagination: ^4.1.0
-  injectable: ^2.4.0
+  injectable: ^2.5.0
   intl: ^0.19.0
   local_auth: ^2.0.0
   package_info_plus: ^8.0.0

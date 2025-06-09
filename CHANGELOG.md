@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.8.4+3
+
+### Added
+
+- Add file handling service with platform-specific implementations for downloading and opening files
+- Add FileService utility class for file type detection and URL launching
+- Add support for various file types including office documents, images, videos, and PDFs
+
+### Changed
+
+- Update version to 1.8.4+3
+
+### Technical
+
+- Implement FileHandler service with conditional imports for web and IO platforms
+- Add comprehensive file type detection methods in FileService
+- Integrate open_file dependency for cross-platform file handling
+
+
 ## 1.8.4+2
 
 - Update README
