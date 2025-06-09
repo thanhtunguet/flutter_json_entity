@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.4+5
+
+- Use infinite_scroll_pagination v4, v5 has not been compatible yet
+
 ## 1.8.4+4
 
 ### Changed
