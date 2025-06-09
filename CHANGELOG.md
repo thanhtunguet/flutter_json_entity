@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.4+4
+
+### Changed
+
+- go_router to v15
+- infinite_pagination_scroll to v5
+
 ## 1.8.4+3
 
 ### Added
