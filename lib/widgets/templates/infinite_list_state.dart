@@ -52,15 +52,15 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     pagingController.addPageRequestListener(handlePageRequest);
   }
 
-  reset() {
+  Future<void> reset() async {
     filter.skip = 0;
-    pagingController.itemList = [];
     pagingController.nextPageKey = filter.skip;
-    handlePageRequest(filter.skip);
+    pagingController.itemList = [];
+    await handlePageRequest(filter.skip);
   }
 
   @override
-  dispose() {
+  void dispose() {
     pagingController.dispose();
     searchController.dispose();
     searchFocus.dispose();
@@ -71,11 +71,11 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     return pagingController.itemList!;
   }
 
-  clearFilter() {
+  void clearFilter() {
     pagingController.refresh();
   }
 
-  reloadUI() {
+  void reloadUI() {
     setState(() {});
   }
 
@@ -89,7 +89,7 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     }
   }
 
-  toggleSearch() {
+  void toggleSearch() {
     if (isSearching) {
       searchController.text = '';
 
@@ -107,8 +107,9 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     });
   }
 
-  handlePageRequest(int pageKey) async {
+  Future<void> handlePageRequest(int pageKey) async {
     filter.skip = pageKey;
+
     await Future.wait([
       repository.list(filter),
       repository.count(filter),
@@ -116,29 +117,32 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
       final list = values[0] as List<T>;
       final count = values[1] as int;
 
-      setState(() {
-        total = count;
+      if (mounted) {
+        setState(() {
+          total = count;
 
-        if (pagingController.isLastPage(filter, list, count)) {
-          pagingController.appendLastPage(list);
-          return;
-        }
+          if (pagingController.isLastPage(filter, list, count)) {
+            pagingController.appendLastPage(list);
+            return;
+          }
 
-        pagingController.appendPage(list, filter.skip + list.length);
-      });
+          pagingController.appendPage(list, filter.skip + list.length);
+        });
+      }
     }).catchError((error) {
       debugPrint('Có lỗi xảy ra');
 
-      if (error is DioException) {
-        if (error.response?.statusCode == 403) {
-          setState(() {
-            isForbidden = true;
-          });
-          return;
+      if (mounted) {
+        pagingController.error(error);
+        if (error is DioException) {
+          if (error.response?.statusCode == 403) {
+            setState(() {
+              isForbidden = true;
+            });
+            return;
+          }
         }
       }
-
-      pagingController.error(error);
     });
   }
 
