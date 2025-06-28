@@ -2,7 +2,6 @@ import "package:bloc/bloc.dart";
 import "package:dio/dio.dart";
 import "package:firebase_crashlytics/firebase_crashlytics.dart";
 import "package:flutter/foundation.dart";
-import "package:sentry_flutter/sentry_flutter.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
 part "error_handling_event.dart";
@@ -11,8 +10,6 @@ part "error_handling_state.dart";
 /// Bloc that handles error capturing and reporting to Firebase Crashlytics and Sentry.
 class ErrorHandlingBloc extends Cubit<void> {
   bool get useFirebase => SupaArchitecturePlatform.instance.useFirebase;
-
-  bool get useSentry => SupaArchitecturePlatform.instance.useSentry;
 
   /// Constructor for the error handling bloc.
   ErrorHandlingBloc() : super(null);
@@ -54,16 +51,20 @@ class ErrorHandlingBloc extends Cubit<void> {
         FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
       }
       // Log to Sentry for web and all other platforms
-      Sentry.captureException(error);
+      _captureException(error);
     } else if (error is DioException) {
       // Handle DioException separately
       if (!kIsWeb && SupaArchitecturePlatform.instance.useFirebase) {
         FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
       }
-      Sentry.captureException(error);
+      _captureException(error);
     } else {
       // Log other types of errors or exceptions here
-      Sentry.captureException(error);
+      _captureException(error);
     }
+  }
+
+  void _captureException(dynamic error) {
+    FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
   }
 }

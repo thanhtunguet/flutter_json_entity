@@ -17,7 +17,6 @@ import local_auth_darwin
 import open_file_mac
 import package_info_plus
 import path_provider_foundation
-import sentry_flutter
 import shared_preferences_foundation
 import sign_in_with_apple
 import supa_architecture
@@ -37,7 +36,6 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   OpenFilePlugin.register(with: registry.registrar(forPlugin: "OpenFilePlugin"))
   FPPPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FPPPackageInfoPlusPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
-  SentryFlutterPlugin.register(with: registry.registrar(forPlugin: "SentryFlutterPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   SignInWithApplePlugin.register(with: registry.registrar(forPlugin: "SignInWithApplePlugin"))
   SupaArchitecturePlugin.register(with: registry.registrar(forPlugin: "SupaArchitecturePlugin"))

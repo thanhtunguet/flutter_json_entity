@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.5+1
+
+### Fixed
+
+- Remove Sentry because of causing the rendering issue on some Android devices
+- Replace by FirebaseCrashlytics.recordError
+
 ## 1.8.4+6
 
 - Fix infinite page state

@@ -89,4 +89,17 @@ class AppUser extends JsonModel with AppUserPreferences {
   /// List of mappings between the user and subsystems.
   JsonList<AppUserSubSystemMapping> appUserSubSystemMappings =
       JsonList<AppUserSubSystemMapping>("appUserSubSystemMappings");
+
+  @override
+  void fromJson(json) {
+    super.fromJson(json);
+    if (json is Map<String, dynamic>) {
+      if (json.containsKey("displayName") &&
+          json["displayName"] is String &&
+          json["displayName"].isNotEmpty &&
+          name.value.isEmpty) {
+        name.value = json["displayName"];
+      }
+    }
+  }
 }

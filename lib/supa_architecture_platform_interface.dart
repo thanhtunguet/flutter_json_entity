@@ -18,8 +18,6 @@ abstract class SupaArchitecturePlatform extends PlatformInterface {
 
   late final bool useFirebase;
 
-  late final bool useSentry;
-
   /// Constructs a SupaArchitecturePlatform.
   SupaArchitecturePlatform() : super(token: _token);
 
@@ -48,9 +46,7 @@ abstract class SupaArchitecturePlatform extends PlatformInterface {
 
   Future<void> initialize({
     bool useFirebase = false,
-    bool useSentry = false,
   }) async {
     this.useFirebase = useFirebase;
-    this.useSentry = useSentry;
   }
 }

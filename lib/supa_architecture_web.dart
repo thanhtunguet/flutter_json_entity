@@ -41,11 +41,9 @@ class SupaArchitectureWeb extends SupaArchitecturePlatform {
   @override
   Future<void> initialize({
     bool useFirebase = false,
-    bool useSentry = false,
   }) async {
     super.initialize(
       useFirebase: useFirebase,
-      useSentry: useSentry,
     );
     cookieStorage = WebCookieManager();
     secureStorage.initialize();
