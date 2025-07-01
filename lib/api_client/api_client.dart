@@ -9,6 +9,7 @@ import "package:image_picker/image_picker.dart";
 import "package:path/path.dart";
 import "package:supa_architecture/api_client/interceptors/device_info_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/general_error_log_interceptor.dart";
+import "package:supa_architecture/api_client/interceptors/language_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/persistent_url_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/refresh_interceptor.dart";
 import "package:supa_architecture/api_client/interceptors/timezone_interceptor.dart";
@@ -36,6 +37,7 @@ abstract class ApiClient {
   ApiClient({
     bool shouldUsePersistentUrl = false,
     bool shouldUseDeviceInfo = false,
+    bool shouldUseLanguage = true,
     RefreshInterceptor? refreshInterceptor,
   }) : dio = Dio() {
     if (refreshInterceptor != null) {
@@ -46,6 +48,10 @@ abstract class ApiClient {
 
     if (shouldUseDeviceInfo) {
       dio.interceptors.add(DeviceInfoInterceptor());
+    }
+
+    if (shouldUseLanguage) {
+      dio.interceptors.add(LanguageInterceptor());
     }
 
     if (!kIsWeb) {

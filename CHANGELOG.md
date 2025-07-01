@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.0+1
+
+### Added
+
+- LanguageInterceptor for all repositories
+
 ## 1.8.5+1
 
 ### Fixed
