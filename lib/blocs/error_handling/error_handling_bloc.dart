@@ -65,6 +65,10 @@ class ErrorHandlingBloc extends Cubit<void> {
   }
 
   void _captureException(dynamic error) {
-    FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
+    if (!kIsWeb) {
+      if (SupaArchitecturePlatform.instance.useFirebase) {
+        FirebaseCrashlytics.instance.recordError(error, error.stackTrace);
+      }
+    }
   }
 }

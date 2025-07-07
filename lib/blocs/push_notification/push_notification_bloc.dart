@@ -83,7 +83,8 @@ class PushNotificationBloc
 
   /// Set handler for foreground messages.
   void _setForegroundMessageHandler() {
-    _foregroundNotificationSubscription =
+    if (kIsWeb) return;
+    _foregroundNotificationSubscription ??=
         FirebaseMessaging.onMessage.listen(_handleNotification);
   }
 

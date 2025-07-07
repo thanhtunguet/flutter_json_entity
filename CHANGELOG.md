@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.1+1
+
+### Fixed
+
+- Fix: Remove Sentry integration due to rendering issues on some Android devices, switch to using only FirebaseCrashlytics for error reporting
+- Fix: Update error handling bloc to log errors exclusively to FirebaseCrashlytics
+- Fix: Push notification BLoC improvements and documentation updates
+
+
 ## 1.9.0+1
 
 ### Added
