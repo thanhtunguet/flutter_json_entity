@@ -90,7 +90,7 @@ class PushNotificationBloc
 
   /// Set handler for notifications opened from the background.
   void _setNotificationOpenAppHandler() {
-    _notificationOpenSubscription =
+    _notificationOpenSubscription ??=
         FirebaseMessaging.onMessageOpenedApp.listen(_handleOpenedNotification);
   }
 
