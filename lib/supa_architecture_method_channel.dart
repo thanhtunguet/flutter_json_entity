@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supa_architecture/core/cookie_manager/basic_cookie_manager.dart';
 import 'package:supa_architecture/core/cookie_manager/hive_cookie_manager.dart';
 import 'package:supa_architecture/core/persistent_storage/hive_persistent_storage.dart';
 import 'package:supa_architecture/core/persistent_storage/persistent_storage.dart';
@@ -18,6 +19,26 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
 
   @override
   final PersistentStorage persistentStorage = HivePersistentStorage();
+
+  /// Constructor that initializes cookie storage immediately
+  MethodChannelSupaArchitecture() {
+    // Initialize with basic cookie manager immediately, then upgrade to Hive
+    cookieStorage = BasicCookieManager();
+    _initializeCookieStorage();
+  }
+
+  /// Initialize cookie storage asynchronously
+  Future<void> _initializeCookieStorage() async {
+    try {
+      final hiveManager = await HiveCookieManager.create();
+      // Upgrade to Hive cookie manager
+      cookieStorage = hiveManager;
+    } catch (e) {
+      // Keep using basic implementation if Hive fails
+      // ignore: avoid_print
+      print('Failed to initialize HiveCookieManager: $e');
+    }
+  }
 
   @override
   Future<String?> getPlatformVersion() async {
@@ -41,7 +62,6 @@ class MethodChannelSupaArchitecture extends SupaArchitecturePlatform {
     super.initialize(
       useFirebase: useFirebase,
     );
-    cookieStorage = await HiveCookieManager.create();
     secureStorage.initialize();
     await persistentStorage.initialize();
   }

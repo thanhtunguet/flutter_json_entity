@@ -28,9 +28,19 @@ class WebCookieManager implements CookieManager {
   void _onResponse(Response response, ResponseInterceptorHandler handler) {
     final uri = response.requestOptions.uri;
     final rawCookies = response.headers['set-cookie'] ?? [];
-    final cookies =
-        rawCookies.map((raw) => Cookie.fromSetCookieValue(raw)).toList();
-    saveCookies(uri, cookies);
+
+    // Handle each Set-Cookie header individually
+    for (final rawCookie in rawCookies) {
+      try {
+        final cookie = Cookie.fromSetCookieValue(rawCookie);
+        _saveCookieFromServer(uri, cookie, rawCookie);
+      } catch (e) {
+        // Log error but continue processing other cookies
+        // ignore: avoid_print
+        print('Error parsing cookie: $rawCookie - $e');
+      }
+    }
+
     handler.next(response);
   }
 
@@ -40,9 +50,10 @@ class WebCookieManager implements CookieManager {
     final rawCookies = document.cookie;
     if (rawCookies.isEmpty) return [];
     return rawCookies.split('; ').map((rawCookie) {
-      final parts = rawCookie.split('=');
-      final name = parts[0].trim();
-      final value = parts.length > 1 ? parts[1].trim() : '';
+      final firstEqualIndex = rawCookie.indexOf('=');
+      if (firstEqualIndex == -1) return Cookie(rawCookie.trim(), '');
+      final name = rawCookie.substring(0, firstEqualIndex).trim();
+      final value = rawCookie.substring(firstEqualIndex + 1).trim();
       return Cookie(name, value);
     }).toList();
   }
@@ -54,6 +65,31 @@ class WebCookieManager implements CookieManager {
       document.cookie =
           '${cookie.name}=${cookie.value}; path=/; domain=${uri.host};';
     }
+  }
+
+  /// Saves a cookie from server response, preserving server-set attributes.
+  void _saveCookieFromServer(Uri uri, Cookie cookie, String rawSetCookie) {
+    // Extract the cookie name and value from the raw Set-Cookie header
+    final parts = rawSetCookie.split(';');
+    final nameValue = parts[0].trim();
+    final firstEqualIndex = nameValue.indexOf('=');
+    if (firstEqualIndex == -1) return;
+
+    final name = nameValue.substring(0, firstEqualIndex).trim();
+    final value = nameValue.substring(firstEqualIndex + 1).trim();
+
+    // Build cookie string with server attributes
+    final cookieString = StringBuffer('$name=$value');
+
+    // Add server-set attributes (path, domain, expires, etc.)
+    for (int i = 1; i < parts.length; i++) {
+      final attr = parts[i].trim();
+      if (attr.isNotEmpty) {
+        cookieString.write('; $attr');
+      }
+    }
+
+    document.cookie = cookieString.toString();
   }
 
   /// Deletes all cookies for a specific URI.
@@ -89,7 +125,11 @@ class WebCookieManager implements CookieManager {
     if (cookieString.isEmpty) {
       throw Exception('Cookie not found: $name');
     }
-    final value = cookieString.split('=').skip(1).join('=');
+    final firstEqualIndex = cookieString.indexOf('=');
+    if (firstEqualIndex == -1) {
+      throw Exception('Cookie not found: $name');
+    }
+    final value = cookieString.substring(firstEqualIndex + 1);
     return Cookie(name, value);
   }
 

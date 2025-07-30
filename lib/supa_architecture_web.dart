@@ -14,7 +14,10 @@ import 'supa_architecture_platform_interface.dart';
 /// A web implementation of the SupaArchitecturePlatform of the SupaArchitecture plugin.
 class SupaArchitectureWeb extends SupaArchitecturePlatform {
   /// Constructs a SupaArchitectureWeb
-  SupaArchitectureWeb();
+  SupaArchitectureWeb() {
+    // Initialize cookie storage immediately for web
+    cookieStorage = WebCookieManager();
+  }
 
   @override
   final PersistentStorage persistentStorage = WebPersistentStorage();
@@ -45,7 +48,6 @@ class SupaArchitectureWeb extends SupaArchitecturePlatform {
     super.initialize(
       useFirebase: useFirebase,
     );
-    cookieStorage = WebCookieManager();
     secureStorage.initialize();
     await persistentStorage.initialize();
   }

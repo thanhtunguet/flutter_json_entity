@@ -25,10 +25,12 @@ part "http_response.dart";
 
 /// Unified API Client class for handling HTTP requests and file uploads.
 abstract class ApiClient {
-  CookieManager get cookieStorage => GetIt.instance.get<CookieManager>();
+  CookieManager get cookieStorage =>
+      SupaArchitecturePlatform.instance.cookieStorage;
   PersistentStorage get persistentStorage =>
-      GetIt.instance.get<PersistentStorage>();
-  SecureStorage get secureStorage => GetIt.instance.get<SecureStorage>();
+      SupaArchitecturePlatform.instance.persistentStorage;
+  SecureStorage get secureStorage =>
+      SupaArchitecturePlatform.instance.secureStorage;
 
   final Dio dio;
 
@@ -54,12 +56,12 @@ abstract class ApiClient {
       dio.interceptors.add(LanguageInterceptor());
     }
 
-    if (!kIsWeb) {
-      dio.interceptors
-          .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
-      if (shouldUsePersistentUrl) {
-        dio.interceptors.add(PersistentUrlInterceptor());
-      }
+    // Add cookie interceptor for all platforms
+    dio.interceptors
+        .add(SupaArchitecturePlatform.instance.cookieStorage.interceptor);
+
+    if (shouldUsePersistentUrl) {
+      dio.interceptors.add(PersistentUrlInterceptor());
     }
 
     dio.interceptors
