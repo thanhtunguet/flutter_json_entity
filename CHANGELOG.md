@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.1+3
+
+### Fixed
+
+- Change authentication state when language changes
+
 ## 1.9.1+1
 
 ### Fixed

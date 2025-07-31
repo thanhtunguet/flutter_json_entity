@@ -30,8 +30,8 @@ final class UserAuthenticatedWithMultipleTenantsState
   });
 }
 
-final class UserAuthenticatedWithSelectedTenantState
-    extends AuthenticationState {
+final class UserAuthenticatedWithSelectedTenantState extends AuthenticationState
+    with EquatableMixin {
   final AppUser user;
 
   final Tenant tenant;
@@ -40,6 +40,14 @@ final class UserAuthenticatedWithSelectedTenantState
     required this.user,
     required this.tenant,
   });
+
+  @override
+  List<Object?> get props => [
+        user,
+        tenant,
+        user.languageId.value,
+        user.language.value.code.value,
+      ];
 }
 
 final class AuthenticationLogoutState extends AuthenticationState {}
