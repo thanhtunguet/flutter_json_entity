@@ -6,14 +6,28 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:supa_architecture/supa_architecture.dart';
 import 'package:supa_carbon_icons/supa_carbon_icons.dart';
 
+// v5: Extension for PagingController to handle last page detection
+extension AppendPagingController<T> on PagingController<int, T> {
+  bool isLastPage(DataFilter filter, List list, int count) {
+    if (list.length == count) {
+      return true;
+    }
+    return ((items?.length ?? 0) + list.length == count);
+  }
+}
+
 abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     TW extends StatefulWidget> extends State<TW> {
   final searchFocus = FocusNode();
 
   final searchController = TextEditingController();
 
-  final PagingController<int, T> pagingController = PagingController<int, T>(
-    firstPageKey: 0,
+  // v5: PagingController now takes getNextPageKey and fetchPage parameters
+  late final PagingController<int, T> pagingController =
+      PagingController<int, T>(
+    getNextPageKey: (state) =>
+        state.lastPageIsEmpty ? null : state.nextIntPageKey,
+    fetchPage: (pageKey) => handlePageRequest(pageKey),
   );
 
   abstract TF filter;
@@ -49,14 +63,13 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
   @override
   void initState() {
     super.initState();
-    pagingController.addPageRequestListener(handlePageRequest);
+    // v5: No need to add listeners, fetchPage is handled in constructor
   }
 
   Future<void> reset() async {
     filter.skip = 0;
-    pagingController.nextPageKey = filter.skip;
-    pagingController.itemList = [];
-    await handlePageRequest(filter.skip);
+    // v5: Use refresh() method instead of manual state manipulation
+    pagingController.refresh();
   }
 
   @override
@@ -68,7 +81,8 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
   }
 
   List<T> get list {
-    return pagingController.itemList!;
+    // v5: Use the items extension getter to flatten pages
+    return pagingController.items ?? [];
   }
 
   void clearFilter() {
@@ -107,43 +121,40 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
     });
   }
 
-  Future<void> handlePageRequest(int pageKey) async {
+  Future<List<T>> handlePageRequest(int pageKey) async {
     filter.skip = pageKey;
 
-    await Future.wait([
-      repository.list(filter),
-      repository.count(filter),
-    ]).then((values) {
-      final list = values[0] as List<T>;
-      final count = values[1] as int;
+    try {
+      final results = await Future.wait([
+        repository.list(filter),
+        repository.count(filter),
+      ]);
+
+      final list = results[0] as List<T>;
+      final count = results[1] as int;
 
       if (mounted) {
         setState(() {
           total = count;
-
-          if (pagingController.isLastPage(filter, list, count)) {
-            pagingController.appendLastPage(list);
-            return;
-          }
-
-          pagingController.appendPage(list, filter.skip + list.length);
         });
       }
-    }).catchError((error) {
-      debugPrint('Có lỗi xảy ra');
 
-      if (mounted) {
-        pagingController.error(error);
-        if (error is DioException) {
-          if (error.response?.statusCode == 403) {
-            setState(() {
-              isForbidden = true;
-            });
-            return;
-          }
+      // v5: Return the list directly, PagingController handles state management
+      return list;
+    } catch (error) {
+      debugPrint('Có lỗi xảy ra');
+
+      if (mounted && error is DioException) {
+        if (error.response?.statusCode == 403) {
+          setState(() {
+            isForbidden = true;
+          });
         }
       }
-    });
+
+      // v5: Re-throw the error for PagingController to handle
+      rethrow;
+    }
   }
 
   Future<void> refresh() async {
@@ -215,19 +226,25 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
                 filterRender(),
                 countRender(total),
                 Expanded(
-                  child: PagedListView<int, T>(
-                    pagingController: pagingController,
-                    builderDelegate: PagedChildBuilderDelegate(
-                      itemBuilder: itemRender,
-                      firstPageProgressIndicatorBuilder:
-                          buildFirstPageProgressIndicator,
-                      newPageProgressIndicatorBuilder:
-                          buildNewPageProgressIndicator,
-                      noItemsFoundIndicatorBuilder: buildEmptyListIndicator,
-                      newPageErrorIndicatorBuilder:
-                          buildNextPageErrorPageIndicator,
-                      firstPageErrorIndicatorBuilder:
-                          buildFirstPageErrorPageIndicator,
+                  // v5: Use PagingListener to connect controller to PagedListView
+                  child: PagingListener<int, T>(
+                    controller: pagingController,
+                    builder: (context, state, fetchNextPage) =>
+                        PagedListView<int, T>(
+                      state: state,
+                      fetchNextPage: fetchNextPage,
+                      builderDelegate: PagedChildBuilderDelegate(
+                        itemBuilder: itemRender,
+                        firstPageProgressIndicatorBuilder:
+                            buildFirstPageProgressIndicator,
+                        newPageProgressIndicatorBuilder:
+                            buildNewPageProgressIndicator,
+                        noItemsFoundIndicatorBuilder: buildEmptyListIndicator,
+                        newPageErrorIndicatorBuilder:
+                            buildNextPageErrorPageIndicator,
+                        firstPageErrorIndicatorBuilder:
+                            buildFirstPageErrorPageIndicator,
+                      ),
                     ),
                   ),
                 ),
@@ -257,19 +274,19 @@ abstract class InfiniteListState<T extends JsonModel, TF extends DataFilter,
 
   Widget buildEmptyListIndicator(BuildContext context) {
     return const EmptyComponent(
-      title: 'Chưa có dữ liệu',
+      title: 'Chưa có dữ liệu',
     );
   }
 
   Widget buildNextPageErrorPageIndicator(BuildContext context) {
     return const Center(
-      child: Text('Có lỗi xảy ra'),
+      child: Text('Có lỗi xảy ra'),
     );
   }
 
   Widget buildFirstPageErrorPageIndicator(BuildContext context) {
     return const Center(
-      child: Text('Có lỗi xảy ra'),
+      child: Text('Có lỗi xảy ra'),
     );
   }
 
