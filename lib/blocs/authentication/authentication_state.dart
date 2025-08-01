@@ -43,10 +43,11 @@ final class UserAuthenticatedWithSelectedTenantState extends AuthenticationState
 
   @override
   List<Object?> get props => [
-        user,
         tenant,
-        user.languageId.value,
-        user.language.value.code.value,
+        tenant.id.value,
+        ...user.fields.map(
+          (field) => field.value,
+        ),
       ];
 }
 

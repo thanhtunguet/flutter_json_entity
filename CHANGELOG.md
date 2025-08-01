@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.1+4
+
+- Update authentication with equatable mixin
+
 ## 1.9.1+3
 
 ### Fixed
