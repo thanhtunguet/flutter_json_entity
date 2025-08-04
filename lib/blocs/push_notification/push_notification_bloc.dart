@@ -6,6 +6,7 @@ import "package:equatable/equatable.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/foundation.dart";
 import "package:supa_architecture/core/device_notification_token.dart";
+import "package:supa_architecture/models/user_notification.dart";
 import "package:supa_architecture/repositories/utils_notification_repository.dart";
 import "package:supa_architecture/supa_architecture_platform_interface.dart";
 
@@ -17,6 +18,7 @@ part "push_notification_state.dart";
 class PushNotificationBloc
     extends Bloc<PushNotificationEvent, PushNotificationState> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   final UtilsNotificationRepository _notificationRepository =
       UtilsNotificationRepository();
 
@@ -27,6 +29,27 @@ class PushNotificationBloc
   String? _deviceToken;
 
   PushNotificationBloc() : super(const PushNotificationInitial()) {
+    _onEvents();
+  }
+
+  PushNotificationBloc.fromInitialMessage(
+    RemoteMessage? initialMessage,
+  ) : super(
+          initialMessage != null
+              ? PushNotificationOpened.fromFields(
+                  title: initialMessage.notification?.title ?? "",
+                  body: initialMessage.notification?.body ?? "",
+                  payload: PushNotificationPayload.fromJson(
+                    initialMessage.data,
+                  ),
+                  linkMobile: initialMessage.data["linkMobile"],
+                )
+              : const PushNotificationInitial(),
+        ) {
+    _onEvents();
+  }
+
+  void _onEvents() {
     on<DidReceivedNotificationEvent>(_onDidNotificationReceived);
     on<DidUserOpenedNotificationEvent>(_onDidUserOpenedNotification);
     on<DidResetNotificationEvent>(_onDidResetNotification);
@@ -90,6 +113,7 @@ class PushNotificationBloc
 
   /// Set handler for notifications opened from the background.
   void _setNotificationOpenAppHandler() {
+    if (kIsWeb) return;
     _notificationOpenSubscription ??=
         FirebaseMessaging.onMessageOpenedApp.listen(_handleOpenedNotification);
   }
@@ -149,6 +173,7 @@ class PushNotificationBloc
     if (!await hasNotificationPermission() || _deviceToken == null) return;
 
     final deviceInfo = SupaArchitecturePlatform.instance.deviceInfo;
+
     final deviceToken = DeviceNotificationToken(
       osVersion: deviceInfo.systemVersion,
       deviceId: deviceInfo.deviceUuid,
@@ -159,6 +184,7 @@ class PushNotificationBloc
     );
 
     try {
+      _deviceToken = null;
       await _notificationRepository.deleteToken(deviceToken);
     } catch (error) {
       debugPrint("Failed to unregister device token: ${error.toString()}");
@@ -169,7 +195,7 @@ class PushNotificationBloc
     DidReceivedNotificationEvent event,
     Emitter<PushNotificationState> emit,
   ) {
-    emit(PushNotificationReceived(
+    emit(PushNotificationReceived.fromFields(
       title: event.title,
       body: event.body,
       payload: event.payload,
@@ -181,7 +207,7 @@ class PushNotificationBloc
     DidUserOpenedNotificationEvent event,
     Emitter<PushNotificationState> emit,
   ) {
-    emit(PushNotificationOpened(
+    emit(PushNotificationOpened.fromFields(
       title: event.title,
       body: event.body,
       payload: event.payload,

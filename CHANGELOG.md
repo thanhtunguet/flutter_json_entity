@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.1+5
+
+### Updated
+
+- update notification handling with new data structure and error state
+
 ## 1.9.1+4
 
 - Update authentication with equatable mixin

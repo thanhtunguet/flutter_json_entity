@@ -1,10 +1,96 @@
 part of "push_notification_bloc.dart";
 
+/// Base notification data that is shared between different notification states
+class NotificationData {
+  /// Notification title
+  final String title;
+
+  /// Notification body
+  final String body;
+
+  /// Notification payload
+  final PushNotificationPayload payload;
+
+  /// Mobile link for the notification
+  final String? linkMobile;
+
+  /// Creates a notification data instance
+  const NotificationData({
+    required this.title,
+    required this.body,
+    required this.payload,
+    this.linkMobile,
+  });
+
+  /// Converts the notification data to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      "title": title,
+      "body": body,
+      "payload": payload.toJson(),
+      "linkMobile": linkMobile,
+    };
+  }
+
+  /// Creates a notification data instance from JSON
+  factory NotificationData.fromJson(Map<String, dynamic> json) {
+    return NotificationData(
+      title: json["title"] ?? "",
+      body: json["body"] ?? "",
+      payload: PushNotificationPayload.fromJson(json["payload"] ?? {}),
+      linkMobile: json["linkMobile"],
+    );
+  }
+
+  /// Creates a copy of this notification data with the given fields replaced
+  NotificationData copyWith({
+    String? title,
+    String? body,
+    PushNotificationPayload? payload,
+    String? linkMobile,
+  }) {
+    return NotificationData(
+      title: title ?? this.title,
+      body: body ?? this.body,
+      payload: payload ?? this.payload,
+      linkMobile: linkMobile ?? this.linkMobile,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is NotificationData &&
+        other.title == title &&
+        other.body == body &&
+        other.payload == payload &&
+        other.linkMobile == linkMobile;
+  }
+
+  UserNotification toUserNotification() {
+    return UserNotification()
+      ..title.value = title
+      ..titleWeb.value = title
+      ..titleMobile.value = title
+      ..content.value = body
+      ..contentWeb.value = body
+      ..contentMobile.value = body
+      ..link.value = linkMobile
+      ..linkWeb.value = linkMobile
+      ..linkMobile.value = linkMobile;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(title, body, payload, linkMobile);
+  }
+}
+
 /// Push notification state
 sealed class PushNotificationState {
   const PushNotificationState();
 
-  /// Converts the PushNotificationOpened state to a JSON map.
+  /// Converts the state to a JSON map.
   ///
   /// **Returns:**
   /// - A Map\<String, dynamic\> representing the state in JSON format.
@@ -18,82 +104,117 @@ final class PushNotificationInitial extends PushNotificationState {
 
   @override
   Map<String, dynamic> toJson() {
-    return {};
+    return {"type": "initial"};
   }
 }
 
 /// Push notification received state
 final class PushNotificationReceived extends PushNotificationState {
-  /// Push notification received state
-  final String title;
+  /// Notification data
+  final NotificationData data;
 
   /// Push notification received state
-  final String body;
-
-  /// Push notification received state
-  final PushNotificationPayload payload;
-
-  /// Push notification received state
-  final String? linkMobile;
-
-  /// Push notification received state
-  PushNotificationReceived({
-    required this.title,
-    required this.body,
-    required this.payload,
-    this.linkMobile,
+  const PushNotificationReceived({
+    required this.data,
   });
 
-  /// Push notification opened state
-  DidUserOpenedNotificationEvent opened() {
+  /// Creates a received state from individual notification fields
+  factory PushNotificationReceived.fromFields({
+    required String title,
+    required String body,
+    required PushNotificationPayload payload,
+    String? linkMobile,
+  }) {
+    return PushNotificationReceived(
+      data: NotificationData(
+        title: title,
+        body: body,
+        payload: payload,
+        linkMobile: linkMobile,
+      ),
+    );
+  }
+
+  /// Converts to opened notification event
+  DidUserOpenedNotificationEvent toOpenedEvent() {
     return DidUserOpenedNotificationEvent(
-      title: title,
-      body: body,
-      payload: payload,
-      linkMobile: linkMobile,
+      title: data.title,
+      body: data.body,
+      payload: data.payload,
+      linkMobile: data.linkMobile,
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "title": title,
-      "body": body,
-      "payload": payload.toJson(),
-      "linkMobile": linkMobile,
+      "type": "received",
+      "data": data.toJson(),
     };
   }
 }
 
 /// Push notification opened state
 final class PushNotificationOpened extends PushNotificationState {
-  /// Push notification received state
-  final String title;
-
-  /// Push notification received state
-  final String body;
-
-  /// Push notification received state
-  final PushNotificationPayload payload;
-
-  /// Push notification received state
-  final String? linkMobile;
+  /// Notification data
+  final NotificationData data;
 
   /// Push notification opened state
   const PushNotificationOpened({
-    required this.title,
-    required this.body,
-    required this.payload,
-    this.linkMobile,
+    required this.data,
+  });
+
+  /// Creates an opened state from individual notification fields
+  factory PushNotificationOpened.fromFields({
+    required String title,
+    required String body,
+    required PushNotificationPayload payload,
+    String? linkMobile,
+  }) {
+    return PushNotificationOpened(
+      data: NotificationData(
+        title: title,
+        body: body,
+        payload: payload,
+        linkMobile: linkMobile,
+      ),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "type": "opened",
+      "data": data.toJson(),
+    };
+  }
+}
+
+/// Push notification error state
+final class PushNotificationError extends PushNotificationState {
+  /// Error message
+  final String message;
+
+  /// Error code (optional)
+  final String? code;
+
+  /// Original notification data if available
+  final NotificationData? originalData;
+
+  /// Push notification error state
+  const PushNotificationError({
+    required this.message,
+    this.code,
+    this.originalData,
   });
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "title": title,
-      "body": body,
-      "payload": payload.toJson(),
-      "linkMobile": linkMobile,
+      "type": "error",
+      "message": message,
+      "code": code,
+      "originalData": originalData?.toJson(),
     };
   }
 }
