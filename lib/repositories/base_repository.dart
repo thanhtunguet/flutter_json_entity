@@ -14,6 +14,8 @@ abstract class BaseRepository<T extends JsonModel, TFilter extends DataFilter>
   BaseRepository({
     super.shouldUseDeviceInfo,
     super.shouldUsePersistentUrl,
+    super.refreshInterceptor,
+    super.shouldUseLanguage,
   });
 
   /// Lists entities based on the provided filter.
