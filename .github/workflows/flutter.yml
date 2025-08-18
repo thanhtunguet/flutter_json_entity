@@ -31,7 +31,9 @@ jobs:
 
       # Step 4: Run Flutter tests
       - name: Run tests
-        run: flutter test
+        run: |
+          flutter test --coverage
+          flutter test test/json/ --coverage
 
       # Step 5: Analyze code
       - name: Run flutter analyze
