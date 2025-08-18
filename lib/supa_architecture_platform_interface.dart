@@ -48,5 +48,7 @@ abstract class SupaArchitecturePlatform extends PlatformInterface {
     bool useFirebase = false,
   }) async {
     this.useFirebase = useFirebase;
+    // We should get the device info before initializing the platform.
+    deviceInfo = await DeviceInfo.getDeviceInfo();
   }
 }

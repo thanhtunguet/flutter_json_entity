@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.1+6
+
+### Added
+
+- Get DeviceInfo before initializing platform
+
 ## 1.9.1+5
 
 ### Updated
