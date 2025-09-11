@@ -56,7 +56,12 @@ class EnumBadgesPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(key, style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  key,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: token?.text ?? Colors.black,
+                      ),
+                ),
                 EnumStatusBadge(status: enumModel),
               ],
             ),
