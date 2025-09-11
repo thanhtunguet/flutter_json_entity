@@ -392,7 +392,7 @@ packages:
     source: hosted
     version: "8.0.3"
   go_router:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: go_router
       sha256: b453934c36e289cef06525734d1e676c1f91da9e22e2017d9dcab6ce0f999175
@@ -1007,7 +1007,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.9.1+5"
+    version: "1.9.1"
   supa_carbon_icons:
     dependency: transitive
     description:

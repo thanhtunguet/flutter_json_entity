@@ -1,60 +1,47 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'enum_badges_page.dart';
+import 'supa_color_scheme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ExampleApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final String _platformVersion = 'Unknown';
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    // String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    // try {
-    //   platformVersion = await _supaArchitecturePlugin.getPlatformVersion() ??
-    //       'Unknown platform version';
-    // } on PlatformException {
-    //   platformVersion = 'Failed to get platform version.';
-    // }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      // _platformVersion = platformVersion;
-    });
-  }
+class ExampleApp extends StatelessWidget {
+  const ExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const EnumBadgesPage(),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
+      ],
+    );
+
+    final ThemeData lightTheme = ThemeData.from(
+      colorScheme: lightColorScheme,
+      useMaterial3: true,
+    ).copyWith(
+      extensions: const [lightExtendedColorScheme],
+    );
+
+    final ThemeData darkTheme = ThemeData.from(
+      colorScheme: darkColorScheme,
+      useMaterial3: true,
+    ).copyWith(
+      extensions: const [darkExtendedColorScheme],
+    );
+
+    return MaterialApp.router(
+      title: 'Supa Architecture Example',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
