@@ -29,6 +29,12 @@ class TextStatusBadge extends StatelessWidget {
   /// Token key or hex for background color (e.g., 'warning' or '#FDDC69').
   final String? backgroundColorKey;
 
+  /// Optional explicit border color. Prefer [borderColorKey] for tokens/hex.
+  final Color? borderColor;
+
+  /// Token key or hex for border color (e.g., 'warning' or '#FFD591').
+  final String? borderColorKey;
+
   const TextStatusBadge({
     super.key,
     required this.status,
@@ -38,6 +44,8 @@ class TextStatusBadge extends StatelessWidget {
     this.color = const Color(0xFF000000), // Default text color
     this.textColorKey,
     this.backgroundColorKey,
+    this.borderColor,
+    this.borderColorKey,
   });
 
   @override
@@ -55,17 +63,22 @@ class TextStatusBadge extends StatelessWidget {
         (backgroundColorKey == null || backgroundColorKey!.trim().isEmpty)
             ? null
             : backgroundColorKey!.trim().toLowerCase();
+
     final String? textKey =
         (textColorKey == null || textColorKey!.trim().isEmpty)
             ? null
             : textColorKey!.trim().toLowerCase();
+
+    final String? borderKey =
+        (borderColorKey == null || borderColorKey!.trim().isEmpty)
+            ? null
+            : borderColorKey!.trim().toLowerCase();
 
     if (bgKey != null) {
       if (isHex(bgKey)) {
         resolvedBackground = HexColor.fromHex(bgKey);
       } else if (themeExtension != null) {
         resolvedBackground = themeExtension.getBackgroundColor(bgKey);
-        resolvedBorder = themeExtension.getBorderColor(bgKey);
       }
     }
 
@@ -74,13 +87,22 @@ class TextStatusBadge extends StatelessWidget {
         resolvedText = HexColor.fromHex(textKey);
       } else if (themeExtension != null) {
         resolvedText = themeExtension.getTextColor(textKey);
-        // Only set border if not derived from background key
-        resolvedBorder ??= themeExtension.getBorderColor(textKey);
+      }
+    }
+
+    if (borderKey != null) {
+      if (isHex(borderKey)) {
+        resolvedBorder = HexColor.fromHex(borderKey);
+      } else if (themeExtension != null) {
+        resolvedBorder = themeExtension.getBorderColor(borderKey);
       }
     }
 
     // Default to 'default' token group if neither key provided
-    if (bgKey == null && textKey == null && themeExtension != null) {
+    if (bgKey == null &&
+        textKey == null &&
+        borderKey == null &&
+        themeExtension != null) {
       resolvedBackground = themeExtension.getBackgroundColor('default');
       resolvedText = themeExtension.getTextColor('default');
       resolvedBorder = themeExtension.getBorderColor('default');
@@ -90,7 +112,8 @@ class TextStatusBadge extends StatelessWidget {
     final Color effectiveText = resolvedText ??
         color ??
         getTextColorBasedOnBackground(effectiveBackground);
-    final Color effectiveBorder = resolvedBorder ?? Colors.transparent;
+    final Color effectiveBorder =
+        borderColor ?? resolvedBorder ?? Colors.transparent;
 
     return Container(
       padding: const EdgeInsets.symmetric(
