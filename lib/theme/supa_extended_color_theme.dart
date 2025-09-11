@@ -2,6 +2,26 @@ import 'package:flutter/material.dart';
 
 import 'supa_extended_color_token_group.dart';
 
+const String _default = 'default';
+const String _warning = 'warning';
+const String _information = 'information';
+const String _success = 'success';
+const String _error = 'error';
+const String _blueTag = 'blue';
+const String _cyanTag = 'cyan';
+const String _geekblueTag = 'geekblue';
+const String _goldTag = 'gold';
+const String _greenTag = 'green';
+const String _limeTag = 'lime';
+const String _magentaTag = 'magenta';
+const String _orangeTag = 'orange';
+const String _purpleTag = 'purple';
+const String _redTag = 'red';
+const String _volcanoTag = 'volcano';
+
+const String _processing = 'processing';
+const String _critical = 'critical';
+
 class SupaExtendedColorScheme extends ThemeExtension<SupaExtendedColorScheme> {
   // Warning colors
   final Color warningText;
@@ -359,97 +379,97 @@ class SupaExtendedColorScheme extends ThemeExtension<SupaExtendedColorScheme> {
 
   SupaExtendedColorTokenGroup getTokenGroup(String name) {
     switch (name) {
-      case 'warning':
+      case _warning:
         return SupaExtendedColorTokenGroup(
           text: warningText,
           background: warningBackground,
           border: warningBorder,
         );
-      case 'information':
+      case _information:
         return SupaExtendedColorTokenGroup(
           text: informationText,
           background: informationBackground,
           border: informationBorder,
         );
-      case 'success':
+      case _success:
         return SupaExtendedColorTokenGroup(
           text: successText,
           background: successBackground,
           border: successBorder,
         );
-      case 'default':
+      case _default:
         return SupaExtendedColorTokenGroup(
           text: defaultText,
           background: defaultBackground,
           border: defaultBorder,
         );
-      case 'error':
+      case _error:
         return SupaExtendedColorTokenGroup(
           text: errorText,
           background: errorBackground,
           border: errorBorder,
         );
-      case 'blueTag':
+      case _blueTag:
         return SupaExtendedColorTokenGroup(
           text: blueTagText,
           background: blueTagBackground,
           border: blueTagBorder,
         );
-      case 'cyanTag':
+      case _cyanTag:
         return SupaExtendedColorTokenGroup(
           text: cyanTagText,
           background: cyanTagBackground,
           border: cyanTagBorder,
         );
-      case 'geekblueTag':
+      case _geekblueTag:
         return SupaExtendedColorTokenGroup(
           text: geekblueTagText,
           background: geekblueTagBackground,
           border: geekblueTagBorder,
         );
-      case 'goldTag':
+      case _goldTag:
         return SupaExtendedColorTokenGroup(
           text: goldTagText,
           background: goldTagBackground,
           border: goldTagBorder,
         );
-      case 'greenTag':
+      case _greenTag:
         return SupaExtendedColorTokenGroup(
           text: greenTagText,
           background: greenTagBackground,
           border: greenTagBorder,
         );
-      case 'limeTag':
+      case _limeTag:
         return SupaExtendedColorTokenGroup(
           text: limeTagText,
           background: limeTagBackground,
           border: limeTagBorder,
         );
-      case 'magentaTag':
+      case _magentaTag:
         return SupaExtendedColorTokenGroup(
           text: magentaTagText,
           background: magentaTagBackground,
           border: magentaTagBorder,
         );
-      case 'orangeTag':
+      case _orangeTag:
         return SupaExtendedColorTokenGroup(
           text: orangeTagText,
           background: orangeTagBackground,
           border: orangeTagBorder,
         );
-      case 'purpleTag':
+      case _purpleTag:
         return SupaExtendedColorTokenGroup(
           text: purpleTagText,
           background: purpleTagBackground,
           border: purpleTagBorder,
         );
-      case 'redTag':
+      case _redTag:
         return SupaExtendedColorTokenGroup(
           text: redTagText,
           background: redTagBackground,
           border: redTagBorder,
         );
-      case 'volcanoTag':
+      case _volcanoTag:
         return SupaExtendedColorTokenGroup(
           text: volcanoTagText,
           background: volcanoTagBackground,
@@ -463,39 +483,41 @@ class SupaExtendedColorScheme extends ThemeExtension<SupaExtendedColorScheme> {
   // Helper methods to match SupaExtendedColorScheme interface
   Color getTextColor(String key) {
     switch (key) {
-      case 'warning':
+      case _warning:
         return warningText;
-      case 'processing':
+      case _processing:
         return informationText;
-      case 'success':
+      case _information:
+        return informationText;
+      case _success:
         return successText;
-      case 'critical':
+      case _critical:
         return errorText;
-      case 'error':
+      case _error:
         return errorText;
-      case 'defaultColor':
+      case _default:
         return defaultText;
-      case 'blue':
+      case _blueTag:
         return blueTagText;
-      case 'cyan':
+      case _cyanTag:
         return cyanTagText;
-      case 'geekblue':
+      case _geekblueTag:
         return geekblueTagText;
-      case 'gold':
+      case _goldTag:
         return goldTagText;
-      case 'green':
+      case _greenTag:
         return greenTagText;
-      case 'lime':
+      case _limeTag:
         return limeTagText;
-      case 'magenta':
+      case _magentaTag:
         return magentaTagText;
-      case 'orange':
+      case _orangeTag:
         return orangeTagText;
-      case 'purple':
+      case _purpleTag:
         return purpleTagText;
-      case 'red':
+      case _redTag:
         return redTagText;
-      case 'volcano':
+      case _volcanoTag:
         return volcanoTagText;
       default:
         return defaultText;
@@ -504,39 +526,42 @@ class SupaExtendedColorScheme extends ThemeExtension<SupaExtendedColorScheme> {
 
   Color getBackgroundColor(String key) {
     switch (key) {
-      case 'warning':
+      case _warning:
         return warningBackground;
-      case 'processing':
+      case _processing:
         return informationBackground;
-      case 'success':
+      case _information:
+        return informationBackground;
+      case _success:
         return successBackground;
-      case 'critical':
+      case _critical:
         return errorBackground;
-      case 'error':
+      case _error:
         return errorBackground;
-      case 'defaultColor':
+      case _default:
+      case 'defaultColor': // keep for backward compatibility if needed
         return defaultBackground;
-      case 'blue':
+      case _blueTag:
         return blueTagBackground;
-      case 'cyan':
+      case _cyanTag:
         return cyanTagBackground;
-      case 'geekblue':
+      case _geekblueTag:
         return geekblueTagBackground;
-      case 'gold':
+      case _goldTag:
         return goldTagBackground;
-      case 'green':
+      case _greenTag:
         return greenTagBackground;
-      case 'lime':
+      case _limeTag:
         return limeTagBackground;
-      case 'magenta':
+      case _magentaTag:
         return magentaTagBackground;
-      case 'orange':
+      case _orangeTag:
         return orangeTagBackground;
-      case 'purple':
+      case _purpleTag:
         return purpleTagBackground;
-      case 'red':
+      case _redTag:
         return redTagBackground;
-      case 'volcano':
+      case _volcanoTag:
         return volcanoTagBackground;
       default:
         return defaultBackground;
@@ -545,86 +570,45 @@ class SupaExtendedColorScheme extends ThemeExtension<SupaExtendedColorScheme> {
 
   Color getBorderColor(String key) {
     switch (key) {
-      case 'warning':
+      case _warning:
         return warningBorder;
-      case 'processing':
+      case _processing:
         return informationBorder;
-      case 'success':
+      case _information:
+        return informationBorder;
+      case _success:
         return successBorder;
-      case 'critical':
+      case _critical:
         return errorBorder;
-      case 'error':
+      case _error:
         return errorBorder;
-      case 'defaultColor':
+      case _default:
+      case 'defaultColor': // keep for backward compatibility if needed
         return defaultBorder;
-      case 'blue':
+      case _blueTag:
         return blueTagBorder;
-      case 'cyan':
+      case _cyanTag:
         return cyanTagBorder;
-      case 'geekblue':
+      case _geekblueTag:
         return geekblueTagBorder;
-      case 'gold':
+      case _goldTag:
         return goldTagBorder;
-      case 'green':
+      case _greenTag:
         return greenTagBorder;
-      case 'lime':
+      case _limeTag:
         return limeTagBorder;
-      case 'magenta':
+      case _magentaTag:
         return magentaTagBorder;
-      case 'orange':
+      case _orangeTag:
         return orangeTagBorder;
-      case 'purple':
+      case _purpleTag:
         return purpleTagBorder;
-      case 'red':
+      case _redTag:
         return redTagBorder;
-      case 'volcano':
+      case _volcanoTag:
         return volcanoTagBorder;
       default:
         return defaultBorder;
-    }
-  }
-
-  Color fromKey(String key) {
-    switch (key) {
-      case 'warning':
-        return warningText;
-      case 'onWarning':
-        return warningBackground;
-      case 'warningContainer':
-        return warningBorder;
-      case 'onWarningContainer':
-        return warningText;
-      case 'information':
-        return informationText;
-      case 'onInformation':
-        return informationBackground;
-      case 'informationContainer':
-        return informationBorder;
-      case 'onInformationContainer':
-        return informationText;
-      case 'success':
-        return successText;
-      case 'onSuccess':
-        return successBackground;
-      case 'successContainer':
-        return successBorder;
-      case 'onSuccessContainer':
-        return successText;
-      case 'default':
-      case 'defaultColor':
-        return defaultText;
-      case 'onDefault':
-        return defaultBackground;
-      case 'defaultContainer':
-        return defaultBorder;
-      case 'onDefaultContainer':
-        return defaultText;
-      case 'critical':
-        return errorText;
-      case 'onCritical':
-        return errorBackground;
-      default:
-        return defaultText;
     }
   }
 }
