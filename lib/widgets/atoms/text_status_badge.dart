@@ -26,14 +26,8 @@ class TextStatusBadge extends StatelessWidget {
       'Use backgroundColorKey or theme tokens; this prop will be removed in a future release.')
   final Color backgroundColor;
 
-  /// Token key or hex for background color (e.g., 'warning' or '#FDDC69').
-  final String? backgroundColorKey;
-
   /// Optional explicit border color. Prefer [borderColorKey] for tokens/hex.
   final Color? borderColor;
-
-  /// Token key or hex for border color (e.g., 'warning' or '#FFD591').
-  final String? borderColorKey;
 
   const TextStatusBadge({
     super.key,
@@ -43,9 +37,7 @@ class TextStatusBadge extends StatelessWidget {
     this.backgroundColor = const Color(0xFFFDDC69), // Default background color
     this.color = const Color(0xFF000000), // Default text color
     this.textColorKey,
-    this.backgroundColorKey,
     this.borderColor,
-    this.borderColorKey,
   });
 
   @override
@@ -59,20 +51,14 @@ class TextStatusBadge extends StatelessWidget {
 
     bool isHex(String? v) => v != null && v.trim().startsWith('#');
 
-    final String? bgKey =
-        (backgroundColorKey == null || backgroundColorKey!.trim().isEmpty)
-            ? null
-            : backgroundColorKey!.trim().toLowerCase();
-
     final String? textKey =
         (textColorKey == null || textColorKey!.trim().isEmpty)
             ? null
             : textColorKey!.trim().toLowerCase();
 
-    final String? borderKey =
-        (borderColorKey == null || borderColorKey!.trim().isEmpty)
-            ? null
-            : borderColorKey!.trim().toLowerCase();
+    final String? bgKey = (isHex(textKey) ? null : textKey);
+
+    final String? borderKey = (isHex(textKey) ? null : textKey);
 
     if (bgKey != null) {
       if (isHex(bgKey)) {
@@ -115,6 +101,11 @@ class TextStatusBadge extends StatelessWidget {
         getTextColorBasedOnBackground(effectiveBackgroundColor);
     final Color effectiveBorderColor =
         borderColor ?? resolvedBorderColor ?? Colors.transparent;
+
+    print('bgColor $bgKey');
+    print('textColor $textKey');
+    print('borderColor $borderKey');
+    print('---------------------\n\n');
 
     return Container(
       padding: const EdgeInsets.symmetric(
