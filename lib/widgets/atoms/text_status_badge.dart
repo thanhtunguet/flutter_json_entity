@@ -53,9 +53,9 @@ class TextStatusBadge extends StatelessWidget {
     final themeExtension =
         Theme.of(context).extension<SupaExtendedColorScheme>();
 
-    Color? resolvedBackground;
-    Color? resolvedText;
-    Color? resolvedBorder;
+    Color? resolvedBackgroundColor;
+    Color? resolvedTextColor;
+    Color? resolvedBorderColor;
 
     bool isHex(String? v) => v != null && v.trim().startsWith('#');
 
@@ -76,25 +76,25 @@ class TextStatusBadge extends StatelessWidget {
 
     if (bgKey != null) {
       if (isHex(bgKey)) {
-        resolvedBackground = HexColor.fromHex(bgKey);
+        resolvedBackgroundColor = HexColor.fromHex(bgKey);
       } else if (themeExtension != null) {
-        resolvedBackground = themeExtension.getBackgroundColor(bgKey);
+        resolvedBackgroundColor = themeExtension.getBackgroundColor(bgKey);
       }
     }
 
     if (textKey != null) {
       if (isHex(textKey)) {
-        resolvedText = HexColor.fromHex(textKey);
+        resolvedTextColor = HexColor.fromHex(textKey);
       } else if (themeExtension != null) {
-        resolvedText = themeExtension.getTextColor(textKey);
+        resolvedTextColor = themeExtension.getTextColor(textKey);
       }
     }
 
     if (borderKey != null) {
       if (isHex(borderKey)) {
-        resolvedBorder = HexColor.fromHex(borderKey);
+        resolvedBorderColor = HexColor.fromHex(borderKey);
       } else if (themeExtension != null) {
-        resolvedBorder = themeExtension.getBorderColor(borderKey);
+        resolvedBorderColor = themeExtension.getBorderColor(borderKey);
       }
     }
 
@@ -103,17 +103,18 @@ class TextStatusBadge extends StatelessWidget {
         textKey == null &&
         borderKey == null &&
         themeExtension != null) {
-      resolvedBackground = themeExtension.getBackgroundColor('default');
-      resolvedText = themeExtension.getTextColor('default');
-      resolvedBorder = themeExtension.getBorderColor('default');
+      resolvedBackgroundColor = themeExtension.getBackgroundColor('default');
+      resolvedTextColor = themeExtension.getTextColor('default');
+      resolvedBorderColor = themeExtension.getBorderColor('default');
     }
 
-    final Color effectiveBackground = resolvedBackground ?? backgroundColor;
-    final Color effectiveText = resolvedText ??
+    final Color effectiveBackgroundColor =
+        resolvedBackgroundColor ?? backgroundColor;
+    final Color effectiveTextColor = resolvedTextColor ??
         color ??
-        getTextColorBasedOnBackground(effectiveBackground);
-    final Color effectiveBorder =
-        borderColor ?? resolvedBorder ?? Colors.transparent;
+        getTextColorBasedOnBackground(effectiveBackgroundColor);
+    final Color effectiveBorderColor =
+        borderColor ?? resolvedBorderColor ?? Colors.transparent;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -121,17 +122,20 @@ class TextStatusBadge extends StatelessWidget {
         vertical: 0,
       ),
       decoration: ShapeDecoration(
-        color: effectiveBackground,
+        color: effectiveBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: BorderSide(color: effectiveBorder, width: 1),
+          side: BorderSide(
+            color: effectiveBorderColor,
+            width: 1,
+          ),
         ),
       ),
       child: Text(
         status,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: effectiveText,
+              color: effectiveTextColor,
               height: 1.5,
               fontWeight: FontWeight.w500,
             ),

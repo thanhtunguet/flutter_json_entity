@@ -20,6 +20,7 @@ class EnumStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isHex(String? v) => v != null && v.trim().startsWith('#');
+
     final String? colorRaw = status.color.rawValue;
     final String? computedBorderKey =
         (colorRaw != null && colorRaw.trim().isNotEmpty && !isHex(colorRaw))
@@ -31,8 +32,6 @@ class EnumStatusBadge extends StatelessWidget {
       textColorKey: status.color.rawValue ?? 'default',
       backgroundColorKey: status.backgroundColor.rawValue ?? 'default',
       borderColorKey: computedBorderKey,
-      // Keep legacy prop working but prefer keys
-      backgroundColor: backgroundColor ?? Colors.transparent,
     );
   }
 }
