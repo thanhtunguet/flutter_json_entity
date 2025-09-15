@@ -27,5 +27,9 @@ class EnumModel extends JsonModel {
   /// The color associated with the enumeration.
   JsonString color = JsonString("color");
 
+  /// Deprecated: use consolidated color extension with token/background keys.
+  /// This field will be removed in a future release.
+  @Deprecated(
+      'Use consolidated color extension with token/background keys; this field will be removed in a future release.')
   JsonString backgroundColor = JsonString("backgroundColor");
 }
