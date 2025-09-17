@@ -20,7 +20,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  json_entity: ^1.0.0
+  json_entity: ^2.0.0
 ```
 
 This package depends on `get_it` and `intl`.

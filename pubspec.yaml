@@ -1,6 +1,6 @@
 name: json_entity
 description: "A library for parsing JSON data into Dart objects, inspired by PHP Laravel ORM."
-version: 1.0.0
+version: 2.0.0
 homepage: https://github.com/thanhtunguet/flutter_json_entity
 
 environment:
