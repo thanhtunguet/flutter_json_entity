@@ -1,3 +1,4 @@
-## 0.0.1
+## 2.0.0
 
-* TODO: Describe initial release.
+- Release as separated package
+- Only json-related features
