@@ -1,68 +1,39 @@
-# 🧱 supa_architecture
+<!--
+This README describes the package. If you publish this package to pub.dev,
+this README's contents appear on the landing page for your package.
 
-A scalable and opinionated Flutter architecture designed to boost productivity, enforce consistency, and support large-scale modular development.
+For information about how to write a good package README, see the guide for
+[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
 
----
+For general information about developing packages, see the Dart guide for
+[creating packages](https://dart.dev/guides/libraries/create-packages)
+and the Flutter guide for
+[developing packages and plugins](https://flutter.dev/to/develop-packages).
+-->
 
-## 📦 Installation
+TODO: Put a short description of the package here that helps potential users
+know whether this package might be useful for them.
 
-Add this to your `pubspec.yaml`:
+## Features
 
-```yaml
-dependencies:
-  supa_architecture: ^<latest-version>
+TODO: List what your package can do. Maybe include images, gifs, or videos.
+
+## Getting started
+
+TODO: List prerequisites and provide or point to information on how to
+start using the package.
+
+## Usage
+
+TODO: Include short and useful examples for package users. Add longer examples
+to `/example` folder.
+
+```dart
+const like = 'sample';
 ```
 
-Then run:
+## Additional information
 
-```bash
-flutter pub get
-```
-
----
-
-## ✅ Compatibility
-
-| Feature           | Support                  |
-|-------------------|--------------------------|
-| ✅ Flutter SDK     | 3.10 or higher           |
-| ✅ Platforms       | Android, iOS, Web, macOS |
-| ✅ Null safety     | ✔️ Enabled                |
-| ✅ Modular support | ✔️ Built-in               |
-
----
-
-## 📜 Latest Changelog
-
-### `v1.7.4` – 2025-03-20
-- ✅ Added support for custom bottom sheet theming
-- 🧩 Refactored localization manager integration
-- 🛠 Fixed null-safe handling in persistent storage
-- 💄 Updated default text styles to match SupaTheme
-
-👉 [View full changelog →](https://open.supa.vn/changelog)
-
----
-
-## 📚 Full Documentation
-
-👉 Visit the full documentation site:  
-🔗 [https://deepwiki.com/supavn/supa_architecture](https://deepwiki.com/supavn/supa_architecture)
-
-There you'll find:
-- Setup guide
-- Folder structure and architecture overview
-- CLI tools and code generation
-- Widget library and theming
-- Localization and state management
-- Best practices
-
----
-
-## 💬 Feedback
-
-Feel free to submit issues, suggestions, or improvements.
-
----
-
-Made with ❤️ by the Supa team.
+TODO: Tell users more about the package: where to find more information, how to
+contribute to the package, how to file issues, what response they can expect
+from the package authors, and more.

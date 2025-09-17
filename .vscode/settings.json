@@ -1,8 +1,0 @@
-{
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "always",
-        "source.fixAll.dart": "always",
-        "source.organizeImports": "always"
-    }
-}
